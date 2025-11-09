@@ -2,6 +2,9 @@
 env/
 *.env
 
+# Ejecutables
+*.pyc
+
 # Logs
 logs
 *.log
