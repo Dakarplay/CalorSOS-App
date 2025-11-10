@@ -1,14 +1,23 @@
+# backend/routers/admin.py
 from fastapi import APIRouter, HTTPException
-from ..supabase_client import supabase
+from backend.models.admin_mdls import AdminModel
 
 router = APIRouter(prefix="/admin", tags=["Administración"])
 
 @router.put("/validar_reporte/{id_reporte}")
-def validar_reporte(id_reporte: int):
-    
-    # Permite al administrador validar o aprobar un reporte comunitario.
+def validar_reporte(id_reporte: str):
+    """Permite al administrador validar un reporte comunitario (cambiar estado a 'validado')."""
     try:
-        response = supabase.table("reportes").update({"estado": "validado"}).eq("id", id_reporte).execute()
-        return {"message": "Reporte validado correctamente", "data": response.data}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al validar reporte: {str(e)}")
+        reporte = AdminModel.validar_reporte(id_reporte)
+        return {"status": "success", "message": "Reporte validado correctamente", "data": reporte}
+    except HTTPException as e:
+        raise e
+
+@router.put("/rechazar_reporte/{id_reporte}")
+def rechazar_reporte(id_reporte: str):
+    """Permite al administrador rechazar un reporte comunitario (cambiar estado a 'rechazado')."""
+    try:
+        reporte = AdminModel.rechazar_reporte(id_reporte)
+        return {"status": "success", "message": "Reporte rechazado correctamente", "data": reporte}
+    except HTTPException as e:
+        raise e
