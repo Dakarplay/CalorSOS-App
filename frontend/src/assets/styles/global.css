@@ -8,7 +8,7 @@
 }
 
 .login-logo {
-  width: 120px;
+  width: 200px;
   margin-bottom: 20px;
 }
 
@@ -68,4 +68,22 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  background: #ff6b00;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 12px;
+  font-weight: 700;
+}
+
+.error-msg {
+  color: #d93025;
+  margin-top: 8px;
+  font-size: 14px;
 }
