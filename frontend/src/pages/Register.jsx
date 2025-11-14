@@ -1,10 +1,13 @@
 // src/pages/Register.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader.jsx";
 import logo from "../assets/logo.svg";
 import { registerUser } from "../services/usuariosService.js";
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     nombre: "",
     correo: "",
@@ -15,10 +18,7 @@ export default function Register() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -30,10 +30,11 @@ export default function Register() {
       const res = await registerUser(formData);
 
       if (res.status === 200 || res.status === 201) {
-        alert("Registro exitoso. ¡Ahora inicia sesión!");
-        window.location.href = "/login";
+        alert("Registro exitoso. Ahora inicia sesión con tu usuario.");
+        navigate("/login"); // Redirigir a Login
       } else {
-        setErrorMsg(res.data?.detail || "Error registrando usuario.");
+        const data = await res.json();
+        setErrorMsg(data?.detail || "Error registrando usuario.");
       }
     } catch (err) {
       setErrorMsg(err.response?.data?.detail || "Error de conexión.");
@@ -85,13 +86,15 @@ export default function Register() {
         {errorMsg && <p className="login-error">{errorMsg}</p>}
 
         <button type="submit" className="btn-primary" disabled={loading}>
-          {loading ? "Registrando..." : "Registrarse"}
+          {loading ? "Procesando..." : "Registrarse"}
         </button>
       </form>
 
       <p className="small-text">
         ¿Ya tienes una cuenta?{" "}
-        <a href="/login" className="link">Iniciar sesión</a>
+        <a href="/login" className="link">
+          Iniciar sesión
+        </a>
       </p>
     </div>
   );
