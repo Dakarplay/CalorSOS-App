@@ -75,9 +75,21 @@ def perfil(datos_usuario: dict = Depends(verificar_token)):
     """
     Devuelve el usuario actual basado en el token.
     """
+    # Obtener el usuario completo desde la base de datos
+    usuario_completo = UsuarioModel.obtener_usuario_por_id(datos_usuario["id_usuario"])
+
+    # Filtrar la contraseña por seguridad
+    usuario_filtrado = {
+        "id_usuario": usuario_completo["id_usuario"],
+        "nombre": usuario_completo["nombre"],
+        "correo": usuario_completo["correo"],
+        "telefono": usuario_completo.get("telefono"),
+        "rol": usuario_completo["rol"]
+    }
+
     return {
         "status": "success",
-        "usuario_actual": datos_usuario
+        "usuario_actual": usuario_filtrado
     }
 
 
@@ -139,3 +151,36 @@ def actualizar_usuario(
 @router.delete("/{id_usuario}")
 def eliminar_usuario(id_usuario: str, datos_usuario: dict = Depends(verificar_rol(["admin"]))):
     return UsuarioModel.eliminar_usuario(id_usuario)
+
+# ======================================================
+# CAMBIAR CONTRASEÑA
+# ======================================================
+@router.put("/{id_usuario}/cambiar-password")
+def cambiar_password(
+    id_usuario: str,
+    data: dict = Body(...),
+    datos_usuario: dict = Depends(verificar_token)
+):
+    """
+    Endpoint específico para cambiar contraseña con verificación
+    """
+    if datos_usuario["rol"] != "admin" and datos_usuario["id_usuario"] != id_usuario:
+        raise HTTPException(status_code=403, detail="No tienes permisos para modificar este perfil")
+
+    # Verificar contraseña actual
+    usuario = UsuarioModel.obtener_usuario_por_id(id_usuario)
+    if not verify_password(data["currentPassword"], usuario["password"]):
+        raise HTTPException(status_code=401, detail="Contraseña actual incorrecta")
+
+    # Hashear nueva contraseña
+    nueva_password_hasheada = hash_password(data["newPassword"])
+
+    # Actualizar en la base de datos
+    usuario_actualizado = UsuarioModel.actualizar_usuario(id_usuario, {
+        "password": nueva_password_hasheada
+    })
+
+    return {
+        "status": "success",
+        "message": "Contraseña cambiada correctamente"
+    }
