@@ -159,7 +159,7 @@ export default function ZonasFrescas() {
                         >
                             <option value="todas">Todas</option>
                             <option value="urbana">Urbana</option>
-                            <option value="rural">Rural</option>
+                            <option value="natural">Natural</option>
                             <option value="artificial">Artificial</option>
                         </select>
 
@@ -219,7 +219,7 @@ export default function ZonasFrescas() {
                         <h3>Estadísticas</h3>
                         <p>Total zonas: <strong>{totalZonas}</strong></p>
                         <p>Urbanas: {countByType("urbana")}</p>
-                        <p>Rurales: {countByType("rural")}</p>
+                        <p>Naturales: {countByType("natural")}</p>
                         <p>Artificiales: {countByType("artificial")}</p>
                     </div>
 
@@ -283,14 +283,28 @@ export default function ZonasFrescas() {
                                     }
                                 />
                             </label>
+                            {reportData.tipo === "zona_fresca" && (
+                                <label>
+                                    Tipo de zona fresca
+                                    <select
+                                        value={reportData.tipo_zona_fresca || ""}
+                                        onChange={(e) =>
+                                            setReportData(prev => ({ ...prev, tipo_zona_fresca: e.target.value }))
+                                        }
+                                    >
+                                        <option value="">Seleccione...</option>
+                                        <option value="urbana">Urbana</option>
+                                        <option value="natural">Natural</option>
+                                        <option value="artificial">Artificial</option>
+                                    </select>
+                                </label>
+                            )}
 
                             <label>
                                 Latitud
                                 <input
                                     value={reportData.latitud || ""}
-                                    onChange={(e) =>
-                                        setReportData(prev => ({ ...prev, latitud: e.target.value }))
-                                    }
+                                    readOnly
                                 />
                             </label>
 
@@ -298,14 +312,16 @@ export default function ZonasFrescas() {
                                 Longitud
                                 <input
                                     value={reportData.longitud || ""}
-                                    onChange={(e) =>
-                                        setReportData(prev => ({ ...prev, longitud: e.target.value }))
-                                    }
+                                    readOnly
                                 />
                             </label>
 
                             <div className="zf-report-actions">
-                                <button type="submit" className="btn-report-submit" disabled={reportLoading}>
+                                <button
+                                    type="submit"
+                                    className="btn-report-submit"
+                                    disabled={reportLoading || (reportData.tipo === "zona_fresca" && !reportData.tipo_zona_fresca)}
+                                >
                                     {reportLoading ? "Enviando..." : "Enviar reporte"}
                                 </button>
                                 <button type="button" className="btn-cancel" onClick={() => setReportOpen(false)}>
