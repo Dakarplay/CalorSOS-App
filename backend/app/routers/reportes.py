@@ -1,3 +1,4 @@
+# backend/app/routers/reportes.py
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Optional
 from backend.models.reportes_mdls import ReporteModel
@@ -14,13 +15,14 @@ def crear_reporte(
     descripcion: str = Form(None),
     latitud: float = Form(None),
     longitud: float = Form(None),
+    tipo_zona_fresca: str = Form(None),   # 👈 nuevo campo
     datos_usuario: dict = Depends(verificar_token)
 ):
-    """
-    Crea un nuevo reporte usando FormData.
-    El id_usuario se obtiene automáticamente del token JWT.
-    """
     try:
+        # Validación: si el tipo es zona_fresca, tipo_zona_fresca es obligatorio
+        if tipo == "zona_fresca" and not tipo_zona_fresca:
+            raise HTTPException(status_code=400, detail="El campo 'tipo_zona_fresca' es obligatorio para reportes de zona fresca.")
+
         id_usuario = datos_usuario["id_usuario"]
         reporte = ReporteModel.crear_reporte(
             id_usuario,
@@ -28,12 +30,13 @@ def crear_reporte(
             nombre,
             descripcion,
             latitud,
-            longitud
+            longitud,
+            tipo_zona_fresca  # 👈 pasarlo al modelo
         )
         return {"status": "success", "data": reporte}
     except Exception as e:
-        print(f"Error creando reporte: {str(e)}")  # Debug log
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 # Listar todos los reportes (solo administradores)
