@@ -8,21 +8,19 @@ import API from "./api";
  */
 export const crearReporte = async (reporte) => {
     try {
-        // Crear un FormData para enviar como x-www-form-urlencoded / multipart
         const formData = new FormData();
         formData.append("tipo", reporte.tipo);
         if (reporte.nombre) formData.append("nombre", reporte.nombre);
         if (reporte.descripcion) formData.append("descripcion", reporte.descripcion);
-        if (reporte.latitud !== undefined && reporte.longitud !== undefined) {
-            formData.append("latitud", reporte.latitud?.toString());
-            formData.append("longitud", reporte.longitud?.toString());
+        if (reporte.latitud) formData.append("latitud", reporte.latitud);
+        if (reporte.longitud) formData.append("longitud", reporte.longitud);
+
+        if (reporte.tipo === "zona_fresca" && reporte.tipo_zona_fresca) {
+            formData.append("tipo_zona_fresca", reporte.tipo_zona_fresca);
         }
 
-        // Petición POST al endpoint /reportes/
         const response = await API.post("/reportes/", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data", // necesario para FormData
-        },
+            headers: { "Content-Type": "multipart/form-data" },
         });
 
         return response.data;
@@ -31,3 +29,4 @@ export const crearReporte = async (reporte) => {
         throw error;
     }
 };
+
