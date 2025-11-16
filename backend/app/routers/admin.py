@@ -1,3 +1,4 @@
+# backend/app/routers/admin.py
 from fastapi import APIRouter, HTTPException, Depends
 from backend.models.admin_mdls import AdminModel
 from backend.app.security.jwt_handler import verificar_rol
