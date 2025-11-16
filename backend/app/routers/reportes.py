@@ -17,7 +17,7 @@ def crear_reporte(
     datos_usuario: dict = Depends(verificar_token)
 ):
     """
-    Crea un nuevo reporte usando FormData. 
+    Crea un nuevo reporte usando FormData.
     El id_usuario se obtiene automáticamente del token JWT.
     """
     try:
@@ -32,6 +32,7 @@ def crear_reporte(
         )
         return {"status": "success", "data": reporte}
     except Exception as e:
+        print(f"Error creando reporte: {str(e)}")  # Debug log
         raise HTTPException(status_code=500, detail=str(e))
 
 

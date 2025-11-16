@@ -261,7 +261,7 @@ export default function ZonasFrescas() {
 
                             <label>
                                 Tipo de reporte
-                                <input value="zona_fresca" readOnly />
+                                <input value="Zonas Frescas" readOnly />
                             </label>
 
                             <label>
