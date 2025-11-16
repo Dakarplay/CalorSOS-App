@@ -1,3 +1,4 @@
+# backend/models/reportes_mdls.py
 from backend.database.supabase_config import supabase
 from fastapi import HTTPException
 from typing import Optional
@@ -13,18 +14,16 @@ class ReporteModel:
         descripcion: Optional[str] = None,
         latitud: Optional[float] = None,
         longitud: Optional[float] = None,
+        tipo_zona_fresca: Optional[str] = None, 
         estado: str = "pendiente"
     ):
-        """Inserta un nuevo reporte en la tabla reportes."""
         try:
-            # Solo incluir campos no None para evitar errores de columna inexistente
             data = {
-                "id_usuario": id_usuario,   # UUID del usuario loggeado
+                "id_usuario": id_usuario,
                 "tipo": tipo,
                 "estado": estado
             }
 
-            # Agregar campos opcionales solo si no son None
             if nombre is not None:
                 data["nombre"] = nombre
             if descripcion is not None:
@@ -34,11 +33,15 @@ class ReporteModel:
             if longitud is not None:
                 data["longitud"] = longitud
 
+            if tipo == "zona_fresca" and tipo_zona_fresca is not None:
+                data["tipo_zona_fresca"] = tipo_zona_fresca   # 👈 SOLO si aplica
+
             response = supabase.table("reportes").insert(data).execute()
             return response.data[0] if response.data else None
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error al crear reporte: {str(e)}")
+
 
     @staticmethod
     def listar_reportes(
