@@ -1,3 +1,9 @@
+/* Inicio IndicatorsPanel.css */
+
+/* frontend/src/assets/styles/IndicatorsPanel.css */
+
+/* Estilos para el panel de indicadores */
+
 /* src/assets/styles/IndicatorsPanel.css */
 
 .ip-container {
@@ -42,15 +48,17 @@
     .ip-container {
         padding: 16px;
     }
-    
+
     .ip-title {
         font-size: 14px;
     }
-    
+
     .ip-value {
         font-size: 12px;
     }
 }
 /* ========================================== */
-/* 🔥 FIN INDICATORS PANEL STYLESHEET       */
+/* FIN INDICATORS PANEL STYLESHEET       */
 /* ========================================== */
+
+/* Fin IndicatorsPanel.css */

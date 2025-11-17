@@ -1,39 +1,45 @@
-// src/services/climaService.js
-import API from "./api.js"; // tu cliente Axios ya configurado
+// Inicio climaService.js
 
-// Obtener clima actual
+// frontend/src/services/climaService.js
+
+// Importación del cliente API configurado
+import API from "./api.js";
+
+// Función para obtener datos climáticos actuales
 export const getClima = async () => {
     try {
         const res = await API.get("/clima/");
-        return res.data; // contiene { status: "success", data: {...} }
+        return res.data;
     } catch (error) {
         console.error("Error obteniendo clima:", error);
         return null;
     }
 };
 
-// Obtener histórico de sensación térmica
+// Función para obtener histórico de sensación térmica
 export const getClimaHistorico = async (dias = 1) => {
     try {
         const res = await API.get("/clima/historico", {
             params: { dias },
         });
-        return res.data; // lista de { hora: "HH:MM", sensacion: number }
+        return res.data;
     } catch (error) {
         console.error("Error obteniendo histórico del clima:", error);
         return [];
     }
 };
 
-// Obtener histórico de temperatura y humedad
+// Función para obtener histórico de temperatura y humedad
 export const getClimaHistoricoTempHumedad = async (dias = 1) => {
     try {
         const res = await API.get("/clima/historico-temp-humedad", {
             params: { dias },
         });
-        return res.data; // lista de { hora: "HH:MM" o "DD/MM", temperatura: val, humedad: val }
+        return res.data;
     } catch (error) {
         console.error("Error obteniendo histórico temp/humedad:", error);
         return [];
     }
 };
+
+// Fin climaService.js

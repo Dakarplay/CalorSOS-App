@@ -1,3 +1,9 @@
+/* Inicio Alertas.css */
+
+/* frontend/src/assets/styles/Alertas.css */
+
+/* Estilos para la página de alertas */
+
 /* --- CONTENEDOR GENERAL --- */
 .page-container {
     min-height: 100vh;
@@ -22,3 +28,5 @@
     color: #ffffff;
     text-shadow: 0px 0px 6px rgba(255,255,255,0.1);
 }
+
+/* Fin Alertas.css */

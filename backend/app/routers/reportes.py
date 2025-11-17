@@ -1,13 +1,16 @@
-# backend/app/routers/reportes.py
+# Inicio backend/app/routers/reportes.py
+
+# Importaciones necesarias para el router de reportes
 from fastapi import APIRouter, HTTPException, Depends
 from typing import Optional
 from backend.models.reportes_mdls import ReporteModel
 from backend.app.security.jwt_handler import verificar_token, verificar_rol
-
-router = APIRouter(prefix="/reportes", tags=["Reportes"])
-
 from fastapi import Form
 
+# Creación del router con prefijo y tags
+router = APIRouter(prefix="/reportes", tags=["Reportes"])
+
+# Endpoint para crear reporte (usuario autenticado)
 @router.post("/")
 def crear_reporte(
     tipo: str = Form(...),
@@ -15,15 +18,18 @@ def crear_reporte(
     descripcion: str = Form(None),
     latitud: float = Form(None),
     longitud: float = Form(None),
-    tipo_zona_fresca: str = Form(None),   # 👈 nuevo campo
+    tipo_zona_fresca: str = Form(None),
     datos_usuario: dict = Depends(verificar_token)
 ):
     try:
-        # Validación: si el tipo es zona_fresca, tipo_zona_fresca es obligatorio
+        # Validación para reportes de zona fresca
         if tipo == "zona_fresca" and not tipo_zona_fresca:
             raise HTTPException(status_code=400, detail="El campo 'tipo_zona_fresca' es obligatorio para reportes de zona fresca.")
 
+        # Obtener ID del usuario autenticado
         id_usuario = datos_usuario["id_usuario"]
+
+        # Crear reporte usando el modelo
         reporte = ReporteModel.crear_reporte(
             id_usuario,
             tipo,
@@ -31,15 +37,13 @@ def crear_reporte(
             descripcion,
             latitud,
             longitud,
-            tipo_zona_fresca  # 👈 pasarlo al modelo
+            tipo_zona_fresca
         )
         return {"status": "success", "data": reporte}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-
-# Listar todos los reportes (solo administradores)
+# Endpoint para listar reportes (solo administradores)
 @router.get("/")
 def listar_reportes(
     id_usuario: Optional[str] = None,
@@ -52,8 +56,7 @@ def listar_reportes(
     """
     return {"status": "success", "data": ReporteModel.listar_reportes(id_usuario, tipo, estado)}
 
-
-# Obtener un reporte específico (solo usuarios autenticados)
+# Endpoint para obtener reporte específico (usuario autenticado)
 @router.get("/{id_reporte}")
 def obtener_reporte(
     id_reporte: str,
@@ -64,8 +67,7 @@ def obtener_reporte(
     """
     return {"status": "success", "data": ReporteModel.obtener_reporte_por_id(id_reporte)}
 
-
-# Actualizar un reporte (solo administradores)
+# Endpoint para actualizar reporte (solo administradores)
 @router.put("/{id_reporte}")
 def actualizar_reporte(
     id_reporte: str,
@@ -77,8 +79,7 @@ def actualizar_reporte(
     """
     return {"status": "success", "data": ReporteModel.actualizar_reporte(id_reporte, data)}
 
-
-# Eliminar un reporte (solo administradores)
+# Endpoint para eliminar reporte (solo administradores)
 @router.delete("/{id_reporte}")
 def eliminar_reporte(
     id_reporte: str,
@@ -88,3 +89,5 @@ def eliminar_reporte(
     Elimina un reporte por su ID. Solo los administradores pueden hacerlo.
     """
     return ReporteModel.eliminar_reporte(id_reporte)
+
+# Fin backend/app/routers/reportes.py

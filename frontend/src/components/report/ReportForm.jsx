@@ -1,28 +1,44 @@
-// src/components/report/ReportForm.jsx
+// Inicio ReportForm.jsx
+
+// frontend/src/components/report/ReportForm.jsx
+
+// Componente de formulario para crear reportes comunitarios
+
+// Importaciones de React y hooks
 import React, { useState } from "react";
+
+// Importación del componente MapView
 import MapView from "../maps/MapView.jsx";
-import { enviarReporte } from "../services/reportesService.js";
+
+// Importación del servicio de reportes
+import { enviarReporte } from "../../services/reportesService.js";
+
+// Importación de estilos
 import "./ReportForm.css";
 
+// Componente funcional principal
 export default function ReportForm({ onClose, tipoPreseleccion = null }) {
-
+    // Estados del formulario
     const [tipo, setTipo] = useState(tipoPreseleccion || "");
     const [nombre, setNombre] = useState("");
     const [descripcion, setDescripcion] = useState("");
     const [foto, setFoto] = useState(null);
     const [ubicacion, setUbicacion] = useState(null);
 
+    // Estados de UI
     const [mensaje, setMensaje] = useState(null);
     const [enviando, setEnviando] = useState(false);
 
-    // Cuando el usuario hace click en un marcador del mapa
+    // Manejar selección de ubicación en el mapa
     const handleMapClick = (coords) => {
         setUbicacion(coords);
     };
 
+    // Manejar envío del formulario
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Validación de campos obligatorios
         if (!tipo || !nombre || !descripcion || !ubicacion) {
             setMensaje("Completa todos los campos obligatorios.");
             return;
@@ -32,6 +48,7 @@ export default function ReportForm({ onClose, tipoPreseleccion = null }) {
         setMensaje(null);
 
         try {
+            // Preparar datos del formulario
             const formData = new FormData();
             formData.append("tipo", tipo);
             formData.append("nombre", nombre);
@@ -40,11 +57,12 @@ export default function ReportForm({ onClose, tipoPreseleccion = null }) {
             formData.append("longitud", ubicacion.lng);
             if (foto) formData.append("foto", foto);
 
+            // Enviar reporte
             const resp = await enviarReporte(formData);
 
             if (!resp.ok) throw new Error("Error enviando el reporte");
 
-            setMensaje("Reporte enviado correctamente 🎉");
+            setMensaje("Reporte enviado correctamente");
             setTimeout(onClose, 1200);
 
         } catch (err) {
@@ -57,12 +75,10 @@ export default function ReportForm({ onClose, tipoPreseleccion = null }) {
 
     return (
         <div className="report-form">
-
             <h2>Nuevo reporte comunitario</h2>
 
             <form onSubmit={handleSubmit}>
-
-                {/* Tipo */}
+                {/* Campo de tipo de reporte */}
                 {!tipoPreseleccion && (
                     <label>
                         Tipo de reporte:
@@ -74,7 +90,7 @@ export default function ReportForm({ onClose, tipoPreseleccion = null }) {
                     </label>
                 )}
 
-                {/* Nombre */}
+                {/* Campo de nombre */}
                 <label>
                     Nombre:
                     <input
@@ -85,7 +101,7 @@ export default function ReportForm({ onClose, tipoPreseleccion = null }) {
                     />
                 </label>
 
-                {/* Descripción */}
+                {/* Campo de descripción */}
                 <label>
                     Descripción:
                     <textarea
@@ -95,13 +111,13 @@ export default function ReportForm({ onClose, tipoPreseleccion = null }) {
                     />
                 </label>
 
-                {/* Foto */}
+                {/* Campo de foto opcional */}
                 <label>
                     Foto (opcional):
                     <input type="file" accept="image/*" onChange={(e) => setFoto(e.target.files[0])} />
                 </label>
 
-                {/* Mapa pequeño para seleccionar ubicación */}
+                {/* Selector de ubicación con mapa */}
                 <div className="map-selector">
                     <p>Selecciona la ubicación en el mapa:</p>
                     <MapView
@@ -112,20 +128,23 @@ export default function ReportForm({ onClose, tipoPreseleccion = null }) {
                     />
                 </div>
 
-                {/* Info ubicación */}
+                {/* Vista previa de coordenadas */}
                 {ubicacion && (
                     <div className="coords-preview">
-                        📍 Ubicación: {ubicacion.lat.toFixed(5)}, {ubicacion.lng.toFixed(5)}
+                        Ubicación: {ubicacion.lat.toFixed(5)}, {ubicacion.lng.toFixed(5)}
                     </div>
                 )}
 
+                {/* Mensaje de estado */}
                 {mensaje && <p className="msg">{mensaje}</p>}
 
+                {/* Botón de envío */}
                 <button type="submit" disabled={enviando}>
                     {enviando ? "Enviando..." : "Enviar reporte"}
                 </button>
             </form>
-
         </div>
     );
 }
+
+// Fin ReportForm.jsx

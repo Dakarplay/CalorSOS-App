@@ -1,3 +1,9 @@
+// Inicio leafletConfig.js
+
+// frontend/src/utils/leafletConfig.js
+
+// Configuración de Leaflet para mapas
+
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -11,3 +17,5 @@ L.Icon.Default.mergeOptions({
 });
 
 export default L;
+
+// Fin leafletConfig.js

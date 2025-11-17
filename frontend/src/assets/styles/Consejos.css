@@ -1,3 +1,9 @@
+/* Inicio Consejos.css */
+
+/* frontend/src/assets/styles/Consejos.css */
+
+/* Estilos para la página de consejos */
+
 /* CONTENEDOR PRINCIPAL */
 .consejos-container {
   min-height: 100vh;
@@ -11,7 +17,7 @@
   align-self: start;
   margin: 20px 16px;
   font-size: 2rem;
-  
+
 }
 /* LAYOUT CON SIDEBAR */
 .consejos-layout {
@@ -179,3 +185,5 @@
     width: 100%;
   }
 }
+
+/* Fin Consejos.css */

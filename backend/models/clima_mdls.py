@@ -1,23 +1,32 @@
+# Inicio clima_mdls.py
+
 # backend/models/clima_mdls.py
+
+# Importaciones necesarias para el modelo climático
 from fastapi import HTTPException
 import requests
 from datetime import datetime, date, timedelta, timezone
 import pytz
 
+# Clase principal para manejar datos climáticos
 class ClimaModel:
-    LAT = 10.3910  # Coordenadas fijas de Cartagena
+    """
+    Modelo para obtener y procesar datos climáticos de Cartagena.
+    Utiliza APIs externas para datos actuales e históricos.
+    """
+    # Coordenadas fijas de Cartagena
+    LAT = 10.3910
     LON = -75.4794
 
     @staticmethod
     def obtener_clima(ciudad: str = "Cartagena"):
         """
-        Obtiene la información climática actual: temperatura, humedad, sensación térmica,
-        condición, UV index, heat_level, hydration_level y thermal_risk.
+        Obtiene la información climática actual incluyendo temperatura, humedad,
+        sensación térmica, condición, UV, niveles de calor e hidratación, y riesgo térmico.
+        Consulta la API de Open-Meteo para datos horarios.
         """
         try:
-            # ==========================
-            # 1) OBTENER DATOS CLIMÁTICOS DE OPEN-METEO
-            # ==========================
+            # Construir URL para consulta de pronóstico
             url = (
                 f"https://api.open-meteo.com/v1/forecast?"
                 f"latitude={ClimaModel.LAT}&longitude={ClimaModel.LON}&"
@@ -25,37 +34,32 @@ class ClimaModel:
                 f"timezone=America/Bogota"
             )
 
+            # Realizar petición a la API
             response = requests.get(url, timeout=10)
             if response.status_code != 200:
                 raise HTTPException(status_code=response.status_code, detail="Error al consultar API climática")
 
             data = response.json()
 
-            # ==========================
-            # 2) HORA ACTUAL EN CARTAGENA
-            # ==========================
+            # Obtener hora actual en Cartagena
             tz = pytz.timezone("America/Bogota")
             now = datetime.now(tz)
             hora_actual = now.hour
 
-            # ==========================
-            # 3) EXTRAER DATOS HORARIOS
-            # ==========================
+            # Extraer datos de la hora actual
             temperatura = data["hourly"]["temperature_2m"][hora_actual]
             humedad = data["hourly"]["relativehumidity_2m"][hora_actual]
             feels_like = data["hourly"]["apparent_temperature"][hora_actual]
             uv_index = data["hourly"]["uv_index"][hora_actual]
             weather_code = data["hourly"]["weathercode"][hora_actual]
 
-            # Validación de datos
+            # Validar y convertir datos
             temperatura = float(temperatura) if temperatura is not None else 0.0
             humedad = float(humedad) if humedad is not None else 0.0
             feels_like = float(feels_like) if feels_like is not None else temperatura
             uv_index = float(uv_index) if uv_index is not None else 0.0
 
-            # ==========================
-            # 4) MAPEO WEATHERCODE -> DESCRIPCIÓN
-            # ==========================
+            # Mapear código de clima a descripción
             weather_dict = {
                 0: "Despejado",
                 1: "Principalmente despejado",
@@ -80,14 +84,12 @@ class ClimaModel:
             }
             condicion = weather_dict.get(weather_code, "Desconocido")
 
-            # ==========================
-            # 5) CALCULOS PERSONALIZADOS
-            # ==========================
+            # Calcular niveles personalizados
             heat_level = min(100, max(0, (feels_like - 20) * 4))
             hydration_level = round(1 + (humedad / 100) * 3 + (temperatura / 40) * 5)
             hydration_level = min(10, max(1, hydration_level))
 
-            # Usar sensación térmica en lugar de temperatura para mejor precisión en climas tropicales
+            # Calcular riesgo térmico usando WBGT
             wbgt = (0.7 * feels_like) + (0.3 * (humedad / 10))
             if wbgt < 24:
                 thermal_risk = 0
@@ -102,9 +104,7 @@ class ClimaModel:
             else:
                 thermal_risk = 5
 
-            # ==========================
-            # 6) CONSTRUIR RESPUESTA
-            # ==========================
+            # Construir respuesta con todos los datos
             clima = {
                 "ciudad": ciudad,
                 "temperatura": temperatura,
@@ -127,13 +127,16 @@ class ClimaModel:
     @staticmethod
     def obtener_historico_sensacion(dias: int = 1):
         """
-        Devuelve la sensación térmica horaria de los últimos `dias` días.
-        Retorna una lista de dicts: [{"hora": "06:00", "sensacion": 28.5}, ...]
+        Devuelve la sensación térmica horaria de los últimos días especificados.
+        Utiliza la API de archive para datos históricos.
+        Retorna lista de diccionarios con hora y sensación.
         """
         try:
+            # Definir rango de fechas
             end = date.today()
             start = end - timedelta(days=dias)
 
+            # Construir URL para datos históricos
             url = (
                 f"https://archive-api.open-meteo.com/v1/archive?"
                 f"latitude={ClimaModel.LAT}&longitude={ClimaModel.LON}&"
@@ -141,6 +144,7 @@ class ClimaModel:
                 f"hourly=apparent_temperature&timezone=America/Bogota"
             )
 
+            # Realizar petición
             resp = requests.get(url, timeout=10)
             if resp.status_code != 200:
                 raise HTTPException(
@@ -152,9 +156,11 @@ class ClimaModel:
             horas = data.get("hourly", {}).get("time", [])
             sensaciones = data.get("hourly", {}).get("apparent_temperature", [])
 
+            # Validar datos obtenidos
             if not horas or not sensaciones or len(horas) != len(sensaciones):
                 raise HTTPException(status_code=500, detail="Datos históricos incompletos")
 
+            # Procesar datos en lista de diccionarios
             historico = [
                 {"hora": h.split("T")[1][:5], "sensacion": float(s)}
                 for h, s in zip(horas, sensaciones)
@@ -170,17 +176,18 @@ class ClimaModel:
     @staticmethod
     def obtener_historico_temp_humedad(dias: int = 1):
         """
-        Devuelve temperatura y humedad con timestamp completo.
-        Para 1 día → últimas 24 horas desde ahora (usando forecast para datos actuales).
-        Para >1 día → todo el rango de días (usando archive).
+        Devuelve temperatura y humedad con timestamp completo para los días especificados.
+        Para 1 día usa forecast con past_days, para más días usa archive API.
+        Retorna lista con timestamp, hora, fecha, temperatura y humedad.
         """
         lat = ClimaModel.LAT
         lon = ClimaModel.LON
         tz = pytz.timezone("America/Bogota")
         now = datetime.now(tz)
 
+        # Seleccionar API según número de días
         if dias == 1:
-            # Para 1 día, usar forecast API con past_days=1 para obtener datos históricos
+            # Usar forecast API para 1 día con datos pasados
             url = (
                 f"https://api.open-meteo.com/v1/forecast?"
                 f"latitude={lat}&longitude={lon}&"
@@ -188,7 +195,7 @@ class ClimaModel:
                 f"past_days=1&timezone=America/Bogota"
             )
         else:
-            # Para más días, usar archive API
+            # Usar archive API para más días
             end_date = now.date()
             start_date = end_date - timedelta(days=dias)
             url = (
@@ -198,21 +205,26 @@ class ClimaModel:
                 f"hourly=temperature_2m,relativehumidity_2m&timezone=America/Bogota"
             )
 
+        # Realizar petición
         resp = requests.get(url, timeout=10)
         if resp.status_code != 200:
             raise HTTPException(status_code=resp.status_code, detail="Error al consultar API climática histórica")
         data = resp.json()
 
+        # Verificar errores en respuesta
         if "error" in data:
             raise HTTPException(status_code=500, detail=data.get("reason", "Error en API climática histórica"))
 
+        # Extraer datos
         times = data["hourly"]["time"]
         temps = data["hourly"]["temperature_2m"]
         hums = data["hourly"]["relativehumidity_2m"]
 
+        # Validar consistencia de datos
         if len(times) != len(temps) or len(times) != len(hums):
             raise HTTPException(status_code=500, detail="Datos históricos inconsistentes")
 
+        # Procesar datos históricos
         historico = []
         for t, temp, hum in zip(times, temps, hums):
             dt_obj = datetime.fromisoformat(t)
@@ -224,11 +236,10 @@ class ClimaModel:
                 "humedad": hum
             })
 
+        # Para 1 día, filtrar últimas 24 horas
         if dias == 1:
-            # Filtrar últimas 24 horas desde ahora
             historico = historico[-24:]
 
         return historico
-    
-    
-    
+
+# Fin clima_mdls.py

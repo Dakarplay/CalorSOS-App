@@ -1,20 +1,24 @@
-// src/services/puntosService.js
+// Inicio puntosService.js
+
+// frontend/src/services/puntosService.js
+
+// Importación del cliente API configurado
 import API from "./api.js";
 
-// Obtener puntos de hidratación: por defecto solo activos, o todos si estado=null (para admin)
+// Función para obtener puntos de hidratación
 const obtenerPuntosHidratacion = async (estado = "activa") => {
     const url = estado !== "activa" ? "/puntos_hidratacion/" : `/puntos_hidratacion/?estado=${estado}`;
     const res = await API.get(url);
-    return res.data.data; // Mantengo tu estructura
+    return res.data.data;
 };
 
-// Obtener punto por ID
+// Función para obtener punto específico por ID
 const obtenerPuntoPorId = async (id) => {
     const res = await API.get(`/puntos_hidratacion/${id}`);
     return res.data.data;
 };
 
-// Actualizar punto (solo admin)
+// Función para actualizar punto (solo admin)
 const actualizarPunto = async (id, data) => {
     try {
         const res = await API.put(`/puntos_hidratacion/${id}`, data);
@@ -25,7 +29,7 @@ const actualizarPunto = async (id, data) => {
     }
 };
 
-// Eliminar punto (solo admin)
+// Función para eliminar punto (solo admin)
 const eliminarPunto = async (id) => {
     try {
         const res = await API.delete(`/puntos_hidratacion/${id}`);
@@ -36,10 +40,12 @@ const eliminarPunto = async (id) => {
     }
 };
 
-// Export default para que funcione el import puntosService
+// Exportar objeto con todas las funciones
 export default {
     obtenerPuntosHidratacion,
     obtenerPuntoPorId,
     actualizarPunto,
     eliminarPunto,
 };
+
+// Fin puntosService.js

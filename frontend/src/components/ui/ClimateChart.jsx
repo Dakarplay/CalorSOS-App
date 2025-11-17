@@ -1,16 +1,35 @@
+// Inicio ClimateChart.jsx
+
+// frontend/src/components/ui/ClimateChart.jsx
+
+// Componente de gráfico para mostrar temperatura y humedad histórica
+
+// Importaciones de React y hooks
 import React, { useEffect, useState } from "react";
+
+// Importaciones de Recharts para gráficos
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+
+// Importación del servicio de clima
 import { getClimaHistoricoTempHumedad } from "../../services/climaService";
+
+// Importación del componente loader
 import LoaderPremium from "../../components/common/LoaderPremium";
+
+// Importación de estilos
 import "../../assets/styles/ClimateChart.css";
 
+// Componente funcional principal
 export default function TempHumedadChart() {
+    // Estados del componente
     const [historico, setHistorico] = useState([]);
     const [dias, setDias] = useState(1);
     const [loading, setLoading] = useState(true);
 
+    // Opciones de días para los botones
     const botonesDias = [1, 2, 3, 4, 5, 6, 7];
 
+    // Efecto para cargar datos históricos
     useEffect(() => {
         async function fetchHistorico() {
             setLoading(true);
@@ -21,7 +40,7 @@ export default function TempHumedadChart() {
         fetchHistorico();
     }, [dias]);
 
-    // Tooltip personalizado
+    // Componente de tooltip personalizado
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             const date = new Date(label);
@@ -34,8 +53,8 @@ export default function TempHumedadChart() {
                     color: "#fff",
                     fontSize: "13px"
                 }}>
-                    <p>{dias === 1 
-                        ? `Hora: ${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}` 
+                    <p>{dias === 1
+                        ? `Hora: ${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`
                         : `Fecha: ${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`}</p>
                     {payload.map((p) => (
                         <p key={p.dataKey} style={{ color: p.stroke, margin: 0 }}>
@@ -52,6 +71,7 @@ export default function TempHumedadChart() {
         <div className="chart-container">
             <h3>Gráfico de Temperatura y Humedad</h3>
 
+            {/* Botones para seleccionar días */}
             <div className="chart-buttons">
                 {botonesDias.map((d) => (
                     <button
@@ -64,12 +84,14 @@ export default function TempHumedadChart() {
                 ))}
             </div>
 
+            {/* Loader mientras carga */}
             {loading && (
                 <div className="chart-loader">
                     <LoaderPremium />
                 </div>
             )}
 
+            {/* Gráfico responsivo */}
             <ResponsiveContainer width="100%" height={350}>
                 <LineChart
                     data={historico}
@@ -81,13 +103,13 @@ export default function TempHumedadChart() {
                         dataKey="timestamp"
                         stroke="#cfd9e5"
                         tick={false}
-                        interval={0} // todos los puntos seleccionables
+                        interval={0}
                         tickFormatter={(value) => {
                             const date = new Date(value);
                             if (dias === 1) {
-                                return `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`; // HH:MM
+                                return `${date.getHours()}:${("0"+date.getMinutes()).slice(-2)}`;
                             }
-                            return ""; // no mostrar ticks para >1 día
+                            return "";
                         }}
                     />
                     <YAxis yAxisId="left" stroke="#ff7300" tick={{ fontSize: 12 }} />
@@ -96,6 +118,7 @@ export default function TempHumedadChart() {
                         content={<CustomTooltip />}
                         cursor={{ stroke: "#aaa", strokeWidth: 1, strokeDasharray: "3 3" }}
                     />
+                    {/* Línea de temperatura */}
                     <Line
                         yAxisId="left"
                         type="monotone"
@@ -106,6 +129,7 @@ export default function TempHumedadChart() {
                         activeDot={{ r: 6 }}
                         connectNulls
                     />
+                    {/* Línea de humedad */}
                     <Line
                         yAxisId="right"
                         type="monotone"
@@ -121,3 +145,5 @@ export default function TempHumedadChart() {
         </div>
     );
 }
+
+// Fin ClimateChart.jsx

@@ -1,3 +1,9 @@
+# Inicio .gitignore
+
+# .gitignore
+
+# Archivo de configuración para ignorar archivos en Git
+
 # =============================================
 # ENTORNOS VIRTUALES Y VARIABLES DE ENTORNO
 # =============================================
@@ -169,7 +175,7 @@ coverage/
 .lib-cov
 
 # Reportes de diagnóstico de Node.js
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+report.[0-9]*.[0-9]*.[0-9]*.json
 
 # =============================================
 # SERVIDORES Y DEPLOY
@@ -205,3 +211,5 @@ pids
 
 # Historial de comandos
 .history
+
+# Fin .gitignore

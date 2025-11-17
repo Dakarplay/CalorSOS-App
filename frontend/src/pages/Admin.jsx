@@ -1,17 +1,36 @@
-// src/pages/Admin.jsx
+// Inicio Admin.jsx
+
+// frontend/src/pages/Admin.jsx
+
+// Página de panel de administración para gestionar reportes, zonas, puntos y usuarios
+
+// Importaciones de React y hooks
 import React, { useState, useEffect, useContext } from "react";
+
+// Importación del contexto de usuario
 import { UserContext } from "../context/UserContext";
+
+// Importación de componentes
 import Navbar from "../components/ui/NavbarSmart.jsx";
+
+// Importación de servicios
 import { listarReportes, validarReporte, rechazarReporte } from "../services/reportesService.js";
 import zonasService from "../services/zonasService.js";
 import puntosService from "../services/puntosService.js";
 import { listarUsuarios, actualizarUsuario, eliminarUsuario } from "../services/usuariosService.js";
+
+// Importación de modales
 import ReportModal from "../components/report/ReportModal.jsx";
 import MapFullscreenModal from "../components/maps/MapFullscreenModal.jsx";
 import MapView from "../components/maps/MapView.jsx";
+
+// Importación de estilos
 import "../assets/styles/Admin.css";
 
+// COMPONENTE PRINCIPAL
 export default function Admin() {
+
+  // Estados Usuario y pestañas
   const { user } = useContext(UserContext);
   const [activeTab, setActiveTab] = useState("reportes");
 
@@ -199,7 +218,7 @@ export default function Admin() {
   if (!user || user.rol !== "admin") {
     return <div>No tienes permisos para acceder a esta página</div>;
   }
-
+  // RENDER PRINCIPAL
   return (
     <div className="admin-container">
       <Navbar />
@@ -234,7 +253,7 @@ export default function Admin() {
           </button>
         </div>
 
-        {/* Contenido de las pestañas */}
+        {/* SECCIÓN: Reportes */}
         {activeTab === "reportes" && (
           <div className="admin-section">
             <h2>Gestión de Reportes</h2>
@@ -295,7 +314,7 @@ export default function Admin() {
             )}
           </div>
         )}
-
+        {/* SECCIÓN: Zonas Frescas */}
         {activeTab === "zonas" && (
           <div className="admin-section">
             <h2>Gestión de Zonas Frescas</h2>
@@ -348,7 +367,7 @@ export default function Admin() {
             )}
           </div>
         )}
-
+        {/* SECCIÓN: Puntos de Hidratación */}
         {activeTab === "puntos" && (
           <div className="admin-section">
             <h2>Gestión de Puntos de Hidratación</h2>
@@ -400,7 +419,7 @@ export default function Admin() {
             )}
           </div>
         )}
-
+        {/* SECCIÓN: Usuarios */}
         {activeTab === "usuarios" && (
           <div className="admin-section">
             <h2>Gestión de Usuarios</h2>
@@ -443,7 +462,7 @@ export default function Admin() {
           </div>
         )}
       </div>
-
+      
       {/* Modal para editar zona */}
       <ReportModal
         open={openEditZonaModal}
@@ -614,3 +633,5 @@ export default function Admin() {
     </div>
   );
 }
+
+// Fin Admin.jsx

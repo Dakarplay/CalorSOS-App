@@ -1,259 +1,365 @@
-# 🌡️ CalorSOS API Backend
+<!-- Inicio README.md -->
 
-## 🚀 Descripción
+<!-- README.md -->
 
-**CalorSOS** es una API (POR EL MOMENTO API) desarrollada en **FastAPI** para la gestión de información relacionada con puntos de hidratación, zonas frescas, reportes de calor y alertas climáticas.  
-El sistema está completamente integrado con **Supabase** como base de datos y utiliza **JWT** para autenticación y control de roles (usuario / administrador).
+<!-- Archivo de documentación principal del proyecto CalorSOS -->
 
----
+# CalorSOS - Sistema de Gestión de Calor Extremo
 
-## 🧱 Estructura del Proyecto
+## Descripción del Proyecto
+
+**CalorSOS** es una aplicación web completa desarrollada para ayudar a la ciudadanía en situaciones de calor extremo en Cartagena, Colombia. El sistema permite a los usuarios acceder a información vital sobre puntos de hidratación, zonas frescas, reportes ciudadanos, alertas climáticas y consejos de prevención, facilitando la toma de decisiones informadas para proteger la salud en condiciones de altas temperaturas.
+
+El proyecto consta de dos componentes principales:
+- **Backend**: API REST desarrollada en FastAPI que maneja la lógica de negocio, autenticación y conexión con la base de datos.
+- **Frontend**: Interfaz de usuario desarrollada en React con Vite que proporciona una experiencia intuitiva y responsiva.
+
+## Fin del Proyecto
+
+El objetivo principal de CalorSOS es contribuir a la reducción de riesgos asociados con el calor extremo mediante:
+- Información accesible sobre recursos de hidratación y zonas frescas.
+- Sistema de reportes ciudadanos para identificar nuevas necesidades.
+- Alertas climáticas en tiempo real basadas en datos meteorológicos.
+- Consejos preventivos y educativos sobre el manejo del calor.
+- Gestión administrativa eficiente para mantener la información actualizada.
+
+## Funcionalidades Principales
+
+### Para Usuarios Comunes
+- Registro y autenticación de usuarios.
+- Visualización de puntos de hidratación en mapa interactivo.
+- Consulta de zonas frescas disponibles.
+- Creación de reportes ciudadanos sobre necesidades de hidratación o zonas frescas.
+- Recepción de notificaciones sobre alertas climáticas.
+- Acceso a consejos y recomendaciones de prevención.
+- Perfil personal para gestionar información.
+
+### Para Administradores
+- Validación y gestión de reportes ciudadanos.
+- Creación y administración de puntos de hidratación.
+- Gestión de zonas frescas.
+- Emisión de alertas climáticas.
+- Administración de usuarios y roles.
+- Envío de notificaciones a usuarios.
+
+### Funcionalidades Generales
+- Datos climáticos en tiempo real desde APIs externas.
+- Mapa interactivo con Leaflet para visualización geográfica.
+- Sistema de autenticación JWT con roles.
+- Interfaz responsiva y accesible.
+- Integración completa con base de datos Supabase.
+
+## Tecnologías Utilizadas
+
+### Backend
+- **FastAPI**: Framework web moderno y rápido para APIs REST.
+- **Supabase**: Base de datos PostgreSQL como servicio con autenticación integrada.
+- **Python 3.11.9**: Lenguaje de programación principal.
+- **JWT**: Autenticación basada en tokens.
+- **Bcrypt**: Hashing seguro de contraseñas.
+- **Open-Meteo API**: Fuente de datos climáticos.
+
+### Frontend
+- **React 18**: Biblioteca para interfaces de usuario.
+- **Vite**: Herramienta de construcción rápida para desarrollo moderno.
+- **Leaflet**: Biblioteca para mapas interactivos.
+- **Axios**: Cliente HTTP para comunicación con la API.
+- **CSS Modules**: Estilos modulares y organizados.
+- **React Router**: Navegación entre páginas.
+
+### Infraestructura
+- **Git**: Control de versiones.
+- **VS Code**: Entorno de desarrollo integrado.
+- **Postman/Swagger**: Pruebas y documentación de API.
+
+## Estructura del Proyecto
 
 ```
-
-CALORSOS-APP/
+CalorSOS-App/
 │
-├── .venv/                      # 💡 Entorno virtual de Python (no se sube a GitHub)
-├── .gitignore                  # 🧹 Define qué archivos deben ignorarse en el control de versiones (ej: .venv/, __pycache__/)
-├── calorsos.env                # 🔐 Archivo de variables de entorno con credenciales y llaves (Supabase, JWT_SECRET, API_KEY clima)
-├── README.md                   # 📘 Documentación del proyecto: estructura, configuración y endpoints
+├── .gitignore                  # Configuración de archivos ignorados en Git
+├── calorsos.env                # Archivo que contiene la informacion que necesita la api de supabase y la clave JWT
+├── README.md                   # Documentación principal del proyecto
+├── requirements.txt            # Dependencias de Python para el backend
 │
-├── backend/                    # ⚙️ Lógica del servidor (toda la API y conexión con la base de datos)
-│   │
-│   ├── __init__.py             # 🧩 Marca la carpeta como módulo de Python
-│   ├── app/                    # 🚀 Núcleo de la aplicación FastAPI
-│   │   ├── __init__.py         # 🧩 Indica que `app` es un paquete importable
-│   │   ├── main.py             # 🏁 Punto de entrada principal del backend
-│   │   │                       # - Crea la instancia de FastAPI
-│   │   │                       # - Configura CORS
-│   │   │                       # - Registra todos los routers de la API
-│   │   │
-│   │   ├── routers/            # 🌐 Módulos que definen las rutas (endpoints) del sistema
-│   │   │    ├── __init__.py
-│   │   │    ├── admin.py               # 🧠 Rutas exclusivas para validaciones y gestión de reportes (solo admin)
-│   │   │    ├── alertas_calor.py       # ☀️ Rutas para crear, listar y eliminar alertas de calor
-│   │   │    ├── clima.py               # 🌦️ Rutas que obtienen datos meteorológicos externos (públicas)
-│   │   │    ├── notificaciones.py      # 🔔 Rutas de creación y lectura de notificaciones (según rol)
-│   │   │    ├── puntos_hidratacion.py  # 💧 Rutas CRUD de los puntos de hidratación
-│   │   │    ├── reportes.py            # 📝 Rutas CRUD de los reportes ciudadanos
-│   │   │    ├── usuarios.py            # 👤 Registro, login, perfil y manejo de roles de usuarios
-│   │   │    └── zonas_frescas.py       # 🌳 Rutas CRUD de zonas frescas del entorno
-│   │   │
-│   │   └── security/          # 🔒 Módulos encargados de la seguridad y autenticación
-│   │       ├── __init__.py
-│   │       ├── auth.py                 # 🧾 Dependencias para autenticación y autorización (uso de JWT y roles)
-│   │       ├── hashing.py              # 🔑 Cifrado y verificación de contraseñas (bcrypt / passlib)
-│   │       └── jwt_handler.py          # 🛡️ Generación y validación de tokens JWT
-│   │
-│   ├── database/              # 🗄️ Conexión con la base de datos Supabase
+├── backend/                    # Lógica del servidor y API
+│   ├── __init__.py
+│   ├── app/
 │   │   ├── __init__.py
-│   │   └── supabase_config.py         # ⚙️ Inicializa el cliente Supabase usando las claves del archivo `.env`
-│   │
-│   └── models/                # 🧠 Modelos que manejan la lógica de base de datos
+│   │   ├── main.py             # Punto de entrada principal de FastAPI
+│   │   ├── routers/            # Definición de endpoints de la API
+│   │   │   ├── __init__.py
+│   │   │   ├── admin.py
+│   │   │   ├── alertas_calor.py
+│   │   │   ├── clima.py
+│   │   │   ├── notificaciones.py
+│   │   │   ├── puntos_hidratacion.py
+│   │   │   ├── reportes.py
+│   │   │   ├── usuarios.py
+│   │   │   └── zonas_frescas.py
+│   │   └── security/           # Módulos de seguridad y autenticación
+│   │       ├── __init__.py
+│   │       ├── hashing.py
+│   │       └── jwt_handler.py
+│   ├── database/
+│   │   ├── __init__.py
+│   │   └── supabase_config.py  # Configuración de conexión a Supabase
+│   └── models/                 # Modelos de datos y lógica de negocio
 │       ├── __init__.py
-│       ├── admin_mdls.py             # 🧠 Funciones para validar/rechazar reportes (rol admin)
-│       ├── alertas_calor_mdls.py     # ☀️ CRUD y estructura de datos para alertas de calor
-│       ├── clima_mdls.py             # 🌦️ Obtiene datos del clima desde una API externa
-│       ├── notificaciones_mdls.py    # 🔔 Operaciones sobre la tabla de notificaciones (crear, listar, eliminar)
-│       ├── puntos_hidratacion_mdls.py# 💧 CRUD de puntos de hidratación en Supabase
-│       ├── reportes_mdls.py          # 📝 Inserción, actualización y eliminación de reportes ciudadanos
-│       ├── usuarios_mdls.py          # 👤 Manejo de datos de usuario (crear, listar, actualizar, eliminar)
-│       └── zonas_frescas_mdls.py     # 🌳 CRUD para zonas frescas (administración ambiental)
+│       ├── admin_mdls.py
+│       ├── alertas_calor_mdls.py
+│       ├── clima_mdls.py
+│       ├── notificaciones_mdls.py
+│       ├── punto_hidratacion_mdls.py
+│       ├── reportes_mdls.py
+│       ├── usuarios_mdls.py
+│       └── zonas_frescas_mdls.py
 │
-├── docs/                       # 📄 Carpeta destinada a documentación, diagramas o manuales del proyecto (vacía por ahora, pero se usará para manual técnico y API Reference) 
+├── frontend/                   # Interfaz de usuario
+│   ├── index.html              # Punto de entrada HTML
+|   ├── node_modules            # Carpeta con los modulos de Node.js
+│   ├── package.json            # Configuración de dependencias de Node.js
+│   ├── package-lock.json       # Lock de versiones de dependencias
+│   ├── vite.config.js          # Configuración de Vite
+│   └── src/
+│       ├── app.jsx             # Componente raíz de la aplicación
+│       ├── main.jsx            # Punto de entrada de React
+│       ├── assets/
+│       │   ├── images/
+│       │   │   └── logo.svg
+│       │   └── styles/         # Estilos CSS organizados
+│       │       ├── Admin.css 
+│       │       ├── Alertas.css
+│       │       ├── Auth.css
+│       │       ├── ClimateChart.css
+│       │       ├── Configuracion.css
+│       │       ├── Consejos.css
+│       │       ├── global.css
+│       │       ├── Home.css
+│       │       ├── IndicatorsPanel.css
+│       │       ├── NavbarSmart.css
+│       │       ├── Perfil.css
+│       │       ├── PuntosHidratacion.css
+│       │       ├── ReportCTA.css
+│       │       ├── StatCard.css
+│       │       └── ZonasFrescas.css
+│       ├── components/         # Componentes reutilizables
+│       │   ├── common/
+│       │   │   └── LoaderPremium.jsx
+│       │   ├── maps/
+│       │   │   ├── MapFullscreenModal.css
+│       │   │   ├── MapFullscreenModal.jsx
+│       │   │   ├── MapView.css
+│       │   │   └── MapView.jsx
+│       │   ├── report/
+│       │   │   ├── ReportForm.jsx
+│       │   │   ├── ReportModal.css
+│       │   │   └── ReportModal.jsx
+│       │   └── ui/
+│       │       ├── ClimateChart.jsx
+│       │       ├── IndicatorsPanel.jsx
+│       │       ├── MapPreview.jsx
+│       │       ├── NavbarSmart.jsx
+│       │       ├── ReportCTA.jsx
+│       │       └── StatCard.jsx
+│       ├── context/
+│       │   └── UserContext.jsx
+│       ├── data/
+│       │   └── consejosData.js
+│       │
+│       ├── pages/              # Páginas principales de la aplicación
+│       │   ├── Admin.jsx
+│       │   ├── Alertas.jsx
+│       │   ├── Configuracion.jsx
+│       │   ├── Consejos.jsx
+│       │   ├── Home.jsx
+│       │   ├── Login.jsx
+│       │   ├── Perfil.jsx
+│       │   ├── PuntosHidratacion.jsx
+│       │   ├── Register.jsx
+│       │   └── ZonasFrescas.jsx
+│       ├── router/
+│       │   └── AppRouter.jsx
+│       ├── services/           # Servicios para comunicación con API
+│       │   ├── api.js
+│       │   ├── authService.js
+│       │   ├── climaService.js
+│       │   ├── puntosService.js
+│       │   ├── reportesService.js
+│       │   └── zonasService.js
+│       └── utils/
+│           └── leafletConfig.js
 │
-└── frontend/                   # 💻 Carpeta para la futura interfaz web o app móvil de CalorSOS (vacía por ahora, se integrará más adelante con el backend)
-
+└── docs/                       # Documentación adicional (vacío por ahora)
 ```
 
----
+## Instalación y Configuración
 
-## ⚙️ Instalación y Configuración
+### Prerrequisitos
+- Python 3.8 o superior (Preferiblemente se recomienda usar la version de python con la cual se trabajo en el proyecto: `Python 3.11.9`)
+- Node.js 16 o superior
+- Git
+- Cuenta en Supabase: https://supabase.com/
 
-### 1️⃣ Clonar el repositorio
+### 1. Clonar el Repositorio
 
 ```bash
 git clone https://github.com/Dakarplay/CalorSOS-App.git
 cd CalorSOS-App
 ```
 
-### 2️⃣ Crear entorno virtual
+### 2. Configuración del Backend
 
+#### Crear Entorno Virtual
 ```bash
 python -m venv .venv
-source .venv/bin/activate     # En Linux/Mac
-.venv\Scripts\activate      # En Windows
+# En Windows:
+.venv\Scripts\activate
+# En Linux/Mac:
+source .venv/bin/activate
 ```
 
-### 3️⃣ Instalar dependencias
-
+#### Instalar Dependencias
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4️⃣ Crear archivo `.env` en la raíz
-
+#### Configurar Variables de Entorno
+Crear archivo `calorsos.env` en la raíz del proyecto:
 ```env
-SUPABASE_URL=tu_supabase_url
-SUPABASE_KEY=tu_supabase_key
-JWT_SECRET=tu_clave_secreta_segura
+SUPABASE_URL=tu_supabase_url_aqui
+SUPABASE_KEY=tu_supabase_key_aqui
+JWT_SECRET=tu_clave_secreta_muy_segura_aqui
 ```
 
-### 5️⃣ Ejecutar el servidor
-
+#### Ejecutar el Backend
+- Nota: El backend debe ejecutarse desde la carpeta raiz del proyecto `/calorsos-app` y ejecutar el siguiente comando:
 ```bash
 uvicorn backend.app.main:app --reload --port 8000
 ```
 
-### 6️⃣ Abrir la documentación interactiva
+### 3. Configuración del Frontend
 
-👉 [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+#### Instalar Dependencias
+```bash
+cd frontend
+npm install
+```
 
----
+#### Ejecutar el Frontend
+- Nota: Para ejecutar el frontend, debe ubicarse dentro de la carpeta `/frontend` y ejecutar, de esta forma:
+```bash
+cd frontend
+npm run dev
+```
 
-## 🔐 Autenticación JWT
+El frontend estará disponible en `http://localhost:5173` y el backend en `http://localhost:8000`.
 
-### Flujo de autenticación
+## Uso de la Aplicación
 
-1. Registrar usuario → `/usuarios/register`
-2. Iniciar sesión → `/usuarios/login`
+### Acceso a la Documentación de la API
+Una vez ejecutado el backend, acceder a:
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+### Autenticación
+1. Registrar un nuevo usuario en `/usuarios/register`
+2. Iniciar sesión en `/usuarios/login`
 3. Copiar el token JWT recibido
-4. En Swagger → “Authorize” → pegar `Bearer <tu_token>`
+4. Usar el token en el header `Authorization: Bearer <token>` para rutas protegidas
 
----
+### Roles de Usuario
+- **usuario**: Acceso básico a información y creación de reportes
+- **admin**: Acceso completo a gestión del sistema
 
-## 👥 Roles de usuario
+## API Endpoints Principales
 
-| Rol | Descripción | Permisos principales |
-|------|--------------|----------------------|
-| **usuario** | Usuario común | Crear reportes, ver zonas frescas, puntos de hidratación |
-| **admin** | Administrador del sistema | Validar reportes, crear alertas, eliminar o actualizar registros |
+### Autenticación
+- `POST /usuarios/register` - Registro de usuarios
+- `POST /usuarios/login` - Inicio de sesión
+- `GET /usuarios/perfil` - Obtener perfil del usuario autenticado
 
----
+### Gestión de Usuarios (Admin)
+- `GET /usuarios/` - Listar todos los usuarios
+- `PUT /usuarios/{id}` - Actualizar usuario
+- `DELETE /usuarios/{id}` - Eliminar usuario
 
-## 📡 Endpoints Principales
+### Puntos de Hidratación
+- `GET /puntos_hidratacion/` - Listar puntos activos
+- `POST /puntos_hidratacion/` - Crear nuevo punto (requiere token)
+- `PUT /puntos_hidratacion/{id}` - Actualizar punto (admin)
+- `DELETE /puntos_hidratacion/{id}` - Eliminar punto (admin)
 
-### 👤 Usuarios
+### Zonas Frescas
+- `GET /zonas_frescas/` - Listar zonas activas
+- `POST /zonas_frescas/` - Crear nueva zona (requiere token)
+- `PUT /zonas_frescas/{id}` - Actualizar zona (admin)
+- `DELETE /zonas_frescas/{id}` - Eliminar zona (admin)
 
-| Método | Ruta | Acceso |
-|--------|------|--------|
-| POST | `/usuarios/register` | Público |
-| POST | `/usuarios/login` | Público |
-| GET | `/usuarios/perfil` | Token |
-| GET | `/usuarios/` | Admin |
-| PUT | `/usuarios/{id}` | Propietario / Admin |
-| DELETE | `/usuarios/{id}` | Admin|
+### Reportes Ciudadanos
+- `GET /reportes/` - Listar reportes (filtrado por usuario/estado)
+- `POST /reportes/` - Crear nuevo reporte
+- `PUT /reportes/{id}` - Actualizar reporte
+- `DELETE /reportes/{id}` - Eliminar reporte
 
-### 💧 Puntos de Hidratación
+### Administración de Reportes
+- `PUT /admin/validar_reporte/{id}` - Validar reporte y crear entidad correspondiente
+- `PUT /admin/rechazar_reporte/{id}` - Rechazar y eliminar reporte
 
-| Método | Ruta | Acceso |
-|--------|------|--------|
-| POST | `/puntos_hidratacion/` | Token |
-| GET | `/puntos_hidratacion/` | Público |
-| PUT | `/puntos_hidratacion/{id}` | Admin |
-| DELETE | `/puntos_hidratacion/{id}` | Admin |
+### Alertas de Calor
+- `GET /alertas_calor/` - Listar alertas activas
+- `POST /alertas_calor/` - Crear nueva alerta (admin)
+- `DELETE /alertas_calor/{id}` - Eliminar alerta (admin)
 
-### 🌳 Zonas Frescas
+### Notificaciones
+- `GET /notificaciones/` - Listar notificaciones del usuario
+- `POST /notificaciones/` - Crear notificación (admin)
+- `PUT /notificaciones/{id}` - Actualizar estado (admin)
+- `DELETE /notificaciones/{id}` - Eliminar notificación (admin)
 
-| Método | Ruta | Acceso |
-|--------|------|--------|
-| POST | `/zonas_frescas/` | Token |
-| GET | `/zonas_frescas/` | Público |
-| PUT | `/zonas_frescas/{id}` | Admin |
-| DELETE | `/zonas_frescas/{id}` | Admin |
+### Datos Climáticos
+- `GET /clima/` - Obtener clima actual
+- `GET /clima/historico/{dias}` - Obtener datos históricos
 
-### ☀️ Alertas de Calor
+## Funcionamiento del Sistema
 
-| Método | Ruta | Acceso |
-|--------|------|--------|
-| GET | `/alertas_calor/` | Público |
-| POST | `/alertas_calor/` | Admin |
-| DELETE | `/alertas_calor/{id}` | Admin |
+### Flujo de Usuario Común
+1. **Registro/Login**: El usuario se registra o inicia sesión.
+2. **Visualización**: Accede al mapa principal con puntos de hidratación y zonas frescas.
+3. **Reportes**: Puede crear reportes sobre necesidades no cubiertas.
+4. **Alertas**: Recibe notificaciones sobre condiciones climáticas peligrosas.
+5. **Consejos**: Consulta información preventiva sobre el calor.
 
-### 🔔 Notificaciones
+### Flujo Administrativo
+1. **Gestión de Contenido**: Los administradores mantienen actualizados los puntos y zonas.
+2. **Validación de Reportes**: Revisan y procesan reportes ciudadanos, creando nuevas entidades si es necesario.
+3. **Alertas**: Emiten alertas basadas en datos climáticos.
+4. **Monitoreo**: Supervisan el uso del sistema y la actividad de usuarios.
 
-| Método | Ruta | Acceso |
-|--------|------|--------|
-| POST | `/notificaciones/` | Admin |
-| GET | `/notificaciones/` | Token |
-| PUT | `/notificaciones/{id}` | Admin |
-| DELETE | `/notificaciones/{id}` | Admin |
+### Integración Frontend-Backend
+- El frontend consume la API REST del backend.
+- La autenticación se maneja mediante JWT tokens.
+- Los datos geográficos se visualizan usando Leaflet.
+- La comunicación es asíncrona mediante Axios.
 
-### 🧠 Administración
+## Base de Datos
 
-| Método | Ruta | Acceso |
-|--------|------|--------|
-| PUT | `/admin/validar_reporte/{id}` | Admin |
-| PUT | `/admin/rechazar_reporte/{id}` | Admin |
+El sistema utiliza Supabase (PostgreSQL) con las siguientes tablas principales:
+- `usuarios`: Información de usuarios y roles
+- `puntos_hidratacion`: Ubicación y detalles de puntos de hidratación
+- `zonas_frescas`: Información sobre zonas frescas
+- `reportes`: Reportes ciudadanos pendientes de validación
+- `alertas_calor`: Alertas climáticas activas
+- `notificaciones`: Mensajes para usuarios
 
----
+## Desarrollado por
 
-## 🧩 Dependencias principales
+**Dago David Palmera Navarro**
+**Julian David Camargo Padilla**
+- **Proyecto académico** - Ingeniería de Sistemas
+- **Asignatura** - Ingenieria de Servicios de Internet (ISI)
+- **Universidad:** Universidad de Cartagena - Cartagena de Indias - COLOMBIA
+- **Semestre:** 5to Semestre
+- **Periodo:** 2025-2
 
-- **FastAPI** — Framework backend
-- **Uvicorn** — Servidor ASGI
-- **Supabase-py** — Conexión con Supabase
-- **Passlib / Bcrypt** — Hash de contraseñas
-- **PyJWT** — Manejo de tokens JWT
-
----
-
-## 🧠 Desarrollado por
-
-👤 **Dago David Palmera Navarro**  
-💻 Proyecto académico – Ingeniería de Sistemas  
-📆 Año: 2025  
-
----
-
-## ESTRUCTURA FRONTEND
-
-```
-
-frontend/
-│
-├── node_modules/
-├── public/
-│
-├── src/
-│   ├── assets/                 # Recursos locales (SVG, fuentes, estilos globales)
-│   │   ├── logo.svg
-│   │   └── styles/
-│   │       └── global.css
-│   │
-│   ├── components/             # Componentes reutilizables (UI)
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   ├── AlertCard.jsx       # Tarjeta de alerta climática
-│   │   ├── ReportButton.jsx    # Botón flotante para reportes
-│   │   └── Loader.jsx          # Indicador de carga
-│   │
-│   ├── pages/                  # Vistas completas (pantallas)
-│   │   ├── Home.jsx            # Página principal con el mapa
-│   │   ├── Reportes.jsx        # Página para enviar/ver reportes
-│   │   ├── ZonasFrescas.jsx    # Página para ver zonas frescas
-│   │   └── Perfil.jsx          # Perfil de usuario / login
-│   │
-│   ├── services/               # Lógica para conectar con el backend
-│   │   ├── api.js              # Configuración de axios
-│   │   ├── puntosService.js    # Funciones para puntos de hidratación
-│   │   ├── zonasService.js     # Funciones para zonas frescas
-│   │   └── reportesService.js  # Funciones para reportes
-│   │
-│   ├── hooks/                  # Hooks personalizados (ej: useGeolocalizacion)
-│   │   └── useGeolocation.js
-│   │
-│   ├── context/                # Contextos globales (usuario, alertas, etc.)
-│   │   └── UserContext.jsx
-│   │
-│   ├── router/                 # Configuración de rutas con React Router
-│   │   └── AppRouter.jsx
-│   │
-│   ├── App.jsx                 # Componente raíz
-│   └── main.jsx                # Punto de entrada de React
-│
-├── index.html
-├── package.json
-├── package-lock.json
-└── vite.config.js
-```
+<!-- Fin README.md -->

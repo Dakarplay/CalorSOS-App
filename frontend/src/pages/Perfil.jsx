@@ -1,22 +1,39 @@
+// Inicio Perfil.jsx
+
+// frontend/src/pages/Perfil.jsx
+
+// Página para gestionar el perfil del usuario
+
+// Importaciones de React y hooks
 import React, { useContext, useState, useEffect } from "react";
+
+// Importación del contexto de usuario
 import { UserContext } from "../context/UserContext.jsx";
+
+// Importación de componentes
 import NavbarSmart from "../components/ui/NavbarSmart";
+
+// Importación de estilos
 import "../assets/styles/Perfil.css";
 
 export default function Perfil() {
   const { user, logout, updateProfile, changePassword } = useContext(UserContext);
+
   const [isEditing, setIsEditing] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+
   const [formData, setFormData] = useState({
     nombre: '',
     correo: '',
     telefono: ''
   });
+
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
   });
+
   const [loading, setLoading] = useState(false);
 
   // Actualizar formData cuando cambie el user
@@ -66,7 +83,7 @@ export default function Perfil() {
       alert('Las contraseñas no coinciden');
       return;
     }
-    
+
     if (passwordData.newPassword.length < 6) {
       alert('La contraseña debe tener al menos 6 caracteres');
       return;
@@ -119,7 +136,7 @@ export default function Perfil() {
             {/* Columna izquierda: Información personal */}
             <div className="pr-card">
               <h2 className="pr-card__title">Información Personal</h2>
-              
+
               <div className="pr-info-group">
                 <div className="pr-info-label">Nombre</div>
                 {isEditing ? (
@@ -179,7 +196,7 @@ export default function Perfil() {
 
               <div className="pr-actions">
                 {!isEditing ? (
-                  <button 
+                  <button
                     className="pr-btn pr-btn--primary"
                     onClick={() => setIsEditing(true)}
                     disabled={loading}
@@ -188,14 +205,14 @@ export default function Perfil() {
                   </button>
                 ) : (
                   <>
-                    <button 
+                    <button
                       className="pr-btn pr-btn--primary"
                       onClick={handleSaveProfile}
                       disabled={loading}
                     >
                       {loading ? 'Guardando...' : 'Guardar Cambios'}
                     </button>
-                    <button 
+                    <button
                       className="pr-btn pr-btn--secondary"
                       onClick={cancelEdit}
                       disabled={loading}
@@ -210,7 +227,7 @@ export default function Perfil() {
             {/* Columna derecha: Seguridad */}
             <div className="pr-card">
               <h2 className="pr-card__title">Seguridad</h2>
-              
+
               {!showChangePassword ? (
                 <>
                   <div className="pr-info-group">
@@ -221,15 +238,15 @@ export default function Perfil() {
                   </div>
 
                   <div className="pr-actions">
-                    <button 
+                    <button
                       className="pr-btn pr-btn--secondary"
                       onClick={() => setShowChangePassword(true)}
                       disabled={loading}
                     >
                       Cambiar Contraseña
                     </button>
-                    <button 
-                      className="pr-btn pr-btn--danger" 
+                    <button
+                      className="pr-btn pr-btn--danger"
                       onClick={logout}
                       disabled={loading}
                     >
@@ -279,14 +296,14 @@ export default function Perfil() {
                   </div>
 
                   <div className="pr-actions">
-                    <button 
+                    <button
                       className="pr-btn pr-btn--primary"
                       onClick={handleChangePassword}
                       disabled={loading}
                     >
                       {loading ? 'Cambiando...' : 'Cambiar Contraseña'}
                     </button>
-                    <button 
+                    <button
                       className="pr-btn pr-btn--secondary"
                       onClick={cancelPasswordChange}
                       disabled={loading}
@@ -303,3 +320,5 @@ export default function Perfil() {
     </>
   );
 }
+
+// Fin Perfil.jsx

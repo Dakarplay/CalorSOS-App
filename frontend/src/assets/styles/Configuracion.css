@@ -1,3 +1,9 @@
+/* Inicio Configuracion.css */
+
+/* frontend/src/assets/styles/Configuracion.css */
+
+/* Estilos para la página de configuración */
+
 /* Contenedor principal */
 .page-container {
     min-height: 100vh;
@@ -22,3 +28,5 @@
 }
 
 /* Puedes agregar clases para tarjetas, listas o grids de puntos de hidratación */
+
+/* Fin Configuracion.css */

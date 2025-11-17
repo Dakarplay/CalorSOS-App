@@ -1,3 +1,9 @@
+/* Inicio MapView.css */
+
+/* frontend/src/components/maps/MapView.css */
+
+/* Estilos para el componente MapView */
+
 /* src/components/maps/MapView.css */
 
 .mv-container {
@@ -118,3 +124,5 @@
     box-shadow: 0 2px 6px rgba(220,53,69,0.35);
     transform: translateY(-4px);
 }
+
+/* Fin MapView.css */

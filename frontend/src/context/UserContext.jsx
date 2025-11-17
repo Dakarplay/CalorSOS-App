@@ -1,5 +1,13 @@
-// src/context/UserContext.jsx
+// Inicio UserContext.jsx
+
+// frontend/src/context/UserContext.jsx
+
+// Contexto para gestionar el estado del usuario
+
+// Importaciones de React
 import { createContext, useState, useEffect } from "react";
+
+// Importación del servicio API
 import API from "../services/api.js";
 
 export const UserContext = createContext();
@@ -9,57 +17,51 @@ export const UserProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token") || null);
     const [loading, setLoading] = useState(true);
 
-    // ----------------------------------------------------
     // Normalizador de perfil desde backend
-    // ----------------------------------------------------
     const normalizeUser = (data) => {
         return data?.usuario_actual || data?.data || data || null;
     };
 
-    // ----------------------------------------------------
     // Verificar token al iniciar la app
-    // ----------------------------------------------------
     useEffect(() => {
         const verify = async () => {
-            if (!token) { 
-                setLoading(false); 
-                return; 
-            }
-
-            try {
-                const me = await API.get("/usuarios/perfil");
-                const normalized = normalizeUser(me.data);
-                setUser(normalized);
-
-            } catch {
-                // Token inválido
-                localStorage.removeItem("token");
-                setToken(null);
-                setUser(null);
-            }
-
+        if (!token) {
             setLoading(false);
+            return;
+        }
+
+        try {
+            const me = await API.get("/usuarios/perfil");
+            const normalized = normalizeUser(me.data);
+            setUser(normalized);
+
+        } catch {
+            // Token inválido
+            localStorage.removeItem("token");
+            setToken(null);
+            setUser(null);
+        }
+
+        setLoading(false);
         };
 
         verify();
     }, [token]);
 
-    // ----------------------------------------------------
-    // LOGIN
-    // ----------------------------------------------------
+    // Función de login
     const login = async (correo, password) => {
         const form = new FormData();
         form.append("correo", correo);
         form.append("password", password);
 
         const res = await fetch("http://localhost:8000/usuarios/login", {
-            method: "POST",
-            body: form,
+        method: "POST",
+        body: form,
         });
 
         if (!res.ok) {
-            const error = await res.json();
-            throw new Error(error.detail || "Credenciales incorrectas");
+        const error = await res.json();
+        throw new Error(error.detail || "Credenciales incorrectas");
         }
 
         const data = await res.json();
@@ -77,80 +79,76 @@ export const UserProvider = ({ children }) => {
         return normalized;
     };
 
-    // ----------------------------------------------------
-    // LOGOUT
-    // ----------------------------------------------------
+    // Función de logout
     const logout = () => {
         localStorage.removeItem("token");
         setUser(null);
         setToken(null);
     };
 
-    // ----------------------------------------------------
-    // ACTUALIZAR PERFIL - USANDO TU SERVICIO API
-    // ----------------------------------------------------
+    // Actualizar perfil usando el servicio API
     const updateProfile = async (profileData) => {
         try {
-            if (!user || !user.id_usuario) {
-                throw new Error('Usuario no identificado');
-            }
+        if (!user || !user.id_usuario) {
+            throw new Error('Usuario no identificado');
+        }
 
-            // Usar tu servicio API en lugar de fetch directo
-            const response = await API.put(`/usuarios/${user.id_usuario}`, profileData);
-            
-            // Actualizar el contexto con los nuevos datos
-            setUser(prev => ({
-                ...prev,
-                ...profileData
-            }));
+        // Usar el servicio API en lugar de fetch directo
+        const response = await API.put(`/usuarios/${user.id_usuario}`, profileData);
 
-            return response.data;
+        // Actualizar el contexto con los nuevos datos
+        setUser(prev => ({
+            ...prev,
+            ...profileData
+        }));
+
+        return response.data;
         } catch (error) {
-            console.error('Error updating profile:', error);
-            throw new Error(error.response?.data?.detail || 'Error al actualizar perfil');
+        console.error('Error updating profile:', error);
+        throw new Error(error.response?.data?.detail || 'Error al actualizar perfil');
         }
     };
 
-    // ----------------------------------------------------
-    // CAMBIAR CONTRASEÑA - USANDO TU SERVICIO API
-    // ----------------------------------------------------
+    // Cambiar contraseña usando el servicio API
     const changePassword = async (currentPassword, newPassword) => {
         try {
-            if (!user || !user.id_usuario) {
-                throw new Error('Usuario no identificado');
-            }
+        if (!user || !user.id_usuario) {
+            throw new Error('Usuario no identificado');
+        }
 
-            if (newPassword.length < 6) {
-                throw new Error('La contraseña debe tener al menos 6 caracteres');
-            }
+        if (newPassword.length < 6) {
+            throw new Error('La contraseña debe tener al menos 6 caracteres');
+        }
 
-            // Usar el nuevo endpoint específico para cambiar contraseña
-            const response = await API.put(`/usuarios/${user.id_usuario}/cambiar-password`, {
-                currentPassword: currentPassword,
-                newPassword: newPassword
-            });
+        // Usar el nuevo endpoint específico para cambiar contraseña
+        const response = await API.put(`/usuarios/${user.id_usuario}/cambiar-password`, {
+            currentPassword: currentPassword,
+            newPassword: newPassword
+        });
 
-            return response.data;
+        return response.data;
         } catch (error) {
-            console.error('Error changing password:', error);
-            throw new Error(error.response?.data?.detail || 'Error al cambiar contraseña');
+        console.error('Error changing password:', error);
+        throw new Error(error.response?.data?.detail || 'Error al cambiar contraseña');
         }
     };
 
     return (
-        <UserContext.Provider 
-            value={{ 
-                user, 
-                setUser, 
-                token, 
-                loading, 
-                login, 
-                logout,
-                updateProfile,
-                changePassword
-            }}
+        <UserContext.Provider
+        value={{
+            user,
+            setUser,
+            token,
+            loading,
+            login,
+            logout,
+            updateProfile,
+            changePassword
+        }}
         >
-            {children}
+        {children}
         </UserContext.Provider>
     );
 };
+
+// Fin UserContext.jsx

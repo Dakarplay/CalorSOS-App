@@ -1,3 +1,9 @@
+/* Inicio StatCard.css */
+
+/* frontend/src/assets/styles/StatCard.css */
+
+/* Estilos para el componente StatCard */
+
 /* statcard.css */
 .sc-card {
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
@@ -26,3 +32,5 @@
 .sc-unit { font-size:14px; color:#9fb0c8; }
 
 .sc-foot { font-size:12px; color:#8b9bb0; }
+
+/* Fin StatCard.css */

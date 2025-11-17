@@ -1,3 +1,9 @@
+/* Inicio global.css */
+
+/* frontend/src/assets/styles/global.css */
+
+/* Estilos globales para la aplicación */
+
 /* Reset y tipografía global */
 html, body {
   margin: 0;
@@ -22,3 +28,5 @@ html, body {
   padding-top: 65px;
   min-height: calc(100vh - 65px);
 }
+
+/* Fin global.css */

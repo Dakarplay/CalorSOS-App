@@ -1,3 +1,9 @@
+/* Inicio ClimateChart.css */
+
+/* frontend/src/assets/styles/ClimateChart.css */
+
+/* Estilos para el componente ClimateChart */
+
 .chart-container {
     margin-top: 20px;
     background: #1f2a33;
@@ -114,3 +120,5 @@
     border-radius: 14px;
     z-index: 10;
 }
+
+/* Fin ClimateChart.css */

@@ -1,9 +1,25 @@
-// src/pages/Register.jsx
+// Inicio Register.jsx
+
+// frontend/src/pages/Register.jsx
+
+// Página para registrar nuevos usuarios
+
+// Importaciones de React y hooks
 import { useState } from "react";
+
+// Importación de React Router
 import { useNavigate } from "react-router-dom";
+
+// Importación de componentes
 import LoaderPremium from "../components/common/LoaderPremium.jsx";
+
+// Importación de assets
 import logo from "../assets/images/logo.svg";
+
+// Importación de servicios
 import { registerUser } from "../services/usuariosService.js";
+
+// Importación de estilos
 import "../assets/styles/Auth.css";
 
 export default function Register() {
@@ -115,7 +131,7 @@ export default function Register() {
           ¿Ya tienes una cuenta?{" "}
           <a href="/login" className="auth-link">Inicia sesión</a>
         </p>
-        
+
         <footer className="auth-footer">
           <p>© {new Date().getFullYear()} CalorSOS — Todos los derechos reservados</p>
         </footer>
@@ -123,3 +139,5 @@ export default function Register() {
     </div>
   );
 }
+
+// Fin Register.jsx

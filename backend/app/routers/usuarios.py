@@ -1,11 +1,13 @@
-# backend/app/routers/usuarios.py
+# Inicio backend/app/routers/usuarios.py
+
+# Importaciones necesarias para el router de usuarios
 from fastapi import APIRouter, HTTPException, Form, Depends, Body
 from backend.models.usuarios_mdls import UsuarioModel
 from backend.app.security.hashing import hash_password, verify_password
 from backend.app.security.jwt_handler import crear_token, verificar_token, verificar_rol
 
+# Creación del router con prefijo y tags
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
-
 
 # ======================================================
 # REGISTRO DE USUARIOS
@@ -19,11 +21,15 @@ def register(
     rol: str = Form("usuario")
 ):
     try:
+        # Verificar si el correo ya existe
         existente = UsuarioModel.obtener_usuario_por_correo(correo)
         if existente:
             raise HTTPException(status_code=400, detail="El correo ya está registrado")
 
+        # Hashear la contraseña
         hashed_pw = hash_password(password)
+
+        # Crear nuevo usuario
         usuario = UsuarioModel.crear_usuario(
             nombre=nombre,
             correo=correo,
@@ -41,19 +47,21 @@ def register(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
 # ======================================================
 # LOGIN DE USUARIOS
 # ======================================================
 @router.post("/login")
 def login(correo: str = Form(...), password: str = Form(...)):
+    # Buscar usuario por correo
     usuario = UsuarioModel.obtener_usuario_por_correo(correo)
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
+    # Verificar contraseña
     if not verify_password(password, usuario["password"]):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
+    # Crear token de acceso
     token = crear_token({
         "id_usuario": usuario["id_usuario"],
         "correo": usuario["correo"],
@@ -66,9 +74,8 @@ def login(correo: str = Form(...), password: str = Form(...)):
         "token_type": "bearer"
     }
 
-
 # ======================================================
-# PERFIL (UNA SOLA RUTA, FUNCIONANDO)
+# PERFIL DEL USUARIO ACTUAL
 # ======================================================
 @router.get("/perfil")
 def perfil(datos_usuario: dict = Depends(verificar_token)):
@@ -92,12 +99,12 @@ def perfil(datos_usuario: dict = Depends(verificar_token)):
         "usuario_actual": usuario_filtrado
     }
 
-
 # ======================================================
-# ADMIN - OBTENER TODOS LOS USUARIOS
+# ADMIN - LISTAR TODOS LOS USUARIOS
 # ======================================================
 @router.get("/")
 def listar_todos_los_usuarios(datos_usuario: dict = Depends(verificar_rol(["admin"]))):
+    # Obtener lista completa de usuarios
     usuarios = UsuarioModel.listar_usuarios()
     return {
         "status": "success",
@@ -105,16 +112,16 @@ def listar_todos_los_usuarios(datos_usuario: dict = Depends(verificar_rol(["admi
         "usuarios": usuarios
     }
 
-
 # ======================================================
 # OBTENER USUARIO POR ID
 # ======================================================
 @router.get("/{id_usuario}")
 def obtener_usuario_por_id(id_usuario: str, datos_usuario: dict = Depends(verificar_token)):
-
+    # Verificar permisos de acceso
     if datos_usuario["rol"] != "admin" and datos_usuario["id_usuario"] != id_usuario:
         raise HTTPException(status_code=403, detail="No tienes permisos para acceder a este perfil")
 
+    # Obtener usuario específico
     usuario = UsuarioModel.obtener_usuario_por_id(id_usuario)
 
     return {
@@ -122,9 +129,8 @@ def obtener_usuario_por_id(id_usuario: str, datos_usuario: dict = Depends(verifi
         "usuario": usuario
     }
 
-
 # ======================================================
-# ACTUALIZAR
+# ACTUALIZAR USUARIO
 # ======================================================
 @router.put("/{id_usuario}")
 def actualizar_usuario(
@@ -132,10 +138,11 @@ def actualizar_usuario(
     data: dict = Body(...),
     datos_usuario: dict = Depends(verificar_token)
 ):
-
+    # Verificar permisos de modificación
     if datos_usuario["rol"] != "admin" and datos_usuario["id_usuario"] != id_usuario:
         raise HTTPException(status_code=403, detail="No tienes permisos para modificar este perfil")
 
+    # Actualizar usuario
     usuario_actualizado = UsuarioModel.actualizar_usuario(id_usuario, data)
 
     return {
@@ -144,9 +151,8 @@ def actualizar_usuario(
         "usuario": usuario_actualizado
     }
 
-
 # ======================================================
-# ELIMINAR (ADMIN)
+# ELIMINAR USUARIO (ADMIN)
 # ======================================================
 @router.delete("/{id_usuario}")
 def eliminar_usuario(id_usuario: str, datos_usuario: dict = Depends(verificar_rol(["admin"]))):
@@ -164,6 +170,7 @@ def cambiar_password(
     """
     Endpoint específico para cambiar contraseña con verificación
     """
+    # Verificar permisos
     if datos_usuario["rol"] != "admin" and datos_usuario["id_usuario"] != id_usuario:
         raise HTTPException(status_code=403, detail="No tienes permisos para modificar este perfil")
 
@@ -184,3 +191,5 @@ def cambiar_password(
         "status": "success",
         "message": "Contraseña cambiada correctamente"
     }
+
+# Fin backend/app/routers/usuarios.py

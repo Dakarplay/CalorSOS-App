@@ -1,4 +1,13 @@
+// Inicio MapView.jsx
+
+// frontend/src/components/maps/MapView.jsx
+
+// Componente principal para mostrar mapas interactivos con marcadores
+
+// Importaciones de React y hooks
 import React, { useEffect, useRef } from "react";
+
+// Importaciones de React Leaflet
 import {
     MapContainer,
     TileLayer,
@@ -7,10 +16,13 @@ import {
     useMap,
 } from "react-leaflet";
 
+// Importación de Leaflet
 import L from "leaflet";
+
+// Importación de estilos
 import "./MapView.css";
 
-// Fix de íconos por defecto (marcador azul)
+// Configuración de íconos por defecto de Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -18,7 +30,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-// --- FORZAR RESIZE EN MODAL ---
+// Componente para forzar resize en modal
 function ForceResize() {
     const map = useMap();
     useEffect(() => {
@@ -27,7 +39,7 @@ function ForceResize() {
     return null;
 }
 
-// --- CENTRAR EN SELECCIÓN ---
+// Componente para centrar en selección
 function CenterOnSelection({ seleccion }) {
     const map = useMap();
 
@@ -42,7 +54,7 @@ function CenterOnSelection({ seleccion }) {
     return null;
 }
 
-// --- NUEVO: RESET GENERAL DE VISTA ---
+// Componente para reset general de vista
 function ResetView({ trigger, zonasFrescas, puntosHidratacion }) {
     const map = useMap();
 
@@ -89,7 +101,7 @@ function ResetView({ trigger, zonasFrescas, puntosHidratacion }) {
     return null;
 }
 
-// ICONO VERDE PARA ZONAS FRESCAS
+// Ícono verde para zonas frescas
 const greenDivIcon = new L.DivIcon({
     html: `<span class="zf-div-marker"></span>`,
     className: "custom-div-icon-wrapper",
@@ -98,7 +110,7 @@ const greenDivIcon = new L.DivIcon({
     popupAnchor: [0, -20],
 });
 
-// ICONO AZUL PARA PUNTOS DE HIDRATACIÓN
+// Ícono azul para puntos de hidratación
 const blueDivIcon = new L.DivIcon({
     html: `<span class="ph-div-marker"></span>`,
     className: "custom-div-icon-wrapper",
@@ -107,7 +119,7 @@ const blueDivIcon = new L.DivIcon({
     popupAnchor: [0, -20],
 });
 
-// ICONO ROJO PARA REPORTES
+// Ícono rojo para reportes
 const redDivIcon = new L.DivIcon({
     html: `<span class="report-div-marker"></span>`,
     className: "custom-div-icon-wrapper",
@@ -116,6 +128,7 @@ const redDivIcon = new L.DivIcon({
     popupAnchor: [0, -20],
 });
 
+// Componente funcional principal
 export default function MapView({
     mini = false,
     onExpand,
@@ -124,14 +137,14 @@ export default function MapView({
     zonaSeleccionada = null,
     puntoSeleccionado = null,
     onSelectMarker = () => {},
-    resetView = false,   // 👈 NUEVO
-    reportes = [], // Nueva prop para reportes
-    selectedMarker = null, // Para controlar el zoom en marcador seleccionado
+    resetView = false,
+    reportes = [],
+    selectedMarker = null,
 }) {
-
+    // Referencias para marcadores
     const markerRefs = useRef({});
 
-    // abrir popup automático
+    // Abrir popup automático al seleccionar
     useEffect(() => {
         if (zonaSeleccionada && markerRefs.current[zonaSeleccionada.id_zona]) {
             try {
@@ -147,7 +160,6 @@ export default function MapView({
 
     return (
         <div className={mini ? "mv-container mini" : "mv-container full"}>
-
             <MapContainer
                 center={[10.391, -75.479]}
                 zoom={13}
@@ -170,14 +182,14 @@ export default function MapView({
             >
                 <ForceResize />
 
-                {/* reset general cuando trigger cambia */}
+                {/* Reset general cuando trigger cambia */}
                 <ResetView
                     trigger={resetView}
                     zonasFrescas={zonasFrescas}
                     puntosHidratacion={puntosHidratacion}
                 />
 
-                {/* centrado por selección */}
+                {/* Centrado por selección */}
                 <CenterOnSelection seleccion={zonaSeleccionada || puntoSeleccionado || (reportes.length > 0 ? reportes[0] : null)} />
 
                 <TileLayer
@@ -185,7 +197,7 @@ export default function MapView({
                     attribution="&copy; OpenStreetMap"
                 />
 
-                {/* Marcadores verdes (Zonas Frescas) */}
+                {/* Marcadores verdes para zonas frescas */}
                 {Array.isArray(zonasFrescas) && zonasFrescas.map((z) => (
                     <Marker
                         key={z.id_zona}
@@ -201,7 +213,7 @@ export default function MapView({
                     </Marker>
                 ))}
 
-                {/* Marcadores azules (Puntos de hidratación) */}
+                {/* Marcadores azules para puntos de hidratación */}
                 {Array.isArray(puntosHidratacion) && puntosHidratacion.map((p) => (
                     <Marker
                         key={p.id_punto}
@@ -214,11 +226,10 @@ export default function MapView({
                             <strong>{p.nombre}</strong><br />
                             {p.descripcion}
                         </Popup>
-
                     </Marker>
                 ))}
 
-                {/* Marcadores rojos (Reportes) */}
+                {/* Marcadores rojos para reportes */}
                 {Array.isArray(reportes) && reportes.map((r) => (
                     <Marker
                         key={r.id_reporte}
@@ -235,17 +246,16 @@ export default function MapView({
                         </Popup>
                     </Marker>
                 ))}
-
             </MapContainer>
 
-            {/* botón ver completo si es mini */}
+            {/* Botón para ver mapa completo si es mini */}
             {mini && (
                 <button className="mv-expand-btn" onClick={onExpand}>
                     Ver mapa completo
                 </button>
             )}
 
-            {/* botón reset vista si no es mini */}
+            {/* Botón para reset vista si no es mini */}
             {!mini && (
                 <button className="mv-reset-btn" onClick={() => {
                     // Trigger reset view
@@ -258,3 +268,5 @@ export default function MapView({
         </div>
     );
 }
+
+// Fin MapView.jsx

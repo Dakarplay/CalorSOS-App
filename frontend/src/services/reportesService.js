@@ -1,4 +1,8 @@
-// src/services/reportesService.js
+// Inicio reportesService.js
+
+// frontend/src/services/reportesService.js
+
+// Importación del cliente API configurado
 import API from "./api";
 
 /**
@@ -79,4 +83,6 @@ export const rechazarReporte = async (idReporte) => {
         throw error;
     }
 };
+
+// Fin reportesService.js
 

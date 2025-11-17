@@ -1,7 +1,13 @@
+/* Inicio Auth.css */
+
+/* frontend/src/assets/styles/Auth.css */
+
+/* Estilos para páginas de autenticación (Login y Register) */
+
 /* ==========================================
-   🔥 AUTH PAGES (Login - Register)
-   Paleta: #121620, #263141, #1f2a33, #ff6b00
-   Fondo animado + footer minimalista
+    AUTH PAGES (Login - Register)
+    Paleta: #121620, #263141, #1f2a33, #ff6b00
+    Fondo animado + footer minimalista
    ========================================== */
 
 /* Fondo general con animación */
@@ -17,7 +23,7 @@
   background: linear-gradient(180deg, #121620, #263141);
 }
 
-/* ✨ Partículas flotantes */
+/* Partículas flotantes */
 .auth-page::before,
 .auth-page::after {
   content: "";
@@ -240,7 +246,7 @@
 }
 
 /* ==========================================
-  🔥 LOADER PREMIUM - THERMAL PULSE WAVE
+  LOADER PREMIUM - THERMAL PULSE WAVE
   ========================================== */
 
 .thermal-loader {
@@ -302,5 +308,7 @@
 }
 
 /* ========================================== */
-/* 🔥 FIN AUTH PAGES STYLESHEET            */
+/* FIN AUTH PAGES STYLESHEET            */
 /* ========================================== */
+
+/* Fin Auth.css */

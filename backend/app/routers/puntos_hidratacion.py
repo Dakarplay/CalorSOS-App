@@ -1,12 +1,15 @@
+# Inicio backend/app/routers/puntos_hidratacion.py
+
+# Importaciones necesarias para el router de puntos de hidratación
 from fastapi import APIRouter, HTTPException, Depends, Body
 from backend.models.punto_hidratacion_mdls import PuntoHidratacionModel
 from backend.app.security.jwt_handler import verificar_token, verificar_rol
 from typing import Optional
 
+# Creación del router con prefijo y tags
 router = APIRouter(prefix="/puntos_hidratacion", tags=["Puntos de Hidratación"])
 
-
-# Crear punto (usuario autenticado)
+# Endpoint para crear punto de hidratación (usuario autenticado)
 @router.post("/")
 def crear_punto(
     nombre: str,
@@ -19,9 +22,11 @@ def crear_punto(
     """Permite a un usuario registrar un nuevo punto (estado = activa por defecto)."""
 
     try:
+        # Estado por defecto para nuevos puntos
         estado = "activa"
         validado_por = None
 
+        # Crear punto usando el modelo
         punto = PuntoHidratacionModel.crear_punto(
             nombre, descripcion, latitud, longitud, estado, validado_por
         )
@@ -31,8 +36,7 @@ def crear_punto(
     except HTTPException as e:
         raise e
 
-
-# Listar puntos (público)
+# Endpoint para listar puntos (acceso público)
 @router.get("/")
 def listar_puntos(estado: Optional[str] = None):
     """Lista todos los puntos. Si estado es None, muestra todos; si no, filtra por estado."""
@@ -50,8 +54,7 @@ def listar_puntos(estado: Optional[str] = None):
             "data": PuntoHidratacionModel.listar_puntos(estado)
         }
 
-
-# Obtener punto por ID
+# Endpoint para obtener punto por ID
 @router.get("/{id_punto}")
 def obtener_punto(id_punto: str):
     return {
@@ -59,8 +62,7 @@ def obtener_punto(id_punto: str):
         "data": PuntoHidratacionModel.obtener_punto_por_id(id_punto)
     }
 
-
-# Actualizar punto (solo admin)
+# Endpoint para actualizar punto (solo administradores)
 @router.put("/{id_punto}")
 def actualizar_punto(
     id_punto: str,
@@ -72,11 +74,12 @@ def actualizar_punto(
         "data": PuntoHidratacionModel.actualizar_punto(id_punto, data)
     }
 
-
-# Eliminar punto (solo admin)
+# Endpoint para eliminar punto (solo administradores)
 @router.delete("/{id_punto}")
 def eliminar_punto(
     id_punto: str,
     datos_usuario: dict = Depends(verificar_rol(["admin"]))
 ):
     return PuntoHidratacionModel.eliminar_punto(id_punto)
+
+# Fin backend/app/routers/puntos_hidratacion.py

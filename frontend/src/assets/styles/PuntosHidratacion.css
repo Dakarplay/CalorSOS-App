@@ -1,5 +1,11 @@
+/* Inicio PuntosHidratacion.css */
+
+/* frontend/src/assets/styles/PuntosHidratacion.css */
+
+/* Estilos para la página de puntos de hidratación */
+
 /* ===============================
-   PUNTOS DE HIDRATACIÓN - PAGE
+  PUNTOS DE HIDRATACIÓN - PAGE
 ================================*/
 
 .ph-page {
@@ -12,7 +18,7 @@
 }
 
 /* ===============================
-   TITLE
+  TITLE
 ================================*/
 
 .ph-title {
@@ -26,7 +32,7 @@
 }
 
 /* ===============================
-   MAIN GRID
+  MAIN GRID
 ================================*/
 
 .ph-layout {
@@ -37,7 +43,7 @@
 }
 
 /* ===============================
-   LEFT SIDEBAR
+  LEFT SIDEBAR
 ================================*/
 
 .ph-sidebar {
@@ -78,7 +84,7 @@
 }
 
 /* ===============================
-   CLEAR SELECTION BUTTON
+  CLEAR SELECTION BUTTON
 ================================*/
 
 .ph-clear-btn {
@@ -102,7 +108,7 @@
 }
 
 /* ===============================
-   LISTA DE PUNTOS
+  LISTA DE PUNTOS
 ================================*/
 
 .ph-list-compact {
@@ -173,7 +179,7 @@
 }
 
 /* ===============================
-   MAP CARD
+  MAP CARD
 ================================*/
 
 .ph-map-card {
@@ -192,7 +198,7 @@
 }
 
 /* ===============================
-   REPORT-BAR
+  REPORT-BAR
 ================================*/
 
 .ph-report-bar {
@@ -218,7 +224,7 @@
 }
 
 /* ===============================
-   REPORT BUTTON
+  REPORT BUTTON
 ================================*/
 
 .btn-reportar-punto {
@@ -240,7 +246,7 @@
 }
 
 /* ===============================
-   RIGHT SIDEBAR
+  RIGHT SIDEBAR
 ================================*/
 
 .ph-right-sidebar {
@@ -277,7 +283,7 @@
 }
 
 /* ===============================
-   REPORT MODAL
+  REPORT MODAL
 ================================*/
 
 .ph-report-backdrop {
@@ -375,7 +381,7 @@
 }
 
 /* ===============================
-   RESPONSIVE
+  RESPONSIVE
 ================================*/
 
 @media (max-width: 1024px) {
@@ -393,7 +399,7 @@
 }
 
 /* ===============================
-   GLASS PREMIUM LOADER OVERLAY
+  GLASS PREMIUM LOADER OVERLAY
 ================================*/
 
 .ph-loader-screen {
@@ -435,7 +441,7 @@
 }
 
 /* ===============================
-   LOADER: Glow Naranja + Glass Ring
+  LOADER: Glow Naranja + Glass Ring
 ================================*/
 
 .thermal-loader {
@@ -489,3 +495,5 @@
   height: 28px;
   border-width: 3px;
 }
+
+/* Fin PuntosHidratacion.css */

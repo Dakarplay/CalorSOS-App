@@ -1,3 +1,9 @@
+/* Inicio MapFullscreenModal.css */
+
+/* frontend/src/components/maps/MapFullscreenModal.css */
+
+/* Estilos para el modal de mapa en pantalla completa */
+
 /* Fondo oscuro semitransparente */
 .mfm-backdrop {
   position: fixed;
@@ -64,3 +70,5 @@
   from { transform: scale(0.92); opacity: 0 }
   to { transform: scale(1); opacity: 1 }
 }
+
+/* Fin MapFullscreenModal.css */

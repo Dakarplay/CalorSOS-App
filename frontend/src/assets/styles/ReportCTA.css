@@ -1,6 +1,45 @@
+/* Inicio ReportCTA.css */
+
+/* frontend/src/assets/styles/ReportCTA.css */
+
+/* Estilos para el componente ReportCTA */
+
 /* report_cta.css */
-.rca-wrap { padding:18px 20px; display:flex; justify-content:center; }
-.rca-inner { width:100%; max-width:1100px; display:flex; justify-content:space-between; align-items:center; gap:16px; background:#0b1220; padding:12px; border-radius:12px; box-shadow: 0 8px 20px rgba(0,0,0,0.45); }
-.rca-text { color:#cfe1f7; font-size:14px; }
-.rca-btn { background:#ff7b2e; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700; }
-.rca-btn:hover { background:#e6671e; }
+.rca-wrap {
+    padding:18px 20px;
+    display:flex;
+    justify-content:center;
+}
+
+.rca-inner { width:100%;
+    max-width:1100px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    background:#0b1220;
+    padding:12px;
+    border-radius:12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+}
+
+.rca-text {
+    color:#cfe1f7;
+    font-size:14px;
+}
+
+.rca-btn {
+    background:#ff7b2e;
+    color:#fff;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.rca-btn:hover {
+    background:#e6671e;
+}
+
+/* Fin ReportCTA.css */

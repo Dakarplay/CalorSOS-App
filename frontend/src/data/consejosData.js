@@ -1,4 +1,8 @@
-// src/data/consejosData.js
+// Inicio consejosData.js
+
+// frontend/src/data/consejosData.js
+
+// Datos de consejos para prevenir el calor
 
 export const consejosData = [
     {
@@ -159,81 +163,83 @@ export const consejosData = [
     {
         "titulo": "Crea corrientes de aire en casa",
         "descripcion": "Abre ventanas opuestas para generar ventilación cruzada y refrescar los espacios.",
-        "categoria": "Hogar"
+        categoria: "Hogar"
     },
     {
         "titulo": "Refresca tus pies",
         "descripcion": "Sumergir los pies en agua fresca ayuda a regular la temperatura corporal rápidamente.",
-        "categoria": "Control corporal"
+        categoria: "Control corporal"
     },
     {
         "titulo": "Evita deportes al aire libre",
         "descripcion": "Posterga actividades deportivas intensas hasta que baje la temperatura ambiental.",
-        "categoria": "Actividad física"
+        categoria: "Actividad física"
     },
     {
         "titulo": "Consume sopas frías",
         "descripcion": "Gazpacho, vichyssoise y otras sopas frías son nutritivas e hidratantes.",
-        "categoria": "Alimentación"
+        categoria: "Alimentación"
     },
     {
         "titulo": "Conoce los centros de enfriamiento",
         "descripcion": "Identifica centros públicos con aire acondicionado disponibles durante olas de calor.",
-        "categoria": "Comunidad"
+        categoria: "Comunidad"
     },
     {
         "titulo": "Reconoce la deshidratación en ancianos",
         "descripcion": "Boca seca, confusión y disminución de orina son señales de alerta en adultos mayores.",
-        "categoria": "Emergencias"
+        categoria: "Emergencias"
     },
     {
         "titulo": "Usa sombra natural",
         "descripcion": "Prefiere árboles y zonas verdes que proporcionan mejor sombra que estructuras artificiales.",
-        "categoria": "Exposición al sol"
+        categoria: "Exposición al sol"
     },
     {
         "titulo": "Hidrátate durante el ejercicio",
         "descripcion": "Bebe 250ml de agua cada 15-20 minutos durante actividad física moderada.",
-        "categoria": "Hidratación"
+        categoria: "Hidratación"
     },
     {
         "titulo": "Usa persianas termicas",
         "descripcion": "Instala persianas o cortinas térmicas para bloquear el calor exterior eficazmente.",
-        "categoria": "Hogar"
+        categoria: "Hogar"
     },
     {
         "titulo": "Entrena en horas tempranas",
         "descripcion": "Las 5:00-7:00 a.m. son ideales para ejercicio al aire libre en días calurosos.",
-        "categoria": "Actividad física"
+        categoria: "Actividad física"
     },
     {
         "titulo": "Incluye electrolitos naturales",
         "descripcion": "Agua de coco, plátanos y almendras ayudan a reponer electrolitos perdidos por el sudor.",
-        "categoria": "Alimentación"
+        categoria: "Alimentación"
     },
     {
         "titulo": "Organiza grupos de apoyo",
         "descripcion": "Crea redes vecinales para verificar el bienestar de personas vulnerables durante olas de calor.",
-        "categoria": "Comunidad"
+        categoria: "Comunidad"
     },
     {
         "titulo": "Atención inmediata a calambres",
         "descripcion": "Los calambres musculares pueden ser el primer signo de golpe de calor. Busca sombra e hidrátate.",
-        "categoria": "Emergencias"
+        categoria: "Emergencias"
     },
     {
         "titulo": "Usa protección solar labial",
         "descripcion": "Aplica protector solar en labios con SPF para evitar quemaduras y deshidratación.",
-        "categoria": "Exposición al sol"
+        categoria: "Exposición al sol"
     },
     {
         "titulo": "Bebe agua con limón",
         "descripcion": "Agregar limón al agua mejora el sabor y aporta electrolitos naturales.",
-        "categoria": "Hidratación"
+        categoria: "Hidratación"
     },
     {
         "titulo": "Viste ropa de manga larga ligera",
         "descripcion": "Las mangas largas de tejidos ligeros protegen mejor del sol que las camisetas sin mangas.",
-        "categoria": "Protección personal"
+        categoria: "Protección personal"
     }
 ];
+
+// Fin consejosData.js

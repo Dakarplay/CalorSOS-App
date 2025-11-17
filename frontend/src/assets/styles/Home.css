@@ -1,41 +1,93 @@
-/* home_redux.css: layout calculado y espaciamiento */
-.hr-container { min-height:100vh; background: linear-gradient(180deg,#121620,#263141); color:#dbe9f8; font-family: Inter, Helvetica, Arial, sans-serif; }
-.hr-content { max-width:1280px; margin:20px auto; padding:0 16px 40px; }
+/* Inicio Home.css */
 
-.hr-alerts { margin-top:14px; margin-bottom:18px; display:flex; justify-content:center; }
-.hr-alerts__inner { background:#1f2a33; color:#cfe1f7; padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); min-width:320px; text-align:center; }
+/* frontend/src/assets/styles/Home.css */
 
+/* Estilos para la página principal de la aplicación */
+
+/* Contenedor principal de la página */
+.hr-container {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #121620, #263141);
+    color: #dbe9f8;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+}
+
+/* Contenido principal */
+.hr-content {
+    max-width: 1280px;
+    margin: 20px auto;
+    padding: 0 16px 40px;
+}
+
+/* Sección de alertas climáticas */
+.hr-alerts {
+    margin-top: 14px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: center;
+}
+
+.hr-alerts__inner {
+    background: #1f2a33;
+    color: #cfe1f7;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    min-width: 320px;
+    text-align: center;
+}
+
+/* Grid principal de la página */
 .hr-grid {
-  display:grid;
-  grid-template-columns: 1.15fr 0.85fr; /* left column bigger for map */
-  gap:18px;
-  align-items:start;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 18px;
+    align-items: start;
 }
 
-/* Left column styles */
-.hr-left { display:flex; flex-direction:column; gap:14px; }
+/* Columna izquierda */
+.hr-left {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
 
-/* Right column: stacked cards and indicators */
-.hr-right { display:flex; flex-direction:column; gap:14px; }
+/* Columna derecha */
+.hr-right {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
 
-/* Stats row inside right column */
-.hr-stats { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+/* Fila de estadísticas en la columna derecha */
+.hr-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
 
-/* Responsive adjustments */
+/* Ajustes responsivos */
 @media (max-width: 980px) {
-  .hr-grid { grid-template-columns: 1fr; }
-  .hr-stats { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 600px) {
-  .hr-stats { grid-template-columns: 1fr; }
+    .hr-grid {
+        grid-template-columns: 1fr;
+    }
+    .hr-stats {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
-/* Map Preview Card - Integrado con home_redux.css */
+@media (max-width: 600px) {
+    .hr-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tarjeta de vista previa del mapa */
 .map-preview-card {
     background: #1f2a33;
     border-radius: 10px;
     padding: 16px;
-    border: 1px solid rgba(255,255,255,0.02);
+    border: 1px solid rgba(255, 255, 255, 0.02);
 }
 
 .map-preview-header {
@@ -46,14 +98,14 @@
 }
 
 .map-preview-header h3 {
-    color: #dbe9f8;
+    color: #c5ecf6;
     font-size: 16px;
     font-weight: 600;
     margin: 0 0 4px 0;
 }
 
 .map-location-desc {
-    color: #8fa3bf;
+    color: #72a1ae;
     font-size: 13px;
     margin: 0;
     font-weight: 400;
@@ -67,14 +119,17 @@
 }
 
 .map-stat-item {
-    color: #cfe1f7;
+    color: #89a3aa;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 1000;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    font-style: italic;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    font-display: auto;
 }
 
-/* Responsive adjustments para el mapa */
+/* Ajustes responsivos para el mapa */
 @media (max-width: 980px) {
     .map-preview-header {
         flex-direction: column;
@@ -97,11 +152,11 @@
     }
 }
 
-/* Report Modal Styles */
+/* Estilos del modal de reporte */
 .rm-modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.60);
+    background: rgba(0, 0, 0, 0.60);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -114,8 +169,8 @@
     border-radius: 14px;
     width: 520px;
     max-width: 92%;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 10px 35px rgba(0,0,0,0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.65);
     position: relative;
     color: #eaf3ff;
 }
@@ -156,7 +211,7 @@
 .rm-textarea,
 .rm-select {
     background: #081018;
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 9px 10px;
     border-radius: 8px;
     color: #eaf3ff;
@@ -168,7 +223,7 @@
 .rm-textarea:focus,
 .rm-select:focus {
     border-color: #ff8a27;
-    box-shadow: 0 0 6px rgba(255,138,39,0.6);
+    box-shadow: 0 0 6px rgba(255, 138, 39, 0.6);
     outline: none;
 }
 
@@ -184,17 +239,17 @@
 
 .rm-select-orange {
     border-color: #ff8a27 !important;
-    box-shadow: 0 0 6px rgba(255,138,39,0.6) !important;
+    box-shadow: 0 0 6px rgba(255, 138, 39, 0.6) !important;
 }
 
 .rm-select-blue {
     border-color: #4a90e2 !important;
-    box-shadow: 0 0 6px rgba(74,144,226,0.6) !important;
+    box-shadow: 0 0 6px rgba(74, 144, 226, 0.6) !important;
 }
 
 .rm-coords {
     background: #0a0f1a;
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 9px 10px;
     border-radius: 8px;
     color: #b0c4de;
@@ -234,7 +289,7 @@
 .rm-btn-cancel {
     background: transparent;
     color: #eaf3ff;
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     padding: 8px 10px;
     border-radius: 8px;
     cursor: pointer;
@@ -244,3 +299,5 @@
     border-color: #ff8a27;
     color: #ff8a27;
 }
+
+/* Fin Home.css */

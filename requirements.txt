@@ -1,3 +1,9 @@
+# Inicio requirements.txt
+
+# requirements.txt
+
+# Archivo de dependencias de Python para el proyecto backend
+
 annotated-doc==0.0.3
 annotated-types==0.7.0
 anyio==4.11.0
@@ -11,6 +17,7 @@ cryptography==46.0.3
 deprecation==2.1.0
 ecdsa==0.19.1
 fastapi==0.121.1
+fastapi-utils==0.8.0
 h11==0.16.0
 h2==4.3.0
 hpack==4.1.0
@@ -23,6 +30,7 @@ packaging==25.0
 passlib==1.7.4
 postgrest==2.24.0
 propcache==0.4.1
+psutil==5.9.8
 pyasn1==0.6.1
 pycparser==2.23
 pydantic==2.12.4
@@ -31,6 +39,7 @@ PyJWT==2.10.1
 python-dotenv==1.2.1
 python-jose==3.5.0
 python-multipart==0.0.20
+pytz==2025.2
 realtime==2.24.0
 requests==2.32.5
 rsa==4.9.1
@@ -48,3 +57,5 @@ urllib3==2.5.0
 uvicorn==0.38.0
 websockets==15.0.1
 yarl==1.22.0
+
+# Fin requirements.txt

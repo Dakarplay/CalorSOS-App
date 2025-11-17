@@ -1,6 +1,13 @@
+// Inicio zonasService.js
+
+// frontend/src/services/zonasService.js
+
+// Importación del cliente API configurado
 import API from "./api";
 
+// Servicio para manejar operaciones con zonas frescas
 const zonasService = {
+    // Función para listar zonas frescas
     async listarZonas(estado = "activa") {
         try {
             // Si estado es null o vacío, obtener todas las zonas (para admin)
@@ -13,6 +20,7 @@ const zonasService = {
         }
     },
 
+    // Función para obtener zona específica por ID
     async obtenerZona(id) {
         try {
             const res = await API.get(`/zonas_frescas/${id}`);
@@ -23,6 +31,7 @@ const zonasService = {
         }
     },
 
+    // Función para crear nueva zona fresca
     async crearZona(data) {
         try {
             const res = await API.post("/zonas_frescas", data);
@@ -33,6 +42,7 @@ const zonasService = {
         }
     },
 
+    // Función para actualizar zona fresca
     async actualizarZona(id, data) {
         try {
             const res = await API.put(`/zonas_frescas/${id}`, data);
@@ -43,6 +53,7 @@ const zonasService = {
         }
     },
 
+    // Función para eliminar zona fresca
     async eliminarZona(id) {
         try {
             const res = await API.delete(`/zonas_frescas/${id}`);
@@ -54,4 +65,7 @@ const zonasService = {
     },
 };
 
+// Exportar servicio
 export default zonasService;
+
+// Fin zonasService.js

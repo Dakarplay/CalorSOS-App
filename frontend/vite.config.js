@@ -1,3 +1,9 @@
+// Inicio vite.config.js
+
+// frontend/vite.config.js
+
+// Archivo de configuración de Vite para el proyecto frontend
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -5,3 +11,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 })
+
+// Fin vite.config.js

@@ -1,10 +1,18 @@
-// src/components/ui/IndicatorsPanel.jsx
+// Inicio IndicatorsPanel.jsx
+
+// frontend/src/components/ui/IndicatorsPanel.jsx
+
+// Componente de panel con indicadores ambientales (UV, sensación térmica, riesgo, hidratación)
+
+// Importaciones de React
 import React from "react";
+
+// Importación de estilos
 import "../../assets/styles/IndicatorsPanel.css";
 
+// Componente funcional principal
 export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
-
-    // 1. UV
+    // Cálculos para índice UV
     const uvMax = 11;
     const uvPct = (uv / uvMax) * 100;
 
@@ -15,7 +23,7 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
         uv <= 10 ? "Muy alto" :
         "Extremo";
 
-    // 2. Sensación térmica
+    // Cálculos para sensación térmica
     const feelsPct = ((feelsLike - 20) / 30) * 100;
     const feelsLabel =
         feelsLike < 28 ? "Confortable" :
@@ -23,7 +31,7 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
         feelsLike < 39 ? "Calor intenso" :
         "Peligroso";
 
-    // 3. Riesgo térmico
+    // Cálculos para riesgo térmico
     const riskPct = (risk / 5) * 100;
     const riskLabel =
         risk === 0 ? "Sin riesgo" :
@@ -33,7 +41,7 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
         risk === 4 ? "Muy alto" :
         "Peligroso";
 
-    // 4. Hidratación
+    // Cálculos para hidratación
     const hydPct = (hydration / 10) * 100;
     const hydLabel =
         hydration <= 3 ? "Baja" :
@@ -45,7 +53,7 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
         <div className="ip-container">
             <h3>Indicadores Ambientales</h3>
 
-            {/* UV */}
+            {/* Indicador de UV */}
             <div className="ip-item">
                 <span className="ip-title">Índice UV</span>
                 <div className="ip-bar">
@@ -54,7 +62,7 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
                 <span className="ip-value">{uv} / 11 — {uvLabel}</span>
             </div>
 
-            {/* Sensación térmica */}
+            {/* Indicador de sensación térmica */}
             <div className="ip-item">
                 <span className="ip-title">Sensación Térmica</span>
                 <div className="ip-bar">
@@ -63,7 +71,7 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
                 <span className="ip-value">{feelsLike}°C — {feelsLabel}</span>
             </div>
 
-            {/* Riesgo térmico */}
+            {/* Indicador de riesgo térmico */}
             <div className="ip-item">
                 <span className="ip-title">Riesgo Térmico</span>
                 <div className="ip-bar">
@@ -72,7 +80,7 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
                 <span className="ip-value">{risk} / 5 — {riskLabel}</span>
             </div>
 
-            {/* Hidratación recomendada */}
+            {/* Indicador de hidratación recomendada */}
             <div className="ip-item">
                 <span className="ip-title">Hidratación Recomendada</span>
                 <div className="ip-bar">
@@ -83,3 +91,5 @@ export default function IndicatorsPanel({ uv, feelsLike, risk, hydration }) {
         </div>
     );
 }
+
+// Fin IndicatorsPanel.jsx

@@ -1,3 +1,9 @@
+/* Inicio ReportModal.css */
+
+/* frontend/src/components/report/ReportModal.css */
+
+/* Estilos para el modal de reportes */
+
 /* Fondo oscuro del modal */
 .rm-backdrop {
   position: fixed;
@@ -184,3 +190,5 @@
 .rm-btn-send:hover:not(:disabled) {
   background-color: #ff853a;
 }
+
+/* Fin ReportModal.css */

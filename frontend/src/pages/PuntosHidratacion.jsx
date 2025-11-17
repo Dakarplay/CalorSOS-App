@@ -1,22 +1,35 @@
+// inicio PuntosHidratacion.jsx
+
+// frontend/src/pages/PuntosHidratacion.jsx
+
+// Importaciones de React y hooks
 import React, { useEffect, useState } from "react";
+
+// Importaciones de componentes
 import NavbarSmart from "../components/ui/NavbarSmart.jsx";
 import MapView from "../components/maps/MapView.jsx";
 import MapFullscreenModal from "../components/maps/MapFullscreenModal.jsx";
 import LoaderPremium from "../components/common/LoaderPremium.jsx";
 
+// Importaciones de servicios
 import puntosService from "../services/puntosService.js";
 import { crearReporte } from "../services/reportesService.js";
+
+// Importaciones de estilos
 import "../assets/styles/PuntosHidratacion.css";
 
+// Componente principal para la página de puntos de hidratación
 export default function PuntosHidratacion() {
+    // Estados para manejo de puntos
     const [puntos, setPuntos] = useState([]);
     const [filtered, setFiltered] = useState([]);
     const [search, setSearch] = useState("");
     const [selectedPunto, setSelectedPunto] = useState(null);
 
+    // Estado para controlar apertura del mapa completo
     const [openMap, setOpenMap] = useState(false);
 
-    // Report modal
+    // Estados para el modal de reporte
     const [reportOpen, setReportOpen] = useState(false);
     const [reportLoading, setReportLoading] = useState(false);
     const [reportResult, setReportResult] = useState(null);
@@ -28,7 +41,7 @@ export default function PuntosHidratacion() {
         longitud: "",
     });
 
-    // Cargar puntos - solo activos para usuarios normales
+    // Efecto para cargar puntos de hidratación activos
     useEffect(() => {
         const load = async () => {
             try {
@@ -42,7 +55,7 @@ export default function PuntosHidratacion() {
         load();
     }, []);
 
-    // Filtrado dinámico por nombre
+    // Efecto para filtrado dinámico por nombre
     useEffect(() => {
         let resultado = puntos;
 
@@ -55,13 +68,15 @@ export default function PuntosHidratacion() {
         setFiltered(resultado);
     }, [search, puntos]);
 
+    // Calcular total de puntos
     const totalPuntos = puntos.length;
 
-    // Abrir modal de reporte + geolocalización
+    // Función para abrir modal de reporte con geolocalización
     const handleOpenReport = async () => {
         setReportResult(null);
-        setLoadingReportInit(true);  // ← Mostrar loader antes de abrir el modal
+        setLoadingReportInit(true);
 
+        // Resetear datos del reporte
         setReportData({
             tipo: "hidratacion",
             nombre: "",
@@ -70,6 +85,7 @@ export default function PuntosHidratacion() {
             longitud: "",
         });
 
+        // Obtener ubicación actual
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
@@ -93,7 +109,7 @@ export default function PuntosHidratacion() {
         }
     };
 
-
+    // Función para enviar reporte
     const submitReport = async (e) => {
         e.preventDefault();
         setReportLoading(true);
@@ -102,7 +118,7 @@ export default function PuntosHidratacion() {
         try {
             await crearReporte(reportData);
             setReportResult({ success: true, message: "El reporte ya fue realizado. Gracias." });
-            setTimeout(() => setReportOpen(false), 2000); // Cerrar modal después de 2 segundos para que el usuario vea el mensaje
+            setTimeout(() => setReportOpen(false), 2000);
         } catch (err) {
             setReportResult({ success: false, message: err.message });
         } finally {
@@ -110,7 +126,7 @@ export default function PuntosHidratacion() {
         }
     };
 
-    // Render de cada punto
+    // Función para renderizar cada punto en la lista
     const renderCompactItem = (p) => (
         <div
             key={p.id_punto}
@@ -121,10 +137,13 @@ export default function PuntosHidratacion() {
         </div>
     );
 
+    // Estado para señal de reinicio de vista del mapa
     const [resetViewSignal, setResetViewSignal] = useState(0);
 
+    // Estado para loader inicial de reporte
     const [loadingReportInit, setLoadingReportInit] = useState(false);
 
+    // Renderizado del componente
     return (
         <div className="ph-page">
             <NavbarSmart />
@@ -133,7 +152,7 @@ export default function PuntosHidratacion() {
 
             <div className="ph-layout">
 
-                {/* LEFT SIDEBAR */}
+                {/* Barra lateral izquierda */}
                 <aside className="ph-sidebar">
                     <div className="ph-sidebar-header">
                         <input
@@ -144,13 +163,13 @@ export default function PuntosHidratacion() {
                             onChange={(e) => setSearch(e.target.value)}
                         />
 
-                        {/* NUEVO: botón borrar selección */}
+                        {/* Botón para borrar selección */}
                         {selectedPunto && (
                             <button
                                 className="ph-clear-btn"
                                 onClick={() => {
                                     setSelectedPunto(null);
-                                    setResetViewSignal(prev => prev + 1); // activa el reinicio del mapa
+                                    setResetViewSignal(prev => prev + 1);
                                 }}
                             >
                                 Borrar selección
@@ -167,7 +186,7 @@ export default function PuntosHidratacion() {
                     </div>
                 </aside>
 
-                {/* MAPA */}
+                {/* Área principal del mapa */}
                 <main className="ph-map-area">
                     <div className="ph-map-card">
                         <MapView
@@ -180,7 +199,7 @@ export default function PuntosHidratacion() {
                         />
                     </div>
 
-                    {/* NUEVA SECCIÓN BAJO EL MAPA */}
+                    {/* Sección para reportar nuevo punto */}
                     <div className="ph-report-bar">
                         <h3>¿Deseas reportar un nuevo punto de hidratación?</h3>
                         <p>Utilizaremos tu ubicación actual para facilitar el proceso.</p>
@@ -194,7 +213,7 @@ export default function PuntosHidratacion() {
                     </div>
                 </main>
 
-                {/* RIGHT SIDEBAR - Solo detalles */}
+                {/* Barra lateral derecha con detalles */}
                 <aside className="ph-right-sidebar">
                     <div className="ph-stats">
                         <h3>Estadísticas</h3>
@@ -216,7 +235,7 @@ export default function PuntosHidratacion() {
                 </aside>
             </div>
 
-            {/* MODAL MAPA FULLSCREEN */}
+            {/* Modal de mapa en pantalla completa */}
             <MapFullscreenModal open={openMap} onClose={() => setOpenMap(false)}>
                 <MapView
                     mini={false}
@@ -226,7 +245,7 @@ export default function PuntosHidratacion() {
                 />
             </MapFullscreenModal>
 
-            {/* MODAL REPORTE */}
+            {/* Modal de reporte */}
             {reportOpen && (
                 <div className="ph-report-backdrop">
                     <div className="ph-report-modal">
@@ -301,7 +320,7 @@ export default function PuntosHidratacion() {
                 </div>
             )}
 
-            {/* LOADER OVERLAY PARA GEOLOCALIZACIÓN */}
+            {/* Overlay de loader para geolocalización */}
             {loadingReportInit && (
                 <div className="ph-loader-screen">
                     <LoaderPremium mini={false} />
@@ -311,3 +330,5 @@ export default function PuntosHidratacion() {
         </div>
     );
 }
+
+// Fin PuntosHidratacion.jsx

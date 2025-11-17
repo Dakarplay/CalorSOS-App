@@ -1,275 +1,289 @@
-/* src/assets/styles/Admin.css */
+/* Inicio Admin.css */
 
+/* frontend/src/assets/styles/Admin.css */
+
+/* Estilos para la página de administración */
+
+/* Contenedor principal de la página de administración */
 .admin-container {
-  min-height: 100vh;
-  background: linear-gradient(180deg, #121620, #263141);
-  color: #dbe9f8;
-  font-family: Inter, Helvetica, Arial, sans-serif;
-  padding-top: 65px 0px; /* Espacio para navbar */
+    min-height: 100vh;
+    background: linear-gradient(180deg, #121620, #263141);
+    color: #dbe9f8;
+    font-family: Inter, Helvetica, Arial, sans-serif;
+    padding-top: 65px 0px;
 }
 
+/* Contenido principal */
 .admin-content {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 20px 16px 40px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
 }
 
 .admin-content h1 {
-  color: #ffb87a;
-  margin-bottom: 30px;
-  text-align: center;
-  font-size: 28px;
-  font-weight: 700;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    color: #ffb87a;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* Pestañas de navegación */
 .admin-tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-  background: #1f2a33;
-  border-radius: 12px;
-  padding: 6px;
-  border: 1px solid rgba(255,255,255,0.02);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    background: #1f2a33;
+    border-radius: 12px;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .admin-tab {
-  background: transparent;
-  border: none;
-  padding: 12px 24px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  color: #8fa3bf;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  flex: 1;
-  max-width: 180px;
+    background: transparent;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    color: #8fa3bf;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 180px;
 }
 
 .admin-tab:hover {
-  color: #ff8a27;
-  background: rgba(255,138,39,0.1);
+    color: #ff8a27;
+    background: rgba(255, 138, 39, 0.1);
 }
 
 .admin-tab.active {
-  color: #ffffff;
-  background: #ff8a27;
-  box-shadow: 0 2px 8px rgba(255,138,39,0.3);
+    color: #ffffff;
+    background: #ff8a27;
+    box-shadow: 0 2px 8px rgba(255, 138, 39, 0.3);
 }
 
+/* Sección de contenido */
 .admin-section {
-  background: #1f2a33;
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid rgba(255,255,255,0.02);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  margin-bottom: 20px;
+    background: #1f2a33;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
 }
 
 .admin-section h2 {
-  color: #ffb87a;
-  margin-bottom: 24px;
-  font-size: 20px;
-  font-weight: 700;
-  border-bottom: 2px solid #ff8a27;
-  padding-bottom: 12px;
+    color: #ffb87a;
+    margin-bottom: 24px;
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid #ff8a27;
+    padding-bottom: 12px;
 }
 
+/* Lista de elementos */
 .admin-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
+/* Elemento individual */
 .admin-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px;
-  background: #0f1720;
-  transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: #0f1720;
+    transition: all 0.3s ease;
 }
 
 .admin-item:hover {
-  border-color: rgba(255,138,39,0.3);
-  box-shadow: 0 4px 12px rgba(255,138,39,0.1);
+    border-color: rgba(255, 138, 39, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 138, 39, 0.1);
 }
 
 .admin-item-info h3 {
-  margin: 0 0 8px 0;
-  color: #dbe9f8;
-  font-size: 16px;
-  font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #dbe9f8;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .admin-item-info p {
-  margin: 4px 0;
-  color: #8fa3bf;
-  font-size: 14px;
-  line-height: 1.4;
+    margin: 4px 0;
+    color: #8fa3bf;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
 .admin-item-info p strong {
-  color: #cfe1f7;
-  font-weight: 600;
+    color: #cfe1f7;
+    font-weight: 600;
 }
 
+/* Acciones del elemento */
 .admin-item-actions {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
+/* Botones de acción */
 .admin-btn {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .admin-btn.approve {
-  background: linear-gradient(135deg, #4caf50, #45a049);
-  color: white;
-  box-shadow: 0 2px 6px rgba(76,175,80,0.3);
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: white;
+    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
 }
 
 .admin-btn.approve:hover {
-  background: linear-gradient(135deg, #45a049, #3d8b40);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(76,175,80,0.4);
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
 }
 
 .admin-btn.reject {
-  background: linear-gradient(135deg, #f44336, #d32f2f);
-  color: white;
-  box-shadow: 0 2px 6px rgba(244,67,54,0.3);
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+    box-shadow: 0 2px 6px rgba(244, 67, 54, 0.3);
 }
 
 .admin-btn.reject:hover {
-  background: linear-gradient(135deg, #d32f2f, #b71c1c);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(244,67,54,0.4);
+    background: linear-gradient(135deg, #d32f2f, #b71c1c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
 }
 
 .admin-btn.edit {
-  background: linear-gradient(135deg, #2196f3, #1976d2);
-  color: white;
-  box-shadow: 0 2px 6px rgba(33,150,243,0.3);
+    background: linear-gradient(135deg, #2196f3, #1976d2);
+    color: white;
+    box-shadow: 0 2px 6px rgba(33, 150, 243, 0.3);
 }
 
 .admin-btn.edit:hover {
-  background: linear-gradient(135deg, #1976d2, #1565c0);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(33,150,243,0.4);
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
 }
 
 .admin-btn.delete {
-  background: linear-gradient(135deg, #f44336, #d32f2f);
-  color: white;
-  box-shadow: 0 2px 6px rgba(244,67,54,0.3);
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+    color: white;
+    box-shadow: 0 2px 6px rgba(244, 67, 54, 0.3);
 }
 
 .admin-btn.delete:hover {
-  background: linear-gradient(135deg, #d32f2f, #b71c1c);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(244,67,54,0.4);
+    background: linear-gradient(135deg, #d32f2f, #b71c1c);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
 }
 
 /* Estados especiales */
 .admin-item-info p strong {
-  color: #ff8a27;
+    color: #ff8a27;
 }
 
 /* Estado vacío */
 .admin-empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: #8fa3bf;
-  font-size: 16px;
-  font-style: italic;
+    text-align: center;
+    padding: 40px 20px;
+    color: #8fa3bf;
+    font-size: 16px;
+    font-style: italic;
 }
 
-/* Responsive */
+/* Diseño responsivo */
 @media (max-width: 768px) {
-  .admin-content {
-    padding: 16px 12px 30px;
-  }
+    .admin-content {
+        padding: 16px 12px 30px;
+    }
 
-  .admin-content h1 {
-    font-size: 24px;
-    margin-bottom: 24px;
-  }
+    .admin-content h1 {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
 
-  .admin-tabs {
-    flex-direction: column;
-    gap: 4px;
-    padding: 4px;
-  }
+    .admin-tabs {
+        flex-direction: column;
+        gap: 4px;
+        padding: 4px;
+    }
 
-  .admin-tab {
-    padding: 10px 16px;
-    font-size: 14px;
-    max-width: none;
-  }
+    .admin-tab {
+        padding: 10px 16px;
+        font-size: 14px;
+        max-width: none;
+    }
 
-  .admin-section {
-    padding: 18px;
-  }
+    .admin-section {
+        padding: 18px;
+    }
 
-  .admin-section h2 {
-    font-size: 18px;
-    margin-bottom: 18px;
-  }
+    .admin-section h2 {
+        font-size: 18px;
+        margin-bottom: 18px;
+    }
 
-  .admin-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 16px;
-  }
+    .admin-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+    }
 
-  .admin-item-info h3 {
-    font-size: 15px;
-  }
+    .admin-item-info h3 {
+        font-size: 15px;
+    }
 
-  .admin-item-actions {
-    width: 100%;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-  }
+    .admin-item-actions {
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
 
-  .admin-btn {
-    padding: 7px 12px;
-    font-size: 12px;
-    flex: 1;
-    min-width: 80px;
-  }
+    .admin-btn {
+        padding: 7px 12px;
+        font-size: 12px;
+        flex: 1;
+        min-width: 80px;
+    }
 }
 
 @media (max-width: 480px) {
-  .admin-content h1 {
-    font-size: 22px;
-  }
+    .admin-content h1 {
+        font-size: 22px;
+    }
 
-  .admin-section {
-    padding: 16px;
-  }
+    .admin-section {
+        padding: 16px;
+    }
 
-  .admin-item {
-    padding: 14px;
-  }
+    .admin-item {
+        padding: 14px;
+    }
 
-  .admin-btn {
-    padding: 6px 10px;
-    font-size: 11px;
-  }
+    .admin-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
 }
+
+/* Fin Admin.css */

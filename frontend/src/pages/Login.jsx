@@ -1,9 +1,25 @@
-// src/pages/Login.jsx
+// Inicio Login.jsx
+
+// frontend/src/pages/Login.jsx
+
+// Página de inicio de sesión para autenticar usuarios
+
+// Importaciones de React y hooks
 import { useContext, useState } from "react";
+
+// Importación del contexto de usuario
 import { UserContext } from "../context/UserContext.jsx";
+
+// Importación de React Router
 import { useNavigate } from "react-router-dom";
+
+// Importación de componentes
 import LoaderPremium from "../components/common/LoaderPremium.jsx";
+
+// Importación de assets
 import logo from "../assets/images/logo.svg";
+
+// Importación de estilos
 import "../assets/styles/Auth.css";
 
 export default function Login() {
@@ -37,6 +53,7 @@ export default function Login() {
     setLoadingBtn(false);
   };
 
+  // Renderizado del componente
   return (
     <div className="auth-page">
       <div className="auth-card">
@@ -47,7 +64,7 @@ export default function Login() {
         <p className="auth-subtitle">Inicia sesión para continuar</p>
 
         <form onSubmit={handleLogin}>
-          
+
           <div className="input-group">
             <i className="fa-solid fa-envelope"></i>
             <input
@@ -95,3 +112,5 @@ export default function Login() {
     </div>
   );
 }
+
+// Fin Login.jsx
