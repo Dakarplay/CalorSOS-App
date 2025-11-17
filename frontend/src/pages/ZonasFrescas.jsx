@@ -39,7 +39,11 @@ export default function ZonasFrescas() {
         descripcion: "",
         latitud: "",
         longitud: "",
+        tipo_zona_fresca: "",
     });
+
+    // Estado para el marcador del mapa
+    const [mapMarker, setMapMarker] = useState(null);
 
     // Estado para loader de inicialización de reporte
     const [loadingReportInit, setLoadingReportInit] = useState(false);
@@ -93,16 +97,22 @@ export default function ZonasFrescas() {
         descripcion: "",
         latitud: "",
         longitud: "",
+        tipo_zona_fresca: "",
         });
 
         if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (pos) => {
+            const coords = {
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude
+            };
             setReportData(prev => ({
                 ...prev,
-                latitud: pos.coords.latitude,
-                longitud: pos.coords.longitude,
+                latitud: coords.lat,
+                longitud: coords.lng,
             }));
+            setMapMarker(coords);
             setLoadingReportInit(false);
             setReportOpen(true);
             },
@@ -157,59 +167,59 @@ export default function ZonasFrescas() {
 
             {/* Barra lateral izquierda */}
             <aside className="zf-sidebar">
-            <div className="zf-sidebar-header">
-                <input
-                type="search"
-                className="zf-search"
-                placeholder="Buscar zona..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                />
+                <div className="zf-sidebar-header">
+                    <input
+                        type="search"
+                        className="zf-search"
+                        placeholder="Buscar zona..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
 
-                <select
-                className="zf-select"
-                value={tipoFiltro}
-                onChange={(e) => setTipoFiltro(e.target.value)}
-                >
-                <option value="todas">Todas</option>
-                <option value="urbana">Urbana</option>
-                <option value="natural">Natural</option>
-                <option value="artificial">Artificial</option>
-                </select>
+                    <select
+                        className="zf-select"
+                        value={tipoFiltro}
+                        onChange={(e) => setTipoFiltro(e.target.value)}
+                        >
+                        <option value="todas">Todas</option>
+                        <option value="urbana">Urbana</option>
+                        <option value="natural">Natural</option>
+                        <option value="artificial">Artificial</option>
+                    </select>
 
-                {/* Botón para borrar selección */}
-                {selectedZona && (
-                <button
-                    className="zf-clear-btn"
-                    onClick={() => {
-                    setSelectedZona(null);
-                    setResetViewSignal(prev => prev + 1);
-                    }}
-                >
-                    Borrar selección
-                </button>
-                )}
-            </div>
+                    {/* Botón para borrar selección */}
+                    {selectedZona && (
+                    <button
+                        className="zf-clear-btn"
+                        onClick={() => {
+                        setSelectedZona(null);
+                        setResetViewSignal(prev => prev + 1);
+                        }}
+                    >
+                        Borrar selección
+                    </button>
+                    )}
+                </div>
 
-            <div className="zf-list-compact">
-                {filtered.length === 0 ? (
-                <p className="zf-empty">No se encontraron zonas.</p>
-                ) : (
-                filtered.map(renderCompactItem)
-                )}
-            </div>
+                <div className="zf-list-compact">
+                    {filtered.length === 0 ? (
+                    <p className="zf-empty">No se encontraron zonas.</p>
+                    ) : (
+                    filtered.map(renderCompactItem)
+                    )}
+                </div>
             </aside>
 
             {/* Área del mapa */}
             <main className="zf-map-area">
             <div className="zf-map-card">
                 <MapView
-                mini
-                zonasFrescas={filtered}
-                zonaSeleccionada={selectedZona}
-                onSelectMarker={setSelectedZona}
-                onExpand={() => setOpenMap(true)}
-                resetView={resetViewSignal}
+                    mini
+                    zonasFrescas={filtered}
+                    zonaSeleccionada={selectedZona}
+                    onSelectMarker={setSelectedZona}
+                    onExpand={() => setOpenMap(true)}
+                    resetView={resetViewSignal}
                 />
             </div>
 
@@ -244,6 +254,7 @@ export default function ZonasFrescas() {
                     <p><strong>{selectedZona.nombre}</strong></p>
                     <p>{selectedZona.descripcion}</p>
                     <p>Tipo: <span className="zf-tag-inline">{selectedZona.tipo}</span></p>
+                    <p>Estado: {selectedZona.estado || "No disponible"}</p>
                 </>
                 ) : (
                 <p>No has seleccionado ninguna zona.</p>
@@ -255,10 +266,10 @@ export default function ZonasFrescas() {
         {/* Modal de mapa en pantalla completa */}
         <MapFullscreenModal open={openMap} onClose={() => setOpenMap(false)}>
             <MapView
-            mini={false}
-            zonasFrescas={filtered}
-            zonaSeleccionada={selectedZona}
-            onSelectMarker={setSelectedZona}
+                mini={false}
+                zonasFrescas={filtered}
+                zonaSeleccionada={selectedZona}
+                onSelectMarker={setSelectedZona}
             />
         </MapFullscreenModal>
 
@@ -304,7 +315,7 @@ export default function ZonasFrescas() {
                     <select
                         value={reportData.tipo_zona_fresca || ""}
                         onChange={(e) =>
-                        setReportData(prev => ({ ...prev, tipo_zona_fresca: e.target.value }))
+                        setReportData(prev => ({ ...prev, tipo_zona_fresca: e.target.value }) )
                         }
                     >
                         <option value="">Seleccione...</option>
@@ -314,6 +325,26 @@ export default function ZonasFrescas() {
                     </select>
                     </label>
                 )}
+
+                {/* Mapa interactivo para seleccionar ubicación */}
+                <div className="zf-map-selector">
+                    <p>Selecciona la ubicación en el mapa:</p>
+                    <MapView
+                        mini={true}
+                        onSelectMarker={(coords) => {
+                            setMapMarker(coords);
+                            setReportData(prev => ({
+                                ...prev,
+                                latitud: coords.lat,
+                                longitud: coords.lng,
+                            }));
+                        }}
+                        zonasFrescas={[]}
+                        puntosHidratacion={[]}
+                        markerPosition={mapMarker}
+                        showExpandButton={false}
+                    />
+                </div>
 
                 <label>
                     Latitud

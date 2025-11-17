@@ -7,9 +7,10 @@
 /* perfil.css: sigue la estética del home_redux.css */
 .pr-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #121620, #263141);
-  color: #dbe9f8;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-family: Inter, Helvetica, Arial, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .pr-content {
@@ -26,13 +27,13 @@
 .pr-title {
   font-size: 32px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .pr-subtitle {
   font-size: 16px;
-  color: #8fa3bf;
+  color: var(--text-secondary);
 }
 
 /* Grid principal */
@@ -45,19 +46,20 @@
 
 /* Tarjeta de información */
 .pr-card {
-  background: #1f2a33;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .pr-card__title {
   font-size: 18px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 20px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border);
 }
 
 /* Información del usuario */
@@ -67,19 +69,21 @@
 
 .pr-info-label {
   font-size: 14px;
-  color: #8fa3bf;
+  color: var(--text-secondary);
   margin-bottom: 6px;
   font-weight: 500;
 }
 
 .pr-info-value {
   font-size: 16px;
-  color: #dbe9f8;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 /* Botones */
 .pr-actions {
+
+  color: var(--text-secondary);
   display: flex;
   gap: 12px;
   margin-top: 25px;
@@ -111,19 +115,19 @@
 }
 
 .pr-btn--secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #dbe9f8;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
 }
 
 .pr-btn--secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--hover-bg);
   transform: translateY(-1px);
 }
 
 .pr-btn--danger {
   background: rgba(220, 53, 69, 0.2);
-  color: #f8d7da;
+  color: var(--text-primary);
   border: 1px solid rgba(220, 53, 69, 0.3);
 }
 
@@ -164,6 +168,25 @@
 }
 
 /* Agregar a perfil.css */
+.pr-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.pr-input:focus {
+  outline: none;
+  border-color: #ff6b00;
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
 .pr-input:disabled {
   opacity: 0.6;
   cursor: not-allowed;

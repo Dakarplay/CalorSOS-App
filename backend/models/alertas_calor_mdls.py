@@ -5,7 +5,7 @@
 # Importaciones necesarias para el modelo de alertas de calor
 from backend.database.supabase_config import supabase
 from fastapi import HTTPException
-from typing import Optional
+from datetime import datetime, timedelta
 
 # Clase principal para manejar alertas de calor
 class AlertaCalorModel:
@@ -14,30 +14,61 @@ class AlertaCalorModel:
     Gestiona creación, consulta y eliminación de alertas relacionadas con el calor.
     """
 
+    # Método para crear una nueva alerta de calor
     @staticmethod
     def crear_alerta(temperatura: float, humedad: float, indice_uv: float,
-                    nivel_riesgo: str, fuente: str = "OpenWeatherMap"):
-        """
-        Crea una nueva alerta de calor en la base de datos.
-        Inserta los datos proporcionados en la tabla alertas_calor.
-        """
+                        nivel_riesgo: str, fuente: str = "OpenMeteo", estado: str = "activa"):
         try:
-            # Preparar datos para la inserción
             data = {
                 "temperatura": temperatura,
                 "humedad": humedad,
                 "indice_uv": indice_uv,
                 "nivel_riesgo": nivel_riesgo,
-                "fuente": fuente
+                "fuente": fuente,
+                "estado": estado,
             }
-            # Ejecutar inserción en Supabase
+
             response = supabase.table("alertas_calor").insert(data).execute()
-            # Retornar el registro creado o None si falla
             return response.data[0] if response.data else None
+
         except Exception as e:
-            # Manejar errores durante la creación
             raise HTTPException(status_code=500, detail=f"Error al crear alerta de calor: {str(e)}")
 
+    # Método para crear una alerta basada en datos climáticos
+    @staticmethod
+    def crear_alerta_desde_clima(clima: dict):
+        """
+        Previene alertas duplicadas: si ya existe una alerta igual en la última hora, no crea otra.
+        """
+
+        temperatura = clima.get("temperatura")
+        humedad = clima.get("humedad")
+        indice_uv = clima.get("uv_index")
+        nivel = clima.get("nivel_alerta", "desconocido")
+
+        # Buscar alertas similares en la última hora
+        hace_una_hora = (datetime.utcnow() - timedelta(hours=1)).isoformat()
+
+        existing = supabase.table("alertas_calor") \
+            .select("*") \
+            .eq("nivel_riesgo", nivel) \
+            .gte("fecha_alerta", hace_una_hora) \
+            .execute()
+
+        if existing.data:
+            return existing.data[0]  # ya existe alerta reciente → no duplicar
+
+        # Crear nueva alerta
+        nueva = AlertaCalorModel.crear_alerta(
+            temperatura=temperatura,
+            humedad=humedad,
+            indice_uv=indice_uv,
+            nivel_riesgo=nivel,
+            estado="activa"
+        )
+
+        return nueva
+    
     @staticmethod
     def listar_alertas():
         """

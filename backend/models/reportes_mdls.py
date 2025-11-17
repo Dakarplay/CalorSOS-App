@@ -48,8 +48,10 @@ class ReporteModel:
                 data["longitud"] = longitud
 
             # Campo específico para zonas frescas
-            if tipo == "zona_fresca" and tipo_zona_fresca is not None:
+            if tipo == "zona_fresca":
                 data["tipo_zona_fresca"] = tipo_zona_fresca
+            else:
+                data["tipo_zona_fresca"] = None
 
             # Ejecutar inserción en Supabase
             response = supabase.table("reportes").insert(data).execute()

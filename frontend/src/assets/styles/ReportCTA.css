@@ -17,14 +17,16 @@
     justify-content:space-between;
     align-items:center;
     gap:16px;
-    background:#0b1220;
+    background: var(--card-bg);
     padding:12px;
     border-radius:12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+    box-shadow: 0 8px 20px var(--shadow);
+    border: 1px solid var(--border);
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .rca-text {
-    color:#cfe1f7;
+    color: var(--text-primary);
     font-size:14px;
 }
 
@@ -32,14 +34,42 @@
     background:#ff7b2e;
     color:#fff;
     border:none;
-    padding:10px 14px;
+    padding:12px 18px;
     border-radius:8px;
     cursor:pointer;
     font-weight:700;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    text-align: center;
+    min-width: 160px;
 }
 
 .rca-btn:hover {
     background:#e6671e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.rca-btn-zona {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.rca-btn-zona:hover {
+    background: linear-gradient(135deg, #218838, #17a2b8);
+    box-shadow: 0 4px 16px rgba(40, 167, 69, 0.4);
+}
+
+.rca-btn-punto {
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.rca-btn-punto:hover {
+    background: linear-gradient(135deg, #0056b3, #5a0fc8);
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.4);
 }
 
 /* Fin ReportCTA.css */

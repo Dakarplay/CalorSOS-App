@@ -19,8 +19,10 @@ export const crearReporte = async (reporte) => {
         if (reporte.latitud) formData.append("latitud", reporte.latitud);
         if (reporte.longitud) formData.append("longitud", reporte.longitud);
 
-        if (reporte.tipo === "zona_fresca" && reporte.tipo_zona_fresca) {
+        if (reporte.tipo === "zona_fresca") {
             formData.append("tipo_zona_fresca", reporte.tipo_zona_fresca);
+        } else {
+            formData.append("tipo_zona_fresca", "");
         }
 
         const response = await API.post("/reportes/", formData, {

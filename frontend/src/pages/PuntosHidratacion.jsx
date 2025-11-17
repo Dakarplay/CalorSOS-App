@@ -34,12 +34,18 @@ export default function PuntosHidratacion() {
     const [reportLoading, setReportLoading] = useState(false);
     const [reportResult, setReportResult] = useState(null);
     const [reportData, setReportData] = useState({
-        tipo: "zona_fresca",
+        tipo: "hidratacion",
         nombre: "",
         descripcion: "",
         latitud: "",
         longitud: "",
+        tipo_zona_fresca: null,
     });
+
+
+
+    // Estado para el marcador del mapa
+    const [mapMarker, setMapMarker] = useState(null);
 
     // Efecto para cargar puntos de hidratación activos
     useEffect(() => {
@@ -83,17 +89,23 @@ export default function PuntosHidratacion() {
             descripcion: "",
             latitud: "",
             longitud: "",
+            tipo_zona_fresca: null,
         });
 
         // Obtener ubicación actual
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
+                    const coords = {
+                        lat: pos.coords.latitude,
+                        lng: pos.coords.longitude
+                    };
                     setReportData(prev => ({
                         ...prev,
-                        latitud: pos.coords.latitude,
-                        longitud: pos.coords.longitude,
+                        latitud: coords.lat,
+                        longitud: coords.lng,
                     }));
+                    setMapMarker(coords);
                     setLoadingReportInit(false);
                     setReportOpen(true);
                 },
@@ -281,13 +293,31 @@ export default function PuntosHidratacion() {
                                 />
                             </label>
 
+                            {/* Mapa interactivo para seleccionar ubicación */}
+                            <div className="ph-map-selector">
+                                <p>Selecciona la ubicación en el mapa:</p>
+                                <MapView
+                                    mini={true}
+                                    onSelectMarker={(coords) => {
+                                        setMapMarker(coords);
+                                        setReportData(prev => ({
+                                            ...prev,
+                                            latitud: coords.lat,
+                                            longitud: coords.lng,
+                                        }));
+                                    }}
+                                    puntosHidratacion={[]}
+                                    zonasFrescas={[]}
+                                    markerPosition={mapMarker}
+                                    showExpandButton={false}
+                                />
+                            </div>
+
                             <label>
                                 Latitud
                                 <input
                                     value={reportData.latitud || ""}
-                                    onChange={(e) =>
-                                        setReportData(prev => ({ ...prev, latitud: e.target.value }))
-                                    }
+                                    readOnly
                                 />
                             </label>
 
@@ -295,9 +325,7 @@ export default function PuntosHidratacion() {
                                 Longitud
                                 <input
                                     value={reportData.longitud || ""}
-                                    onChange={(e) =>
-                                        setReportData(prev => ({ ...prev, longitud: e.target.value }))
-                                    }
+                                    readOnly
                                 />
                             </label>
 

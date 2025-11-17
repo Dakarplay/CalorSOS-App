@@ -20,7 +20,8 @@ import puntosService from "../services/puntosService.js";
 import { listarUsuarios, actualizarUsuario, eliminarUsuario } from "../services/usuariosService.js";
 
 // Importación de modales
-import ReportModal from "../components/report/ReportModal.jsx";
+import EditZonaModal from "../components/ui/EditZonaModal.jsx";
+import EditPuntoModal from "../components/ui/EditPuntoModal.jsx";
 import MapFullscreenModal from "../components/maps/MapFullscreenModal.jsx";
 import MapView from "../components/maps/MapView.jsx";
 
@@ -57,6 +58,8 @@ export default function Admin() {
   const [puntoToEdit, setPuntoToEdit] = useState(null);
   const [openMapModal, setOpenMapModal] = useState(false);
   const [reporteSeleccionado, setReporteSeleccionado] = useState(null);
+  const [zonaSeleccionada, setZonaSeleccionada] = useState(null);
+  const [puntoSeleccionado, setPuntoSeleccionado] = useState(null);
 
   // Cargar datos según la pestaña activa
   useEffect(() => {
@@ -336,6 +339,17 @@ export default function Admin() {
                       {zona.fecha_registro && <p><strong>Fecha registro:</strong> {new Date(zona.fecha_registro).toLocaleString()}</p>}
                     </div>
                     <div className="admin-item-actions">
+                      {zona.latitud && zona.longitud && (
+                        <button
+                          className="admin-btn edit"
+                          onClick={() => {
+                            setZonaSeleccionada(zona);
+                            setOpenMapModal(true);
+                          }}
+                        >
+                          Ver zona en el mapa
+                        </button>
+                      )}
                       <button
                         className="admin-btn edit"
                         onClick={() => {
@@ -388,6 +402,17 @@ export default function Admin() {
                       {punto.fecha_registro && <p><strong>Fecha registro:</strong> {new Date(punto.fecha_registro).toLocaleString()}</p>}
                     </div>
                     <div className="admin-item-actions">
+                      {punto.latitud && punto.longitud && (
+                        <button
+                          className="admin-btn edit"
+                          onClick={() => {
+                            setPuntoSeleccionado(punto);
+                            setOpenMapModal(true);
+                          }}
+                        >
+                          Ver punto en el mapa
+                        </button>
+                      )}
                       <button
                         className="admin-btn edit"
                         onClick={() => {
@@ -464,156 +489,30 @@ export default function Admin() {
       </div>
       
       {/* Modal para editar zona */}
-      <ReportModal
+      <EditZonaModal
         open={openEditZonaModal}
         onClose={() => {
           setOpenEditZonaModal(false);
           setZonaToEdit(null);
         }}
-      >
-        <h2 className="rm-title">Editar Zona Fresca</h2>
-        <form
-          className="rm-form"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const updates = {
-              nombre: formData.get("nombre"),
-              descripcion: formData.get("descripcion"),
-              tipo: formData.get("tipo")
-            };
-
-            try {
-              await handleActualizarZona(zonaToEdit.id_zona, updates);
-              setOpenEditZonaModal(false);
-              setZonaToEdit(null);
-            } catch (error) {
-              alert("Error al actualizar zona");
-            }
-          }}
-        >
-          <div>
-            <label className="rm-label" htmlFor="nombre">Nombre:</label>
-            <input
-              className="rm-input"
-              type="text"
-              id="nombre"
-              name="nombre"
-              defaultValue={zonaToEdit?.nombre || ""}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="rm-label" htmlFor="descripcion">Descripción:</label>
-            <textarea
-              className="rm-textarea"
-              id="descripcion"
-              name="descripcion"
-              defaultValue={zonaToEdit?.descripcion || ""}
-            />
-          </div>
-
-          <div>
-            <label className="rm-label" htmlFor="tipo">Tipo:</label>
-            <select
-              className="rm-input"
-              id="tipo"
-              name="tipo"
-              defaultValue={zonaToEdit?.tipo || "urbana"}
-              required
-            >
-              <option value="urbana">Urbana</option>
-              <option value="natural">Natural</option>
-              <option value="artificial">Artificial</option>
-            </select>
-          </div>
-
-          <div className="rm-actions">
-            <button
-              type="button"
-              className="rm-btn-cancel"
-              onClick={() => {
-                setOpenEditZonaModal(false);
-                setZonaToEdit(null);
-              }}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className="rm-btn-send">
-              Actualizar Zona
-            </button>
-          </div>
-        </form>
-      </ReportModal>
+        zona={zonaToEdit}
+        onSave={async (updates) => {
+          await handleActualizarZona(zonaToEdit.id_zona, updates);
+        }}
+      />
 
       {/* Modal para editar punto */}
-      <ReportModal
+      <EditPuntoModal
         open={openEditPuntoModal}
         onClose={() => {
           setOpenEditPuntoModal(false);
           setPuntoToEdit(null);
         }}
-      >
-        <h2 className="rm-title">Editar Punto de Hidratación</h2>
-        <form
-          className="rm-form"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const updates = {
-              nombre: formData.get("nombre"),
-              descripcion: formData.get("descripcion")
-            };
-
-            try {
-              await handleActualizarPunto(puntoToEdit.id_punto, updates);
-              setOpenEditPuntoModal(false);
-              setPuntoToEdit(null);
-            } catch (error) {
-              alert("Error al actualizar punto");
-            }
-          }}
-        >
-          <div>
-            <label className="rm-label" htmlFor="nombre_punto">Nombre:</label>
-            <input
-              className="rm-input"
-              type="text"
-              id="nombre_punto"
-              name="nombre"
-              defaultValue={puntoToEdit?.nombre || ""}
-              required
-            />
-          </div>
-
-          <div>
-            <label className="rm-label" htmlFor="descripcion_punto">Descripción:</label>
-            <textarea
-              className="rm-textarea"
-              id="descripcion_punto"
-              name="descripcion"
-              defaultValue={puntoToEdit?.descripcion || ""}
-            />
-          </div>
-
-          <div className="rm-actions">
-            <button
-              type="button"
-              className="rm-btn-cancel"
-              onClick={() => {
-                setOpenEditPuntoModal(false);
-                setPuntoToEdit(null);
-              }}
-            >
-              Cancelar
-            </button>
-            <button type="submit" className="rm-btn-send">
-              Actualizar Punto
-            </button>
-          </div>
-        </form>
-      </ReportModal>
+        punto={puntoToEdit}
+        onSave={async (updates) => {
+          await handleActualizarPunto(puntoToEdit.id_punto, updates);
+        }}
+      />
 
       {/* Modal para ver reporte en el mapa */}
       <MapFullscreenModal
@@ -621,13 +520,15 @@ export default function Admin() {
         onClose={() => {
           setOpenMapModal(false);
           setReporteSeleccionado(null);
+          setZonaSeleccionada(null);
+          setPuntoSeleccionado(null);
         }}
       >
         <MapView
           mini={false}
-          reportes={[reporteSeleccionado].filter(Boolean)}
-          zonaSeleccionada={null}
-          puntoSeleccionado={null}
+          reportes={reporteSeleccionado ? [reporteSeleccionado] : []}
+          zonasFrescas={zonaSeleccionada ? [zonaSeleccionada] : []}
+          puntosHidratacion={puntoSeleccionado ? [puntoSeleccionado] : []}
         />
       </MapFullscreenModal>
     </div>

@@ -7,7 +7,7 @@ from fastapi import HTTPException
 import requests
 from datetime import datetime, date, timedelta, timezone
 import pytz
-
+from backend.database.supabase_config import supabase
 # Clase principal para manejar datos climáticos
 class ClimaModel:
     """
@@ -241,5 +241,41 @@ class ClimaModel:
             historico = historico[-24:]
 
         return historico
+
+    # Método para evaluar nivel de alerta climática
+    @staticmethod
+    def evaluar_alerta_climatica(datos): # datos: dict con 'temperatura', 'uv_index', 'sensacion_termica'
+        """
+        Evalúa el nivel de alerta climática basado en temperatura, índice UV y sensación térmica.
+        Retorna "alto", "medio" o "bajo".
+        """
+        temp = datos["temperatura"]
+        uv = datos["uv_index"]
+        humedad = datos["humedad"]
+
+        # reglas reales y simples
+        if temp >= 36 or uv >= 9 or datos["sensacion_termica"] >= 40:
+            return "alto"
+        if temp >= 33:
+            return "medio"
+        return "bajo"
+
+    # Método para crear alerta en la base de datos
+    @staticmethod
+    def crear_alerta_desde_clima(clima):
+        """
+        Crea una alerta de calor en la base de datos basada en los datos climáticos proporcionados.
+        Usa Supabase para insertar los datos en la tabla 'alertas_calor'.
+        """
+        nivel = clima["nivel_alerta"]
+        datos_insert = {
+            "temperatura": clima["temperatura"],
+            "humedad": clima["humedad"],
+            "indice_uv": clima["uv_index"],
+            "nivel_riesgo": nivel,
+            "fuente": "Open-Meteo"
+        }
+        response = supabase.table("alertas_calor").insert(datos_insert).execute()
+        return response.data[0]
 
 # Fin clima_mdls.py

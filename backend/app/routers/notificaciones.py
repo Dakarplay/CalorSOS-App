@@ -19,6 +19,20 @@ def crear_notificacion(mensaje: str = Body(...), id_usuario: str = Body(...), da
     except HTTPException as e:
         raise e
 
+# Enviar notificación global (solo administradores)
+@router.post("/global")
+def crear_notificaciones_globales(mensaje: str = Body(...), datos_usuario: dict = Depends(verificar_rol(["admin"]))):
+    try:
+        notifs = NotificacionModel.crear_notificaciones_globales(mensaje)
+        return {
+            "status": "success",
+            "mensaje": "Notificación global generada",
+            "cantidad": len(notifs)
+        }
+    except HTTPException as e:
+        raise e
+
+
 # Endpoint para listar notificaciones con permisos diferenciados
 @router.get("/")
 def listar_notificaciones(id_usuario: Optional[str] = None, datos_usuario: dict = Depends(verificar_token)):

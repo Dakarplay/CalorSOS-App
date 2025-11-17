@@ -7,9 +7,10 @@
 /* Contenedor principal de la página */
 .hr-container {
     min-height: 100vh;
-    background: linear-gradient(180deg, #121620, #263141);
-    color: #dbe9f8;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     font-family: Inter, Helvetica, Arial, sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Contenido principal */
@@ -25,16 +26,67 @@
     margin-bottom: 18px;
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .hr-alerts__inner {
-    background: #1f2a33;
-    color: #cfe1f7;
-    padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.02);
-    min-width: 320px;
+    background: var(--card-bg);
+    color: var(--text-primary);
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    min-width: 400px;
+    max-width: 800px;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px var(--shadow);
+    position: relative;
+}
+
+.hr-alerts__inner::before {
+    content: "⚠️";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+.hr-alerts__inner::after {
+    content: "⚠️";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+.hr-alerts--animated {
+    animation: slide-left-right 20s linear infinite;
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+@keyframes slide-left-right {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+.hr-alerts--animated .hr-alerts__inner {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }
 
 /* Grid principal de la página */
@@ -84,10 +136,11 @@
 
 /* Tarjeta de vista previa del mapa */
 .map-preview-card {
-    background: #1f2a33;
+    background: var(--card-bg);
     border-radius: 10px;
     padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border);
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .map-preview-header {
@@ -98,14 +151,14 @@
 }
 
 .map-preview-header h3 {
-    color: #c5ecf6;
+    color: var(--text-primary);
     font-size: 16px;
     font-weight: 600;
     margin: 0 0 4px 0;
 }
 
 .map-location-desc {
-    color: #72a1ae;
+    color: var(--text-secondary);
     font-size: 13px;
     margin: 0;
     font-weight: 400;
@@ -119,7 +172,7 @@
 }
 
 .map-stat-item {
-    color: #89a3aa;
+    color: var(--text-secondary);
     font-size: 12px;
     font-weight: 1000;
     text-transform: uppercase;

@@ -20,6 +20,7 @@
 /* Ventana glass */
 .mfm-window {
   background: rgba(22, 30, 45, 0.55);
+  background: var(--bg-secondary);
   backdrop-filter: blur(12px) saturate(160%);
   padding: 16px;
   border-radius: 18px;

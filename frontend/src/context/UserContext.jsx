@@ -17,6 +17,14 @@ export const UserProvider = ({ children }) => {
     const [token, setToken] = useState(localStorage.getItem("token") || null);
     const [loading, setLoading] = useState(true);
 
+    // Estado global para configuraciones de usuario
+    const [userSettings, setUserSettings] = useState({
+        theme: 'dark',
+        temperatureUnit: 'C',
+        notifications: { sound: true, vibration: true },
+        map: { type: 'street', defaultZoom: 13 }
+    });
+
     // Normalizador de perfil desde backend
     const normalizeUser = (data) => {
         return data?.usuario_actual || data?.data || data || null;
@@ -47,6 +55,29 @@ export const UserProvider = ({ children }) => {
 
         verify();
     }, [token]);
+
+    // Cargar configuraciones de usuario al iniciar (por usuario)
+    useEffect(() => {
+        if (user && user.id_usuario) {
+            const userKey = `userSettings_${user.id_usuario}`;
+            const savedSettings = localStorage.getItem(userKey);
+            if (savedSettings) {
+                const parsed = JSON.parse(savedSettings);
+                setUserSettings(parsed);
+                // Aplicar tema
+                applyTheme(parsed.theme);
+            }
+        }
+    }, [user]);
+
+    // Aplicar tema global
+    const applyTheme = (theme) => {
+        if (theme === 'light') {
+            document.body.classList.add('light-theme');
+        } else {
+            document.body.classList.remove('light-theme');
+        }
+    };
 
     // Función de login
     const login = async (correo, password) => {
@@ -143,7 +174,9 @@ export const UserProvider = ({ children }) => {
             login,
             logout,
             updateProfile,
-            changePassword
+            changePassword,
+            userSettings,
+            setUserSettings
         }}
         >
         {children}

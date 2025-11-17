@@ -4,14 +4,50 @@
 
 /* Estilos globales para la aplicación */
 
+/* Variables CSS para temas */
+:root {
+  /* Tema Oscuro (por defecto) */
+  --bg-primary: linear-gradient(180deg, #121620, #263141);
+  --bg-secondary: #1a1f2e;
+  --text-primary: #dbe9f8;
+  --text-secondary: #a0aec0;
+  --accent: #ff6b35; /* Naranja */
+  --border: #2d3748;
+  --card-bg: rgba(26, 31, 46, 0.8);
+  --input-bg: #2d3748;
+  --btn-primary: #ff6b35; /* Naranja */
+  --btn-secondary: #2d3748;
+  --btn-danger: #e53e3e;
+}
+
+/* Tema Claro */
+.light-theme {
+  --bg-primary: linear-gradient(180deg, #f7fafc, #edf2f7);
+  --bg-secondary: #ffffff;
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --accent: #ff6b35; /* Naranja */
+  --border: #e2e8f0;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --input-bg: #f7fafc;
+  --btn-primary: #ff6b35; /* Naranja */
+  --btn-secondary: #e2e8f0;
+  --btn-danger: #e53e3e;
+  --sidebar-bg: #f8f9fa;
+  --modal-bg: #ffffff;
+  --hover-bg: rgba(255,122,0,0.05);
+  --shadow: rgba(0,0,0,0.1);
+}
+
 /* Reset y tipografía global */
 html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: Inter, Helvetica, Arial, sans-serif;
-  background: linear-gradient(180deg,#121620,#263141);
-  color: #dbe9f8;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 *, *::before, *::after {

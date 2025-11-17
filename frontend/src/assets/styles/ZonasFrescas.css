@@ -9,12 +9,19 @@
 ================================*/
 
 .zf-page {
-  background: linear-gradient(180deg, #10141e, #1b2533);
+  background: var(--bg-primary);
   min-height: 100vh;
-  color: #eaf3ff;
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
   width: 100%;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Tema claro para página */
+.light-theme .zf-page {
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 /* ===============================
@@ -29,6 +36,12 @@
   color: #f4f7ff;
   letter-spacing: 0.4px;
   text-shadow: 0 3px 9px rgba(0,0,0,0.35);
+}
+
+/* Tema claro para título */
+.light-theme .zf-title {
+  color: var(--text-primary);
+  text-shadow: 0 3px 9px rgba(0,0,0,0.1);
 }
 
 /* ===============================
@@ -57,6 +70,13 @@
   gap: 16px;
 }
 
+/* Tema claro para sidebar */
+.light-theme .zf-sidebar {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px var(--shadow);
+}
+
 .zf-sidebar-header {
   display: flex;
   flex-direction: column;
@@ -81,6 +101,20 @@
   border-color: #ff8a27;
   box-shadow: 0 0 6px rgba(255,138,39,0.6);
   outline: none;
+}
+
+/* Tema claro para inputs */
+.light-theme .zf-search,
+.light-theme .zf-select {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+.light-theme .zf-search:focus,
+.light-theme .zf-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 6px rgba(255,107,53,0.6);
 }
 
 /* ===============================
@@ -160,6 +194,27 @@
   color: #f5f8ff;
 }
 
+/* Tema claro para items */
+.light-theme .zf-item-compact {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+
+.light-theme .zf-item-compact:hover {
+  background: var(--hover-bg);
+  border-color: var(--accent);
+}
+
+.light-theme .zf-item-compact.selected {
+  border: 1px solid var(--accent);
+  background: var(--bg-primary);
+  box-shadow: 0 0 10px rgba(255,107,53,0.35);
+}
+
+.light-theme .zf-item-name {
+  color: var(--text-primary);
+}
+
 .zf-item-type {
   background: rgba(255,138,39,0.14);
   border-left: 3px solid #ff8a27;
@@ -190,6 +245,13 @@
   box-shadow: 0 4px 14px rgba(0,0,0,0.25);
 }
 
+/* Tema claro para map card */
+.light-theme .zf-map-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 14px var(--shadow);
+}
+
 .zf-map-card .mv-container.mini {
   width: 100%;
   height: 340px;
@@ -210,6 +272,13 @@
   box-shadow: 0 3px 12px rgba(0,0,0,0.22);
 }
 
+/* Tema claro para report bar */
+.light-theme .zf-report-bar {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  box-shadow: 0 3px 12px var(--shadow);
+}
+
 .zf-report-bar h3 {
   color: #ffb87a;
   margin: 0 0 6px;
@@ -217,10 +286,20 @@
   font-weight: 700;
 }
 
+/* Tema claro para títulos report bar */
+.light-theme .zf-report-bar h3 {
+  color: var(--accent);
+}
+
 .zf-report-bar p {
   margin: 0 0 12px;
   font-size: 14px;
   opacity: 0.85;
+}
+
+/* Tema claro para párrafos report bar */
+.light-theme .zf-report-bar p {
+  color: var(--text-secondary);
 }
 
 /* ===============================
@@ -260,16 +339,33 @@
   gap: 20px;
 }
 
+/* Tema claro para right sidebar */
+.light-theme .zf-right-sidebar {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 15px var(--shadow);
+}
+
 .zf-right-sidebar h3 {
   margin-bottom: 6px;
   color: #ffb87a;
   font-weight: 700;
 }
 
+/* Tema claro para títulos right sidebar */
+.light-theme .zf-right-sidebar h3 {
+  color: var(--accent);
+}
+
 .zf-right-sidebar p {
   font-size: 14px;
   color: #dfe9ff;
   line-height: 1.45;
+}
+
+/* Tema claro para párrafos right sidebar */
+.light-theme .zf-right-sidebar p {
+  color: var(--text-secondary);
 }
 
 /* Tag inline */

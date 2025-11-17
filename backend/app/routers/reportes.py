@@ -23,7 +23,7 @@ def crear_reporte(
 ):
     try:
         # Validación para reportes de zona fresca
-        if tipo == "zona_fresca" and not tipo_zona_fresca:
+        if tipo == "zona_fresca" and (tipo_zona_fresca is None or tipo_zona_fresca == ""):
             raise HTTPException(status_code=400, detail="El campo 'tipo_zona_fresca' es obligatorio para reportes de zona fresca.")
 
         # Obtener ID del usuario autenticado

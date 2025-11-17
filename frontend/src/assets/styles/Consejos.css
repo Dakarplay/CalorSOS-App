@@ -7,10 +7,17 @@
 /* CONTENEDOR PRINCIPAL */
 .consejos-container {
   min-height: 100vh;
-  background: linear-gradient(180deg, #121620, #263141);
-  color: #dbe9f8;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-family: Inter, Helvetica, Arial, sans-serif;
   padding-top: 0;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Tema claro para contenedor */
+.light-theme .consejos-container {
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .consejos-title {
@@ -38,11 +45,22 @@
   height: fit-content;
 }
 
+/* Tema claro para sidebar */
+.light-theme .consejos-sidebar {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+}
+
 .sidebar-title {
   font-size: 1.2rem;
   margin-bottom: 12px;
   font-weight: 600;
   color: #e3eeff;
+}
+
+/* Tema claro para título sidebar */
+.light-theme .sidebar-title {
+  color: var(--text-primary);
 }
 
 .sidebar-clear {
@@ -77,6 +95,11 @@
   color: #dbe9f8;
 }
 
+/* Tema claro para items sidebar */
+.light-theme .sidebar-item {
+  color: var(--text-secondary);
+}
+
 /* CONTENIDO */
 .consejos-content {
   flex: 1;
@@ -87,6 +110,11 @@
   font-weight: 600;
   margin-bottom: 20px;
   color: #f0f6ff;
+}
+
+/* Tema claro para título */
+.light-theme .consejos-title {
+  color: var(--text-primary);
 }
 
 /* GRID DE CONSEJOS */
@@ -108,6 +136,16 @@
 .consejo-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Tema claro para tarjetas */
+.light-theme .consejo-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+}
+
+.light-theme .consejo-card:hover {
+  box-shadow: 0 8px 16px var(--shadow);
 }
 
 /* CATEGORÍAS COLOREADAS */

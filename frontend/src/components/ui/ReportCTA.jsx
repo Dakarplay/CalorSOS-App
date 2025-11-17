@@ -11,7 +11,7 @@ import React from "react";
 import "../../assets/styles/ReportCTA.css";
 
 // Componente funcional principal
-export default function ReportCallToAction({ onClick }) {
+export default function ReportCallToAction() {
     return (
         <div className="rca-wrap">
             <div className="rca-inner">
@@ -19,9 +19,12 @@ export default function ReportCallToAction({ onClick }) {
                     ¿Deseas reportar un nuevo punto de hidratación o zona fresca? Envía un reporte comunitario.
                 </div>
                 <div className="rca-action">
-                    <button className="rca-btn" onClick={onClick}>
-                        Nuevo reporte
-                    </button>
+                    <a href="/zonas-frescas" className="rca-btn rca-btn-zona">
+                        Reportar Zona Fresca
+                    </a>
+                    <a href="/puntos-hidratacion" className="rca-btn rca-btn-punto">
+                        Reportar Punto de Hidratación
+                    </a>
                 </div>
             </div>
         </div>

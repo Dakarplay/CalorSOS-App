@@ -1,5 +1,3 @@
-# Inicio main.py
-
 # backend/app/main.py
 
 # Importaciones necesarias para la aplicación FastAPI
@@ -18,8 +16,51 @@ from backend.app.routers import (
     clima,
 )
 
+# Importaciones necesarias para el scheduler de alertas automáticas
+from apscheduler.schedulers.background import BackgroundScheduler
+from backend.models.clima_mdls import ClimaModel
+from backend.models.alertas_calor_mdls import AlertaCalorModel
+from backend.models.notificaciones_mdls import NotificacionModel
+
 # Crear instancia de la aplicación FastAPI
 app = FastAPI(title="CalorSOS API")
+
+# ------------------------ SCHEDULER DE ALERTAS AUTOMÁTICAS ------------------------
+
+scheduler = BackgroundScheduler()
+
+def tarea_alerta_automatica():
+    """
+    Tarea automática que consulta el clima, evalúa si debe generarse una alerta,
+    crea la alerta en la base de datos y genera notificaciones globales.
+    """
+    try:
+        clima = ClimaModel.obtener_clima("Cartagena")
+        nivel = ClimaModel.evaluar_alerta_climatica(clima)
+        clima["nivel_alerta"] = nivel
+
+        # Crear alerta basada en clima
+        alerta = AlertaCalorModel.crear_alerta_desde_clima(clima)
+
+        # Mensaje de notificación
+        mensaje = (
+            f"⚠️ ALERTA DE CALOR {nivel.upper()} — "
+            f"Temp: {clima['temperatura']}°C, UV: {clima['uv_index']}"
+        )
+
+        # Enviar notificaciones globales
+        NotificacionModel.crear_notificaciones_globales(mensaje)
+
+        print("Alerta y notificaciones generadas automáticamente.")
+
+    except Exception as e:
+        print(f"Error en tarea automática de alerta: {e}")
+
+# Ejecutar la tarea cada 60 minutos
+scheduler.add_job(tarea_alerta_automatica, "interval", minutes=60)
+scheduler.start()
+
+# -----------------------------------------------------------------------------------
 
 # Configurar middleware CORS para permitir acceso desde frontend
 app.add_middleware(
@@ -47,5 +88,3 @@ def root():
     Retorna un mensaje de estado.
     """
     return {"message": "API CalorSOS funcionando correctamente"}
-
-# Fin main.py

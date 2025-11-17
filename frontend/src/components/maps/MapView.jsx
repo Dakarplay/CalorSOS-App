@@ -54,6 +54,21 @@ function CenterOnSelection({ seleccion }) {
     return null;
 }
 
+// Componente para centrar en marcador personalizado
+function CenterOnMarker({ markerPosition }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (markerPosition) {
+            map.setView([markerPosition.lat, markerPosition.lng], 16, {
+                animate: true,
+            });
+        }
+    }, [markerPosition]);
+
+    return null;
+}
+
 // Componente para reset general de vista
 function ResetView({ trigger, zonasFrescas, puntosHidratacion }) {
     const map = useMap();
@@ -140,6 +155,8 @@ export default function MapView({
     resetView = false,
     reportes = [],
     selectedMarker = null,
+    markerPosition = null,
+    showExpandButton = true,
 }) {
     // Referencias para marcadores
     const markerRefs = useRef({});
@@ -192,6 +209,9 @@ export default function MapView({
                 {/* Centrado por selección */}
                 <CenterOnSelection seleccion={zonaSeleccionada || puntoSeleccionado || (reportes.length > 0 ? reportes[0] : null)} />
 
+                {/* Centrado en marcador personalizado */}
+                <CenterOnMarker markerPosition={markerPosition} />
+
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; OpenStreetMap"
@@ -208,7 +228,8 @@ export default function MapView({
                     >
                         <Popup>
                             <strong>{z.nombre}</strong><br />
-                            {z.descripcion}
+                            <strong> Descripcion: </strong> {z.descripcion}<br />
+                            <strong>Estado: </strong>{ z.estado}
                         </Popup>
                     </Marker>
                 ))}
@@ -224,7 +245,8 @@ export default function MapView({
                     >
                         <Popup>
                             <strong>{p.nombre}</strong><br />
-                            {p.descripcion}
+                            <strong> Descripcion: </strong> {p.descripcion}<br />
+                            <strong>Estado: </strong>{ p.estado}
                         </Popup>
                     </Marker>
                 ))}
@@ -246,22 +268,54 @@ export default function MapView({
                         </Popup>
                     </Marker>
                 ))}
+
+                {/* Marcador personalizado para selección en formularios */}
+                {markerPosition && (
+                    <Marker
+                        position={[markerPosition.lat, markerPosition.lng]}
+                        draggable={true}
+                        eventHandlers={{
+                            dragend: (e) => {
+                                const newPos = e.target.getLatLng();
+                                onSelectMarker({ lat: newPos.lat, lng: newPos.lng });
+                            }
+                        }}
+                    >
+                        <Popup>
+                            <strong>Ubicación seleccionada</strong><br />
+                            Lat: {markerPosition.lat.toFixed(5)}<br />
+                            Lng: {markerPosition.lng.toFixed(5)}
+                        </Popup>
+                    </Marker>
+                )}
             </MapContainer>
 
             {/* Botón para ver mapa completo si es mini */}
-            {mini && (
-                <button className="mv-expand-btn" onClick={onExpand}>
+            {mini && showExpandButton && (
+                <button
+                    type="button"
+                    className="mv-expand-btn"
+                    onClick={(e) => { 
+                            e.preventDefault(); // Prevenir comportamiento por defecto
+                            onExpand && onExpand();
+                        }
+                    }
+                >
                     Ver mapa completo
                 </button>
             )}
 
             {/* Botón para reset vista si no es mini */}
             {!mini && (
-                <button className="mv-reset-btn" onClick={() => {
-                    // Trigger reset view
-                    const event = new CustomEvent('resetMapView');
-                    window.dispatchEvent(event);
-                }}>
+                <button
+                    type="button"
+                    className="mv-reset-btn"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        const event = new CustomEvent('resetMapView');
+                        window.dispatchEvent(event);
+                    }}
+                >
                     Restablecer vista
                 </button>
             )}

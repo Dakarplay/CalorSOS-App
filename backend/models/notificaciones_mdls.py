@@ -6,6 +6,7 @@
 from backend.database.supabase_config import supabase
 from fastapi import HTTPException
 from typing import Optional
+from datetime import datetime, timedelta
 
 # Clase principal para manejar notificaciones
 class NotificacionModel:
@@ -13,28 +14,62 @@ class NotificacionModel:
     Modelo para interactuar con la tabla notificaciones en Supabase.
     Gestiona creación, consulta, actualización y eliminación de notificaciones.
     """
-
+    # Crear una nueva notificación
     @staticmethod
     def crear_notificacion(id_usuario: str, mensaje: str, estado: str = "pendiente"):
         """
-        Crea una nueva notificación asociada a un usuario.
-        Inserta los datos en la tabla notificaciones.
+        Crea una nueva notificación para un usuario específico.
+        Args:
+            id_usuario (str): ID del usuario destinatario.
         """
         try:
-            # Preparar datos para inserción
             data = {
                 "id_usuario": id_usuario,
                 "mensaje": mensaje,
-                "estado": estado
+                "estado": estado,
             }
-            # Ejecutar inserción en Supabase
+
             response = supabase.table("notificaciones").insert(data).execute()
-            # Retornar la notificación creada
             return response.data[0] if response.data else None
+
         except Exception as e:
-            # Manejar errores en la creación
             raise HTTPException(status_code=500, detail=f"Error al crear notificación: {str(e)}")
 
+    # Crear notificaciones globales sin spam
+    @staticmethod
+    def crear_notificaciones_globales(mensaje):
+        """
+        Evita spam: no genera la misma notificación más de 1 vez por hora.
+        """
+
+        hace_una_hora = (datetime.utcnow() - timedelta(hours=1)).isoformat()
+
+        # ¿Ya se envió este mensaje recientemente?
+        ya_existe = supabase.table("notificaciones") \
+            .select("*") \
+            .eq("mensaje", mensaje) \
+            .gte("fecha_envio", hace_una_hora) \
+            .execute()
+
+        if ya_existe.data:
+            return ya_existe.data # no repetir si ya existe
+
+        # Enviar a todos
+        usuarios = supabase.table("usuarios").select("id_usuario").execute().data
+        notifs = []
+
+        for u in usuarios:
+            item = {
+                "id_usuario": u["id_usuario"],
+                "mensaje": mensaje,
+                "estado": "pendiente",
+            }
+
+            res = supabase.table("notificaciones").insert(item).execute()
+            notifs.append(res.data[0])
+
+        return notifs
+    
     @staticmethod
     def listar_notificaciones(id_usuario: Optional[str] = None):
         """
