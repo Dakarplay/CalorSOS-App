@@ -26,10 +26,10 @@ class ZonaFrescaModel:
 
     @staticmethod
     def listar_zonas(estado: Optional[str] = None):
-        """Lista todas las zonas frescas, con opción de filtrar por estado."""
+        """Lista todas las zonas frescas, con opción de filtrar por estado. Si estado es None, muestra todas."""
         try:
             query = supabase.table("zonas_frescas").select("*")
-            if estado:
+            if estado is not None:
                 query = query.eq("estado", estado)
             response = query.execute()
             return response.data
