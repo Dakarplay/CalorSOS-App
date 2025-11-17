@@ -29,8 +29,13 @@ def crear_zona(
 # Listar zonas (público)
 @router.get("/")
 def listar_zonas(estado: Optional[str] = None):
-    """Lista todas las zonas frescas (público, con filtro opcional por estado)."""
-    return {"status": "success", "data": ZonaFrescaModel.listar_zonas(estado)}
+    """Lista todas las zonas frescas. Si estado es None, muestra todas; si no, filtra por estado."""
+    if estado is None:
+        # Mostrar todas las zonas sin filtro (para administradores)
+        return {"status": "success", "data": ZonaFrescaModel.listar_zonas(None)}
+    else:
+        # Filtrar por estado (para usuarios normales)
+        return {"status": "success", "data": ZonaFrescaModel.listar_zonas(estado)}
 
 
 # Obtener zona por ID (público)
