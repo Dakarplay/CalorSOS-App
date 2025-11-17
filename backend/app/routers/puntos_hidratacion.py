@@ -35,14 +35,20 @@ def crear_punto(
 # Listar puntos (público)
 @router.get("/")
 def listar_puntos(estado: Optional[str] = None):
-    """Lista todos los puntos (por defecto solo los activos)."""
+    """Lista todos los puntos. Si estado es None, muestra todos; si no, filtra por estado."""
 
-    estado_filtrado = estado or "activa"
-
-    return {
-        "status": "success",
-        "data": PuntoHidratacionModel.listar_puntos(estado_filtrado)
-    }
+    if estado is None:
+        # Mostrar todos los puntos sin filtro (para administradores)
+        return {
+            "status": "success",
+            "data": PuntoHidratacionModel.listar_puntos(None)
+        }
+    else:
+        # Filtrar por estado (para usuarios normales)
+        return {
+            "status": "success",
+            "data": PuntoHidratacionModel.listar_puntos(estado)
+        }
 
 
 # Obtener punto por ID
