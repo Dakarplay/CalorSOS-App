@@ -151,6 +151,10 @@ export default function Home() {
                     <div>
                     <h3>🗺️ Cartagena</h3>
                     <p className="map-location-desc">Zonas frescas y puntos de hidratación</p>
+                    <div className="map-stats">
+                        <span className="map-stat-item">Hay {zonasFrescas.length} ZONAS FRESCAS</span>
+                        <span className="map-stat-item">Hay {puntosHidratacion.length} PUNTOS DE HIDRATACIÓN</span>
+                    </div>
                     </div>
                 </div>
                 <MapView
@@ -158,6 +162,11 @@ export default function Home() {
                     onExpand={() => setOpenMap(true)}
                     zonasFrescas={zonasFrescas}
                     puntosHidratacion={puntosHidratacion}
+                    onSelectMarker={(marker) => {
+                        // Acercar la vista al marcador seleccionado
+                        // Esto se manejará dentro de MapView
+                    }}
+                    resetView={false}
                 />
                 </div>
                 <ClimateChart feelsLike={weather?.sensacion_termica} />
@@ -185,7 +194,7 @@ export default function Home() {
 
         {/* Modal de mapa completo */}
         <MapFullscreenModal open={openMap} onClose={() => setOpenMap(false)}>
-            <MapView mini={false} zonasFrescas={zonasFrescas} puntosHidratacion={puntosHidratacion} />
+            <MapView mini={false} zonasFrescas={zonasFrescas} puntosHidratacion={puntosHidratacion} resetView={false} />
         </MapFullscreenModal>
 
         {/* Modal de reporte */}

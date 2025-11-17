@@ -49,6 +49,30 @@
   background: rgb(240, 162, 102);
 }
 
+/* Botón para reset vista */
+.mv-reset-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  padding: 8px 14px;
+
+  z-index: 5000;
+
+  background: rgba(33, 150, 243, 0.9);
+  border: 2px solid #000000;
+  border-radius: 20px;
+
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+
+  backdrop-filter: blur(3px);
+}
+
+.mv-reset-btn:hover {
+  background: rgb(100, 181, 246);
+}
+
 /* ---------- marcador verde (divIcon) ---------- */
 /* wrapper por si hace falta */
 .custom-div-icon-wrapper {
@@ -81,4 +105,16 @@
     border: 3px solid white;
     box-shadow: 0 0 4px rgba(0,0,0,0.4);
     display: inline-block;
+}
+
+/* Marcador rojo para reportes */
+.report-div-marker {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #dc3545; /* rojo */
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(220,53,69,0.35);
+    transform: translateY(-4px);
 }

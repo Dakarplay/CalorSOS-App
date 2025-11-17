@@ -65,6 +65,27 @@ function ResetView({ trigger, zonasFrescas, puntosHidratacion }) {
         });
     }, [trigger, zonasFrescas]);
 
+    // Escuchar evento de reset
+    useEffect(() => {
+        const handleReset = () => {
+            const coords = [];
+            zonasFrescas?.forEach(z => coords.push([z.latitud, z.longitud]));
+            puntosHidratacion?.forEach(p => coords.push([p.latitud, p.longitud]));
+
+            if (coords.length === 0) return;
+
+            const bounds = L.latLngBounds(coords);
+            map.fitBounds(bounds, {
+                padding: [50, 50],
+                animate: true,
+                maxZoom: 14
+            });
+        };
+
+        window.addEventListener('resetMapView', handleReset);
+        return () => window.removeEventListener('resetMapView', handleReset);
+    }, [map, zonasFrescas, puntosHidratacion]);
+
     return null;
 }
 
@@ -86,6 +107,15 @@ const blueDivIcon = new L.DivIcon({
     popupAnchor: [0, -20],
 });
 
+// ICONO ROJO PARA REPORTES
+const redDivIcon = new L.DivIcon({
+    html: `<span class="report-div-marker"></span>`,
+    className: "custom-div-icon-wrapper",
+    iconSize: [24, 24],
+    iconAnchor: [12, 24],
+    popupAnchor: [0, -20],
+});
+
 export default function MapView({
     mini = false,
     onExpand,
@@ -95,6 +125,8 @@ export default function MapView({
     puntoSeleccionado = null,
     onSelectMarker = () => {},
     resetView = false,   // 👈 NUEVO
+    reportes = [], // Nueva prop para reportes
+    selectedMarker = null, // Para controlar el zoom en marcador seleccionado
 }) {
 
     const markerRefs = useRef({});
@@ -146,7 +178,7 @@ export default function MapView({
                 />
 
                 {/* centrado por selección */}
-                <CenterOnSelection seleccion={zonaSeleccionada || puntoSeleccionado} />
+                <CenterOnSelection seleccion={zonaSeleccionada || puntoSeleccionado || (reportes.length > 0 ? reportes[0] : null)} />
 
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -186,12 +218,41 @@ export default function MapView({
                     </Marker>
                 ))}
 
+                {/* Marcadores rojos (Reportes) */}
+                {Array.isArray(reportes) && reportes.map((r) => (
+                    <Marker
+                        key={r.id_reporte}
+                        position={[r.latitud, r.longitud]}
+                        icon={redDivIcon}
+                        ref={(ref) => (markerRefs.current[r.id_reporte] = ref)}
+                    >
+                        <Popup>
+                            <strong>Reporte: {r.nombre || "Sin nombre"}</strong><br />
+                            <strong>Tipo:</strong> {r.tipo}<br />
+                            <strong>Estado:</strong> {r.estado}<br />
+                            {r.descripcion && <><strong>Descripción:</strong> {r.descripcion}<br /></>}
+                            {r.fecha_reporte && <><strong>Fecha:</strong> {new Date(r.fecha_reporte).toLocaleString()}</>}
+                        </Popup>
+                    </Marker>
+                ))}
+
             </MapContainer>
 
             {/* botón ver completo si es mini */}
             {mini && (
                 <button className="mv-expand-btn" onClick={onExpand}>
                     Ver mapa completo
+                </button>
+            )}
+
+            {/* botón reset vista si no es mini */}
+            {!mini && (
+                <button className="mv-reset-btn" onClick={() => {
+                    // Trigger reset view
+                    const event = new CustomEvent('resetMapView');
+                    window.dispatchEvent(event);
+                }}>
+                    Restablecer vista
                 </button>
             )}
         </div>

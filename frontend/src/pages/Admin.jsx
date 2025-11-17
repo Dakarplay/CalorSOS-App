@@ -7,6 +7,8 @@ import zonasService from "../services/zonasService.js";
 import puntosService from "../services/puntosService.js";
 import { listarUsuarios, actualizarUsuario, eliminarUsuario } from "../services/usuariosService.js";
 import ReportModal from "../components/report/ReportModal.jsx";
+import MapFullscreenModal from "../components/maps/MapFullscreenModal.jsx";
+import MapView from "../components/maps/MapView.jsx";
 import "../assets/styles/Admin.css";
 
 export default function Admin() {
@@ -34,6 +36,8 @@ export default function Admin() {
   const [zonaToEdit, setZonaToEdit] = useState(null);
   const [openEditPuntoModal, setOpenEditPuntoModal] = useState(false);
   const [puntoToEdit, setPuntoToEdit] = useState(null);
+  const [openMapModal, setOpenMapModal] = useState(false);
+  const [reporteSeleccionado, setReporteSeleccionado] = useState(null);
 
   // Cargar datos según la pestaña activa
   useEffect(() => {
@@ -257,6 +261,17 @@ export default function Admin() {
                       {reporte.fecha_reporte && <p><strong>Fecha:</strong> {new Date(reporte.fecha_reporte).toLocaleString()}</p>}
                     </div>
                     <div className="admin-item-actions">
+                      {reporte.latitud && reporte.longitud && (
+                        <button
+                          className="admin-btn edit"
+                          onClick={() => {
+                            setReporteSeleccionado(reporte);
+                            setOpenMapModal(true);
+                          }}
+                        >
+                          Ver reporte en el mapa
+                        </button>
+                      )}
                       {reporte.estado === "pendiente" && (
                         <>
                           <button
@@ -580,6 +595,22 @@ export default function Admin() {
           </div>
         </form>
       </ReportModal>
+
+      {/* Modal para ver reporte en el mapa */}
+      <MapFullscreenModal
+        open={openMapModal}
+        onClose={() => {
+          setOpenMapModal(false);
+          setReporteSeleccionado(null);
+        }}
+      >
+        <MapView
+          mini={false}
+          reportes={[reporteSeleccionado].filter(Boolean)}
+          zonaSeleccionada={null}
+          puntoSeleccionado={null}
+        />
+      </MapFullscreenModal>
     </div>
   );
 }
