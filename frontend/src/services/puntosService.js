@@ -1,9 +1,10 @@
 // src/services/puntosService.js
 import API from "./api.js";
 
-// Obtener TODOS los puntos de hidratación
-const obtenerPuntosHidratacion = async () => {
-    const res = await API.get("/puntos_hidratacion/");
+// Obtener puntos de hidratación: por defecto solo activos, o todos si estado=null (para admin)
+const obtenerPuntosHidratacion = async (estado = "activa") => {
+    const url = estado !== "activa" ? "/puntos_hidratacion/" : `/puntos_hidratacion/?estado=${estado}`;
+    const res = await API.get(url);
     return res.data.data; // Mantengo tu estructura
 };
 
