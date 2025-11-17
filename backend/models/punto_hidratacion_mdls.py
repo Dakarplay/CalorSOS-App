@@ -29,11 +29,11 @@ class PuntoHidratacionModel:
 
     @staticmethod
     def listar_puntos(estado: Optional[str] = None):
-        """Obtiene todos los puntos, filtrando por estado si se indica."""
+        """Obtiene todos los puntos, filtrando por estado si se indica. Si estado es None, muestra todos."""
         try:
             query = supabase.table("puntos_hidratacion").select("*")
 
-            if estado:
+            if estado is not None:
                 query = query.eq("estado", estado)
 
             response = query.execute()
