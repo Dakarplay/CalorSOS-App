@@ -1,0 +1,302 @@
+/* Inicio NotificationSettings.css */
+
+/* frontend/src/components/ui/NotificationSettings.css */
+
+.notification-settings-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.notification-settings-modal {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification-settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.notification-settings-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.notification-settings-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.notification-settings-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.notification-settings-content {
+    padding: 24px;
+}
+
+.notification-status {
+    margin-bottom: 24px;
+}
+
+.notification-status h4 {
+    margin: 0 0 16px 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-label {
+    font-weight: 500;
+    color: #555;
+}
+
+.status-value {
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.status-value.supported {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-value.not-supported {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-value.granted {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-value.denied {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.permission-section {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.permission-section p {
+    margin: 0 0 16px 0;
+    color: #856404;
+    font-weight: 500;
+}
+
+.settings-section {
+    margin-bottom: 24px;
+}
+
+.settings-section h4 {
+    margin: 0 0 16px 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.setting-item {
+    margin-bottom: 16px;
+}
+
+.setting-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #555;
+    user-select: none;
+}
+
+.setting-label input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 4px;
+    margin-right: 12px;
+    transition: all 0.2s;
+}
+
+.setting-label:hover .checkmark {
+    background-color: #ccc;
+}
+
+.setting-label input:checked ~ .checkmark {
+    background-color: #667eea;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.setting-label input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.test-section {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.info-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    border-left: 4px solid #667eea;
+}
+
+.info-text {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #f8f9fa;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.btn-secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .notification-settings-modal {
+        width: 95%;
+        margin: 20px;
+    }
+
+    .notification-settings-header {
+        padding: 16px 20px;
+    }
+
+    .notification-settings-content {
+        padding: 20px;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+/* Fin NotificationSettings.css */

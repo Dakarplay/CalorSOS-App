@@ -1,4 +1,4 @@
-// Inicio Admin.jsx
+  // Inicio Admin.jsx
 
 // frontend/src/pages/Admin.jsx
 
@@ -18,6 +18,13 @@ import { listarReportes, validarReporte, rechazarReporte } from "../services/rep
 import zonasService from "../services/zonasService.js";
 import puntosService from "../services/puntosService.js";
 import { listarUsuarios, actualizarUsuario, eliminarUsuario } from "../services/usuariosService.js";
+import alertasService from "../services/alertasService.js";
+import {
+    listarNotificaciones,
+    crearNotificacionGlobal,
+    actualizarEstadoNotificacion,
+    eliminarNotificacion
+} from "../services/notificacionesApiService.js";
 
 // Importación de modales
 import EditZonaModal from "../components/ui/EditZonaModal.jsx";
@@ -51,6 +58,26 @@ export default function Admin() {
   const [usuarios, setUsuarios] = useState([]);
   const [loadingUsuarios, setLoadingUsuarios] = useState(false);
 
+  // Estados para alertas
+  const [alertas, setAlertas] = useState([]);
+  const [loadingAlertas, setLoadingAlertas] = useState(false);
+
+  // Estados para notificaciones
+  const [notificaciones, setNotificaciones] = useState([]);
+  const [loadingNotificaciones, setLoadingNotificaciones] = useState(false);
+
+  // Estados para formularios
+  const [nuevaAlerta, setNuevaAlerta] = useState({
+    temperatura: '',
+    humedad: '',
+    indice_uv: '',
+    nivel_riesgo: 'bajo',
+    fuente: 'Manual'
+  });
+  const [nuevaNotificacion, setNuevaNotificacion] = useState({
+    mensaje: ''
+  });
+
   // Estados para modales
   const [openEditZonaModal, setOpenEditZonaModal] = useState(false);
   const [zonaToEdit, setZonaToEdit] = useState(null);
@@ -71,6 +98,10 @@ export default function Admin() {
       cargarPuntos();
     } else if (activeTab === "usuarios") {
       cargarUsuarios();
+    } else if (activeTab === "alertas") {
+      cargarAlertas();
+    } else if (activeTab === "notificaciones") {
+      cargarNotificaciones();
     }
   }, [activeTab]);
 
@@ -125,6 +156,34 @@ export default function Admin() {
       alert("Error al cargar usuarios");
     } finally {
       setLoadingUsuarios(false);
+    }
+  };
+
+  const cargarAlertas = async () => {
+    try {
+      setLoadingAlertas(true);
+      const data = await alertasService.listarAlertas();
+      setAlertas(data || []);
+    } catch (error) {
+      console.error("Error cargando alertas:", error);
+      alert("Error al cargar alertas");
+      setAlertas([]);
+    } finally {
+      setLoadingAlertas(false);
+    }
+  };
+
+  const cargarNotificaciones = async () => {
+    try {
+      setLoadingNotificaciones(true);
+      const data = await listarNotificaciones();
+      setNotificaciones(data || []);
+    } catch (error) {
+      console.error("Error cargando notificaciones:", error);
+      alert("Error al cargar notificaciones");
+      setNotificaciones([]);
+    } finally {
+      setLoadingNotificaciones(false);
     }
   };
 
@@ -218,6 +277,80 @@ export default function Admin() {
     }
   };
 
+  // Funciones para alertas
+  const handleCrearAlerta = async () => {
+    try {
+      await alertasService.crearAlerta(nuevaAlerta);
+      alert("Alerta creada correctamente");
+      setNuevaAlerta({
+        temperatura: '',
+        humedad: '',
+        indice_uv: '',
+        nivel_riesgo: 'bajo',
+        fuente: 'Manual'
+      });
+      cargarAlertas();
+    } catch (error) {
+      alert("Error al crear alerta");
+    }
+  };
+
+  const handleGenerarAlertaAutomatica = async () => {
+    try {
+      await alertasService.generarAlertaAutomatica();
+      alert("Alerta automática generada correctamente");
+      cargarAlertas();
+    } catch (error) {
+      alert("Error al generar alerta automática");
+    }
+  };
+
+  const handleEliminarAlerta = async (id) => {
+    if (window.confirm("¿Estás seguro de eliminar esta alerta?")) {
+      try {
+        await alertasService.eliminarAlerta(id);
+        alert("Alerta eliminada correctamente");
+        cargarAlertas();
+      } catch (error) {
+        alert("Error al eliminar alerta");
+      }
+    }
+  };
+
+  // Funciones para notificaciones
+  const handleCrearNotificacionGlobal = async () => {
+    try {
+      await crearNotificacionGlobal(nuevaNotificacion.mensaje);
+      alert("Notificación global creada correctamente");
+      setNuevaNotificacion({ mensaje: '' });
+      cargarNotificaciones();
+    } catch (error) {
+      alert("Error al crear notificación global");
+    }
+  };
+
+  const handleActualizarEstadoNotificacion = async (id, estado) => {
+    try {
+      await actualizarEstadoNotificacion(id, estado);
+      alert("Estado de notificación actualizado correctamente");
+      cargarNotificaciones();
+    } catch (error) {
+      alert("Error al actualizar estado de notificación");
+    }
+  };
+
+  const handleEliminarNotificacion = async (id) => {
+    if (window.confirm("¿Estás seguro de eliminar esta notificación?")) {
+      try {
+        await eliminarNotificacion(id);
+        alert("Notificación eliminada correctamente");
+        cargarNotificaciones();
+      } catch (error) {
+        alert("Error al eliminar notificación");
+      }
+    }
+  };
+
   if (!user || user.rol !== "admin") {
     return <div>No tienes permisos para acceder a esta página</div>;
   }
@@ -247,6 +380,18 @@ export default function Admin() {
             onClick={() => setActiveTab("puntos")}
           >
             Puntos de Hidratación
+          </button>
+          <button
+            className={`admin-tab ${activeTab === "alertas" ? "active" : ""}`}
+            onClick={() => setActiveTab("alertas")}
+          >
+            Alertas de Calor
+          </button>
+          <button
+            className={`admin-tab ${activeTab === "notificaciones" ? "active" : ""}`}
+            onClick={() => setActiveTab("notificaciones")}
+          >
+            Notificaciones
           </button>
           <button
             className={`admin-tab ${activeTab === "usuarios" ? "active" : ""}`}
@@ -444,6 +589,122 @@ export default function Admin() {
             )}
           </div>
         )}
+        {/* SECCIÓN: Alertas de Calor */}
+        {activeTab === "alertas" && (
+          <div className="admin-section">
+            <h2>Gestión de Alertas de Calor</h2>
+
+            {/* Formulario para crear alerta */}
+            <div className="admin-form">
+              <h3>Crear Nueva Alerta</h3>
+              <div className="form-row">
+                <input
+                  type="number"
+                  placeholder="Temperatura (°C)"
+                  value={nuevaAlerta.temperatura}
+                  onChange={(e) => setNuevaAlerta({...nuevaAlerta, temperatura: e.target.value})}
+                />
+                <input
+                  type="number"
+                  placeholder="Humedad (%)"
+                  value={nuevaAlerta.humedad}
+                  onChange={(e) => setNuevaAlerta({...nuevaAlerta, humedad: e.target.value})}
+                />
+                <input
+                  type="number"
+                  placeholder="Índice UV"
+                  value={nuevaAlerta.indice_uv}
+                  onChange={(e) => setNuevaAlerta({...nuevaAlerta, indice_uv: e.target.value})}
+                />
+                <select
+                  value={nuevaAlerta.nivel_riesgo}
+                  onChange={(e) => setNuevaAlerta({...nuevaAlerta, nivel_riesgo: e.target.value})}
+                >
+                  <option value="bajo">Bajo</option>
+                  <option value="medio">Medio</option>
+                  <option value="alto">Alto</option>
+                  <option value="extremo">Extremo</option>
+                </select>
+                <input
+                  type="text"
+                  placeholder="Fuente"
+                  value={nuevaAlerta.fuente}
+                  onChange={(e) => setNuevaAlerta({...nuevaAlerta, fuente: e.target.value})}
+                />
+              </div>
+              <div className="form-actions">
+                <button className="admin-btn create" onClick={handleCrearAlerta}>
+                  Crear Alerta
+                </button>
+                <button className="admin-btn create" onClick={handleGenerarAlertaAutomatica}>
+                  Generar Automática
+                </button>
+              </div>
+            </div>
+
+            {/* Lista de alertas */}
+            {loadingAlertas ? (
+              <p>Cargando alertas...</p>
+            ) : alertas.length === 0 ? (
+              <div className="admin-empty-state">
+                <p>No hay alertas registradas</p>
+              </div>
+            ) : (
+              <div className="admin-list">
+                {alertas.map((alerta) => (
+                  <div key={alerta.id_alerta} className="admin-item">
+                    <div className="admin-item-info">
+                      <h3>Nivel: {alerta.nivel_riesgo.toUpperCase()}</h3>
+                      <p><strong>Temperatura:</strong> {alerta.temperatura}°C</p>
+                      <p><strong>Humedad:</strong> {alerta.humedad}%</p>
+                      <p><strong>UV:</strong> {alerta.indice_uv}</p>
+                      <p><strong>Fuente:</strong> {alerta.fuente}</p>
+                      <p><strong>Fecha:</strong> {new Date(alerta.fecha_alerta).toLocaleString()}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* SECCIÓN: Notificaciones */}
+        {activeTab === "notificaciones" && (
+          <div className="admin-section">
+            <h2>Gestión de Notificaciones</h2>
+
+            {/* Lista de notificaciones */}
+            {loadingNotificaciones ? (
+              <p>Cargando notificaciones...</p>
+            ) : notificaciones.length === 0 ? (
+              <div className="admin-empty-state">
+                <p>No hay notificaciones registradas</p>
+              </div>
+            ) : (
+              <div className="admin-list">
+                {notificaciones.map((notif) => (
+                  <div key={notif.id_notificacion} className="admin-item">
+                    <div className="admin-item-info">
+                      <h3>{notif.mensaje.substring(0, 50)}...</h3>
+                      <p><strong>Usuario ID:</strong> {notif.id_usuario}</p>
+                      <p><strong>Estado:</strong> {notif.estado}</p>
+                      <p><strong>Fecha:</strong> {new Date(notif.fecha_envio).toLocaleString()}</p>
+                    </div>
+                    <div className="admin-item-actions">
+                      <button
+                        className="admin-btn delete"
+                        onClick={() => handleEliminarNotificacion(notif.id_notificacion)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* SECCIÓN: Usuarios */}
         {activeTab === "usuarios" && (
           <div className="admin-section">

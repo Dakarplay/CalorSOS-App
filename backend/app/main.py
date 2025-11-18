@@ -56,8 +56,8 @@ def tarea_alerta_automatica():
     except Exception as e:
         print(f"Error en tarea automática de alerta: {e}")
 
-# Ejecutar la tarea cada 60 minutos
-scheduler.add_job(tarea_alerta_automatica, "interval", minutes=60)
+# Ejecutar la tarea de alertas cada 30 minutos
+scheduler.add_job(tarea_alerta_automatica, "interval", minutes=10)
 scheduler.start()
 
 # -----------------------------------------------------------------------------------

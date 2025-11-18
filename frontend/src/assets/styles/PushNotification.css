@@ -1,0 +1,111 @@
+/* Inicio PushNotification.css */
+
+/* Estilos para notificaciones push en la app */
+.push-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    max-width: 400px;
+    min-width: 300px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease-in-out;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.push-notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.push-notification-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.push-notification-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.push-notification-body {
+    font-size: 14px;
+    margin: 0;
+    line-height: 1.4;
+    opacity: 0.95;
+}
+
+.push-notification-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.push-notification-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Variantes para diferentes tipos de notificación */
+.push-notification.warning {
+    background: linear-gradient(135deg, #ffa726, #fb8c00);
+}
+
+.push-notification.info {
+    background: linear-gradient(135deg, #42a5f5, #1976d2);
+}
+
+.push-notification.success {
+    background: linear-gradient(135deg, #66bb6a, #388e3c);
+}
+
+/* Animación de entrada */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.push-notification.show {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .push-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        min-width: auto;
+    }
+}
+
+/* Fin PushNotification.css */

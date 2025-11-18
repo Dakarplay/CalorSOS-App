@@ -21,14 +21,19 @@ import { getClima } from "../services/climaService.js";
 import zonasService from "../services/zonasService.js";
 import puntosService from "../services/puntosService.js";
 import alertasService from "../services/alertasService.js";
+import notificacionesService from "../services/notificacionesService.js";
+import notificacionesGlobalesService from "../services/notificacionesGlobalesService.js";
 
 // Importaciones de estilos
 import "../assets/styles/Home.css";
+import "../assets/styles/PushNotification.css";
 
 // Componente principal de la página Home
 export default function Home() {
     // Estado para controlar la apertura del mapa completo
     const [openMap, setOpenMap] = useState(false);
+
+
 
     // Estados para datos del backend
     const [zonasFrescas, setZonasFrescas] = useState([]);
@@ -96,14 +101,18 @@ export default function Home() {
     // Estados para alertas
     const [alertaActual, setAlertaActual] = useState(null);
     const [loadingAlertas, setLoadingAlertas] = useState(true);
+    const [alertaPrevia, setAlertaPrevia] = useState(null); // Para detectar cambios
 
-    // Efecto para cargar alerta actual
+    // Efecto para cargar alerta actual (sin mostrar notificación automática)
     useEffect(() => {
         const cargarAlerta = async () => {
             try {
                 setLoadingAlertas(true);
                 const res = await alertasService.obtenerAlertaActual();
-                setAlertaActual(res.data.data);
+                const nuevaAlerta = res.data.data;
+
+                setAlertaActual(nuevaAlerta);
+                setAlertaPrevia(nuevaAlerta);
             } catch (err) {
                 console.error("Error cargando alerta:", err);
             } finally {
@@ -111,6 +120,17 @@ export default function Home() {
             }
         };
         cargarAlerta();
+    }, []);
+
+    // Efecto para iniciar monitoreo global de notificaciones
+    useEffect(() => {
+        // Iniciar monitoreo de notificaciones globales
+        notificacionesGlobalesService.startMonitoring();
+
+        // Cleanup al desmontar componente
+        return () => {
+            notificacionesGlobalesService.stopMonitoring();
+        };
     }, []);
 
     // Texto de alerta dinámico
@@ -182,6 +202,7 @@ export default function Home() {
                 </div>
 
                 <ReportCallToAction />
+
             </div>
 
             {/* Modal de mapa completo */}

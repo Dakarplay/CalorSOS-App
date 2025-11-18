@@ -34,8 +34,8 @@ export default function Alertas() {
             const resActual = await alertasService.obtenerAlertaActual();
             setAlertaActual(resActual.data.data);
 
-            const resHist = await alertasService.listarAlertas();
-            setHistorial(resHist.data.data || []);
+            const historialData = await alertasService.listarAlertas();
+            setHistorial(historialData || []);
         } catch (err) {
             console.error("Error cargando alertas:", err);
         } finally {
