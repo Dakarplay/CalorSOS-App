@@ -8,7 +8,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-// Importaciones de componentes y proveedores
+// ADD: register SW for PWA
+import { registerSW } from "virtual:pwa-register";
+registerSW();
+
 import App from "./app.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 
