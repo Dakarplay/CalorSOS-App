@@ -19,11 +19,13 @@ import "../../assets/styles/NavbarSmart.css";
 
 // Componente funcional principal
 export default function NavbarSmart() {
-    // Estado del componente
+// Estado del componente
     const { user, logout } = useContext(UserContext);
     const [openMenu, setOpenMenu] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
+    const mobileMenuRef = useRef(null);
 
     // Debug del contexto de usuario
     useEffect(() => {
@@ -41,6 +43,9 @@ export default function NavbarSmart() {
         const handler = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
                 setOpenMenu(false);
+            }
+            if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
+                setMobileMenuOpen(false);
             }
         };
         document.addEventListener("mousedown", handler);
@@ -80,6 +85,17 @@ export default function NavbarSmart() {
                     <span className="ns-brand__title">CalorSOS</span>
                 </div>
 
+                {/* Botón hamburguesa para móvil */}
+                <button
+                    className="ns-mobile-menu-btn"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    aria-label="Menú de navegación"
+                >
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                    <span className="hamburger-line"></span>
+                </button>
+
                 <nav className="ns-nav">
                     <NavLink to="/" className={({ isActive }) =>
                         `ns-link ${isActive ? "active" : ""}`
@@ -108,6 +124,57 @@ export default function NavbarSmart() {
                     </NavLink>
                 </nav>
             </div>
+
+            {/* Menú móvil desplegable */}
+            {mobileMenuOpen && (
+                <div className="ns-mobile-menu" ref={mobileMenuRef}>
+                    <NavLink
+                        to="/"
+                        className={({ isActive }) =>
+                            `ns-mobile-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        Inicio
+                    </NavLink>
+                    <NavLink
+                        to="/zonas-frescas"
+                        className={({ isActive }) =>
+                            `ns-mobile-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        Zonas Frescas
+                    </NavLink>
+                    <NavLink
+                        to="/puntos-hidratacion"
+                        className={({ isActive }) =>
+                            `ns-mobile-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        Puntos de Hidratación
+                    </NavLink>
+                    <NavLink
+                        to="/alertas"
+                        className={({ isActive }) =>
+                            `ns-mobile-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        Alertas
+                    </NavLink>
+                    <NavLink
+                        to="/consejos"
+                        className={({ isActive }) =>
+                            `ns-mobile-link ${isActive ? "active" : ""}`
+                        }
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        Consejos
+                    </NavLink>
+                </div>
+            )}
 
             {/* Lado derecho del header */}
             <div className="ns-right" ref={menuRef}>
