@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 load_dotenv("calorsos.env")
 
 # Configuración de JWT
-SECRET_KEY = os.getenv("JWT_SECRET", "super_secret_key_calorsos")
+SECRET_KEY = os.getenv("VITE_JWT_SECRET", "super_secret_key_calorsos")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60  # 1 hora
 
