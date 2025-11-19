@@ -5,6 +5,9 @@
 // Importaciones de React y hooks
 import React, { useState, useEffect } from "react";
 
+// Importaciones de React Router
+import { useNavigate } from "react-router-dom";
+
 // Importaciones de componentes de UI
 import IndicatorsPanel from "../components/ui/IndicatorsPanel.jsx";
 import Navbar from "../components/ui/NavbarSmart.jsx";
@@ -24,14 +27,22 @@ import alertasService from "../services/alertasService.js";
 import notificacionesService from "../services/notificacionesService.js";
 import notificacionesGlobalesService from "../services/notificacionesGlobalesService.js";
 
+// Importaciones de datos
+import { consejosData } from "../data/consejosData.js";
+
 // Importaciones de estilos
 import "../assets/styles/Home.css";
 import "../assets/styles/PushNotification.css";
 
 // Componente principal de la página Home
 export default function Home() {
+    const navigate = useNavigate();
+
     // Estado para controlar la apertura del mapa completo
     const [openMap, setOpenMap] = useState(false);
+
+    // Estado para consejos aleatorios
+    const [consejosAleatorios, setConsejosAleatorios] = useState([]);
 
 
 
@@ -133,6 +144,21 @@ export default function Home() {
         };
     }, []);
 
+    // Efecto para seleccionar consejos aleatorios únicos
+    useEffect(() => {
+        if (consejosData.length > 1) {
+            const indices = [];
+            while (indices.length < 2) {
+                const randomIndex = Math.floor(Math.random() * consejosData.length);
+                if (!indices.includes(randomIndex)) {
+                    indices.push(randomIndex);
+                }
+            }
+            const consejosSeleccionados = indices.map(index => consejosData[index]);
+            setConsejosAleatorios(consejosSeleccionados);
+        }
+    }, []);
+
     // Texto de alerta dinámico
     const alertaTexto = loadingAlertas
         ? "Cargando alertas..."
@@ -198,6 +224,24 @@ export default function Home() {
                             risk={weather?.thermal_risk || 0}
                             hydration={weather?.hydration_level || 0}
                         />
+
+                        {consejosAleatorios.map((consejo, index) => (
+                            <div key={index} className="consejo-card" onClick={() => navigate('/consejos')} style={{ cursor: 'pointer' }}>
+                                <div className="consejo-header">
+                                    <h3>
+                                        <span style={{ marginRight: '8px' }}>{consejo.icono}</span>
+                                        {consejo.titulo}
+                                    </h3>
+                                </div>
+                                <p className="consejo-desc">{consejo.descripcion}</p>
+                                <span
+                                    className="consejo-tag"
+                                    data-categoria={consejo.categoria}
+                                >
+                                    {consejo.categoria}
+                                </span>
+                            </div>
+                        ))}
                     </aside>
                 </div>
 

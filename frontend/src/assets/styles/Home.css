@@ -450,4 +450,81 @@
     }
 }
 
+/* Estilos para tarjeta de consejo aleatorio */
+.consejo-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    margin-top: 14px;
+}
+
+.consejo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.consejo-header h3 {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.consejo-desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 12px 0;
+}
+
+.consejo-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Colores de categorías para consejo aleatorio */
+.consejo-tag[data-categoria="Hidratación"] {
+    background: #3498db;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Protección Solar"] {
+    background: #e74c3c;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Vestimenta"] {
+    background: #9b59b6;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Salud"] {
+    background: #e67e22;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Hogar"] {
+    background: #2ecc71;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Actividad Física"] {
+    background: #f39c12;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Alimentación"] {
+    background: #1abc9c;
+    color: white;
+}
+
 /* Fin Home.css */
