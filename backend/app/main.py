@@ -65,7 +65,7 @@ scheduler.start()
 # Configurar middleware CORS para permitir acceso desde frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En producción, reemplazar con el dominio del frontend
+    allow_origins=["https://calorsos.onrender.com"],  # En producción, reemplazar con el dominio del frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
