@@ -301,7 +301,7 @@ export default function MapView({
                         }
                     }
                 >
-                    Ver mapa completo
+                    Ver mapa completo.
                 </button>
             )}
 

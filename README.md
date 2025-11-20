@@ -239,7 +239,7 @@ source .venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-a
+
 #### Configurar Variables de Entorno
 Crear archivo `calorsos.env` en la raíz del proyecto:
 ```env
