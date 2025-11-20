@@ -6,7 +6,7 @@
 import axios from "axios";
 
 // URL base de la API del backend
-export const API_URL = "http://localhost:8000";
+export const API_URL = import.meta.env.VITE_API_URL;
 
 // Creación del cliente Axios con configuración base
 const API = axios.create({
