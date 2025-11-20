@@ -307,8 +307,8 @@
 ================================*/
 
 .btn-reportar-zona {
-  background: #ff8a27;
-  color: black;
+  background: #4CAF50;
+  color: white;
   border: none;
   padding: 11px 14px;
   font-weight: 700;
@@ -320,7 +320,7 @@
 }
 
 .btn-reportar-zona:hover {
-  background: #ffa45d;
+  background: #66BB6A;
   transform: translateY(-2px);
 }
 
