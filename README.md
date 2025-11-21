@@ -435,18 +435,4 @@ El sistema utiliza **Supabase (PostgreSQL)** con las siguientes tablas principal
 - **Modelos de datos**: 8 modelos principales
 - **Servicios**: 11 servicios de API
 
-## 🚀 Próximas Funcionalidades
-
-- [ ] **Aplicación móvil nativa** (React Native)
-- [ ] **Sistema de geolocalización automática**
-- [ ] **Integración con APIs de emergencias**
-- [ ] **Dashboard avanzado con analytics**
-- [ ] **Sistema de calificaciones para puntos/zonas**
-- [ ] **Notificaciones push nativas**
-- [ ] **Modo offline con sincronización**
-
----
-
-*Última actualización: Diciembre 2024*
-
 <!-- Fin README.md -->
