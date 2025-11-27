@@ -66,13 +66,11 @@ scheduler.start()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://calorsos.onrender.com",  # frontend producción
-        "http://localhost:4173",          # frontend local
-        "http://localhost:5173",          # Vite usa ambos según setup
+        "https://calorsos-app-ofd0.onrender.com",  # frontend producción CORRECTO
+        "http://localhost:4173",
+        "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:4173",
-        "https://calorsos-frontend.onrender.com",
-        "https://calorsos-app-ofd0.onrender.com",
     ],
     allow_credentials=True,
     allow_methods=["*"],
