@@ -313,22 +313,6 @@ export default function PuntosHidratacion() {
                                 />
                             </div>
 
-                            <label>
-                                Latitud
-                                <input
-                                    value={reportData.latitud || ""}
-                                    readOnly
-                                />
-                            </label>
-
-                            <label>
-                                Longitud
-                                <input
-                                    value={reportData.longitud || ""}
-                                    readOnly
-                                />
-                            </label>
-
                             <div className="ph-report-actions">
                                 <button type="submit" className="btn-report-submit" disabled={reportLoading}>
                                     {reportLoading ? "Enviando..." : "Enviar reporte"}

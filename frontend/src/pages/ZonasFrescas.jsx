@@ -346,22 +346,6 @@ export default function ZonasFrescas() {
                     />
                 </div>
 
-                <label>
-                    Latitud
-                    <input
-                    value={reportData.latitud || ""}
-                    readOnly
-                    />
-                </label>
-
-                <label>
-                    Longitud
-                    <input
-                    value={reportData.longitud || ""}
-                    readOnly
-                    />
-                </label>
-
                 <div className="zf-report-actions">
                     <button
                     type="submit"
