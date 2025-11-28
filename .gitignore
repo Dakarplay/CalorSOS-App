@@ -13,9 +13,11 @@ env/
 venv/
 .venv/
 ENV/
-calorsos.env
+*.env
 # Archivos de variables de entorno
 !.env.example  # Mantener el archivo de ejemplo
+.env
+.env.*
 
 # =============================================
 # ARCHIVOS DE PYTHON
