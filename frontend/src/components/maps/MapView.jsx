@@ -1,11 +1,9 @@
-// Inicio MapView.jsx
-
 // frontend/src/components/maps/MapView.jsx
 
 // Componente principal para mostrar mapas interactivos con marcadores
 
 // Importaciones de React y hooks
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 // Importaciones de React Leaflet
 import {
@@ -13,6 +11,7 @@ import {
     TileLayer,
     Marker,
     Popup,
+    Polyline,
     useMap,
 } from "react-leaflet";
 
@@ -21,6 +20,9 @@ import L from "leaflet";
 
 // Importación de estilos
 import "./MapView.css";
+
+// Importación de utilidades de distancia
+import { calcularDistancia, formatearDistancia } from "../../utils/distanceUtils";
 
 // Configuración de íconos por defecto de Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -69,6 +71,25 @@ function CenterOnMarker({ markerPosition }) {
     return null;
 }
 
+// Componente para centrar y hacer zoom en ruta
+function FitRouteBounds({ routeCoordinates }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (routeCoordinates && routeCoordinates.length > 0) {
+            const bounds = L.latLngBounds(routeCoordinates);
+            map.fitBounds(bounds, {
+                padding: [80, 80],
+                animate: true,
+                duration: 0.8,
+                maxZoom: 15
+            });
+        }
+    }, [routeCoordinates, map]);
+
+    return null;
+}
+
 // Componente para reset general de vista
 function ResetView({ trigger, zonasFrescas, puntosHidratacion }) {
     const map = useMap();
@@ -85,12 +106,16 @@ function ResetView({ trigger, zonasFrescas, puntosHidratacion }) {
 
         const bounds = L.latLngBounds(coords);
 
+        // Cerrar todos los popups antes de resetear
+        map.closePopup();
+
         map.fitBounds(bounds, {
             padding: [50, 50],
             animate: true,
+            duration: 0.8,
             maxZoom: 14
         });
-    }, [trigger, zonasFrescas]);
+    }, [trigger, zonasFrescas, puntosHidratacion, map]);
 
     // Escuchar evento de reset
     useEffect(() => {
@@ -102,9 +127,14 @@ function ResetView({ trigger, zonasFrescas, puntosHidratacion }) {
             if (coords.length === 0) return;
 
             const bounds = L.latLngBounds(coords);
+            
+            // Cerrar todos los popups
+            map.closePopup();
+            
             map.fitBounds(bounds, {
                 padding: [50, 50],
                 animate: true,
+                duration: 0.8,
                 maxZoom: 14
             });
         };
@@ -143,6 +173,15 @@ const redDivIcon = new L.DivIcon({
     popupAnchor: [0, -20],
 });
 
+// Ícono negro para posicion del usuario
+const blackDivIcon = new L.DivIcon({
+    html: `<span class="black-div-marker"></span>`,
+    className: "custom-div-icon-wrapper",
+    iconSize: [24, 24],
+    iconAnchor: [12, 24],
+    popupAnchor: [0, -20],
+});
+
 // Componente funcional principal
 export default function MapView({
     mini = false,
@@ -158,9 +197,81 @@ export default function MapView({
     markerPosition = null,
     showExpandButton = true,
     touchZoom = true,
+    routeCoordinates = null, // Nueva prop para coordenadas de ruta
+    highlightedMarker = null, // Nueva prop para resaltar marcador
 }) {
     // Referencias para marcadores
     const markerRefs = useRef({});
+    
+    // Estado para la ubicación del usuario
+    const [userLocation, setUserLocation] = useState(null);
+    const [locationError, setLocationError] = useState(null);
+    const [loadingLocation, setLoadingLocation] = useState(true);
+
+    // Obtener ubicación del usuario al montar el componente
+    useEffect(() => {
+        if ("geolocation" in navigator) {
+            setLoadingLocation(true);
+            
+            // Opciones para optimizar la obtención de ubicación
+            const options = {
+                enableHighAccuracy: false, // Más rápido, menos preciso
+                timeout: 5000, // Timeout de 5 segundos
+                maximumAge: 30000 // Usa cache de hasta 30 segundos
+            };
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                    setLocationError(null);
+                    setLoadingLocation(false);
+                },
+                (error) => {
+                    console.error("Error obteniendo ubicación:", error);
+                    setLocationError(error.message);
+                    setLoadingLocation(false);
+                },
+                options
+            );
+
+            // Opcional: Actualizar ubicación en tiempo real
+            const watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    setUserLocation({
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    });
+                },
+                (error) => {
+                    console.error("Error actualizando ubicación:", error);
+                },
+                options
+            );
+
+            // Limpiar watch al desmontar
+            return () => navigator.geolocation.clearWatch(watchId);
+        } else {
+            setLocationError("Geolocalización no disponible");
+            setLoadingLocation(false);
+        }
+    }, []);
+
+    // Función para calcular distancia desde ubicación del usuario
+    const calcularDistanciaDesdeUsuario = (latitud, longitud) => {
+        if (!userLocation) return null;
+        
+        const distanciaKm = calcularDistancia(
+            userLocation.lat,
+            userLocation.lng,
+            latitud,
+            longitud
+        );
+        
+        return formatearDistancia(distanciaKm);
+    };
 
     // Abrir popup automático al seleccionar
     useEffect(() => {
@@ -175,6 +286,23 @@ export default function MapView({
             } catch {}
         }
     }, [zonaSeleccionada, puntoSeleccionado]);
+
+    // Abrir popup cuando hay marcador resaltado
+    useEffect(() => {
+        if (highlightedMarker) {
+            const markerId = highlightedMarker.id_zona || highlightedMarker.id_punto;
+            if (markerId && markerRefs.current[markerId]) {
+                // Pequeño delay para asegurar que el mapa se haya ajustado
+                setTimeout(() => {
+                    try {
+                        markerRefs.current[markerId].openPopup();
+                    } catch (e) {
+                        console.log("Error abriendo popup:", e);
+                    }
+                }, 500);
+            }
+        }
+    }, [highlightedMarker]);
 
     return (
         <div className={mini ? "mv-container mini" : "mv-container full"}>
@@ -201,6 +329,9 @@ export default function MapView({
             >
                 <ForceResize />
 
+                {/* Ajustar vista cuando hay ruta */}
+                <FitRouteBounds routeCoordinates={routeCoordinates} />
+
                 {/* Reset general cuando trigger cambia */}
                 <ResetView
                     trigger={resetView}
@@ -219,39 +350,98 @@ export default function MapView({
                     attribution="&copy; OpenStreetMap"
                 />
 
-                {/* Marcadores verdes para zonas frescas */}
-                {Array.isArray(zonasFrescas) && zonasFrescas.map((z) => (
+                {/* MARCADOR NEGRO - UBICACIÓN DEL USUARIO */}
+                {userLocation && (
                     <Marker
-                        key={z.id_zona}
-                        position={[z.latitud, z.longitud]}
-                        icon={greenDivIcon}
-                        ref={(ref) => (markerRefs.current[z.id_zona] = ref)}
-                        eventHandlers={{ click: () => onSelectMarker(z) }}
+                        position={[userLocation.lat, userLocation.lng]}
+                        icon={blackDivIcon}
+                        zIndexOffset={1000} // Para que siempre esté al frente
                     >
                         <Popup>
-                            <strong>{z.nombre}</strong><br />
-                            <strong> Descripcion: </strong> {z.descripcion}<br />
-                            <strong>Estado: </strong>{ z.estado}
+                            <strong>Tu ubicación</strong><br />
+                            Lat: {userLocation.lat.toFixed(5)}<br />
+                            Lng: {userLocation.lng.toFixed(5)}
                         </Popup>
                     </Marker>
-                ))}
+                )}
+
+                {/* RUTA TRAZADA - Si existe routeCoordinates */}
+                {routeCoordinates && routeCoordinates.length > 0 && (
+                    <Polyline
+                        positions={routeCoordinates}
+                        color="#2563eb"
+                        weight={4}
+                        opacity={0.8}
+                        dashArray="10, 5"
+                        lineJoin="round"
+                    />
+                )}
+
+                {/* Marcadores verdes para zonas frescas */}
+                {Array.isArray(zonasFrescas) && zonasFrescas.map((z) => {
+                    const distancia = calcularDistanciaDesdeUsuario(z.latitud, z.longitud);
+                    const isHighlighted = highlightedMarker && highlightedMarker.id_zona === z.id_zona;
+                    
+                    return (
+                        <Marker
+                            key={z.id_zona}
+                            position={[z.latitud, z.longitud]}
+                            icon={greenDivIcon}
+                            ref={(ref) => (markerRefs.current[z.id_zona] = ref)}
+                            eventHandlers={{ click: () => onSelectMarker(z) }}
+                            zIndexOffset={isHighlighted ? 500 : 0}
+                        >
+                            <Popup>
+                                <div className="popup-content">
+                                    {isHighlighted && <div className="popup-badge">📍 Más cercana</div>}
+                                    <strong>{z.nombre}</strong><br />
+                                    <strong>Descripción: </strong>{z.descripcion}<br />
+                                    <strong>Estado: </strong>{z.estado}<br />
+                                    {distancia && (
+                                        <>
+                                            <hr style={{ margin: '8px 0', border: 'none', borderTop: '1px solid #ddd' }} />
+                                            <strong>📍 Distancia: </strong>
+                                            <span style={{ color: '#2563eb', fontWeight: 'bold' }}>{distancia}</span>
+                                        </>
+                                    )}
+                                </div>
+                            </Popup>
+                        </Marker>
+                    );
+                })}
 
                 {/* Marcadores azules para puntos de hidratación */}
-                {Array.isArray(puntosHidratacion) && puntosHidratacion.map((p) => (
-                    <Marker
-                        key={p.id_punto}
-                        position={[p.latitud, p.longitud]}
-                        icon={blueDivIcon}
-                        ref={(ref) => (markerRefs.current[p.id_punto] = ref)}
-                        eventHandlers={{ click: () => onSelectMarker(p) }}
-                    >
-                        <Popup>
-                            <strong>{p.nombre}</strong><br />
-                            <strong> Descripcion: </strong> {p.descripcion}<br />
-                            <strong>Estado: </strong>{ p.estado}
-                        </Popup>
-                    </Marker>
-                ))}
+                {Array.isArray(puntosHidratacion) && puntosHidratacion.map((p) => {
+                    const distancia = calcularDistanciaDesdeUsuario(p.latitud, p.longitud);
+                    const isHighlighted = highlightedMarker && highlightedMarker.id_punto === p.id_punto;
+                    
+                    return (
+                        <Marker
+                            key={p.id_punto}
+                            position={[p.latitud, p.longitud]}
+                            icon={blueDivIcon}
+                            ref={(ref) => (markerRefs.current[p.id_punto] = ref)}
+                            eventHandlers={{ click: () => onSelectMarker(p) }}
+                            zIndexOffset={isHighlighted ? 500 : 0}
+                        >
+                            <Popup>
+                                <div className="popup-content">
+                                    {isHighlighted && <div className="popup-badge">📍 Más cercano</div>}
+                                    <strong>{p.nombre}</strong><br />
+                                    <strong>Descripción: </strong>{p.descripcion}<br />
+                                    <strong>Estado: </strong>{p.estado}<br />
+                                    {distancia && (
+                                        <>
+                                            <hr style={{ margin: '8px 0', border: 'none', borderTop: '1px solid #ddd' }} />
+                                            <strong>📍 Distancia: </strong>
+                                            <span style={{ color: '#2563eb', fontWeight: 'bold' }}>{distancia}</span>
+                                        </>
+                                    )}
+                                </div>
+                            </Popup>
+                        </Marker>
+                    );
+                })}
 
                 {/* Marcadores rojos para reportes */}
                 {Array.isArray(reportes) && reportes.map((r) => (
@@ -291,6 +481,21 @@ export default function MapView({
                     </Marker>
                 )}
             </MapContainer>
+
+            {/* Mensaje de error si no hay geolocalización */}
+            {locationError && (
+                <div className="mv-location-error">
+                    📍 No se pudo obtener tu ubicación. Verifica los permisos del navegador.
+                </div>
+            )}
+
+            {/* Mensaje de carga mientras obtiene ubicación */}
+            {loadingLocation && !locationError && (
+                <div className="mv-location-loading">
+                    <div className="mv-loading-spinner"></div>
+                    <span>📍 Obteniendo tu ubicación...</span>
+                </div>
+            )}
 
             {/* Botón para ver mapa completo si es mini */}
             {mini && showExpandButton && (
