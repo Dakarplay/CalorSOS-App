@@ -415,8 +415,7 @@ El sistema utiliza **Supabase (PostgreSQL)** con las siguientes tablas principal
 
 ## Desarrollado por
 
-**Dago David Palmera Navarro**  
-**Julian David Camargo Padilla**  
+**Dago David Palmera Navarro**   
 
 **Proyecto académico** - Ingeniería de Servicios de Internet (ISI)  
 **Universidad:** Universidad de Cartagena - Cartagena de Indias - COLOMBIA  
