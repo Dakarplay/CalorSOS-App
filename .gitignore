@@ -15,9 +15,9 @@ venv/
 ENV/
 *.env
 # Archivos de variables de entorno
+!.env.example  # Mantener el archivo de ejemplo
 .env
 .env.*
-!.env.example  # Mantener el archivo de ejemplo
 
 # =============================================
 # ARCHIVOS DE PYTHON

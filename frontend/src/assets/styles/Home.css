@@ -11,6 +11,8 @@
     color: var(--text-primary);
     font-family: Inter, Helvetica, Arial, sans-serif;
     transition: background 0.3s ease, color 0.3s ease;
+    max-width: 100%;
+    overflow-x: hidden !important;
 }
 
 /* Contenido principal */
@@ -200,6 +202,39 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 12px;
+}
+
+.map-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.legend-green {
+    background-color: #28a745; /* Green for Zonas Frescas */
+}
+
+.legend-blue {
+    background-color: #007bff; /* Blue for Puntos de Hidratación */
+}
+
+.legend-black {
+    background-color: #000000; /* Blue for Puntos de Hidratación */
 }
 
 .map-preview-header h3 {
@@ -447,6 +482,222 @@
         width: 48px;
         height: 48px;
         font-size: 20px;
+    }
+}
+
+/* Estilos para tarjeta de consejo aleatorio */
+.consejo-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    margin-top: 14px;
+}
+
+.consejo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow);
+}
+
+.consejo-header h3 {
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.consejo-desc {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 12px 0;
+}
+
+.consejo-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Colores de categorías para consejo aleatorio */
+.consejo-tag[data-categoria="Hidratación"] {
+    background: #3498db;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Protección Solar"] {
+    background: #e74c3c;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Vestimenta"] {
+    background: #9b59b6;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Salud"] {
+    background: #e67e22;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Hogar"] {
+    background: #2ecc71;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Actividad Física"] {
+    background: #f39c12;
+    color: white;
+}
+
+.consejo-tag[data-categoria="Alimentación"] {
+    background: #1abc9c;
+    color: white;
+}
+
+/* ================================================
+    BOTONES DE NAVEGACIÓN RÁPIDA EN MAPA
+   ================================================ */
+
+.map-quick-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 0 4px;
+}
+
+.quick-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.quick-nav-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.quick-nav-btn:hover:not(:disabled)::before {
+    opacity: 1;
+}
+
+.quick-nav-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+/* Botón de Zona Fresca */
+.btn-zona-fresca {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-zona-fresca:hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Botón de Punto de Hidratación */
+.btn-punto-hidratacion {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-punto-hidratacion:hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Botón de Limpiar Selección */
+.btn-limpiar {
+    background: linear-gradient(135deg, #64748b, #475569);
+    color: white;
+    box-shadow: 0 4px 12px rgba(100, 116, 139, 0.3);
+}
+
+.btn-limpiar:hover:not(:disabled) {
+    box-shadow: 0 6px 16px rgba(100, 116, 139, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-limpiar:disabled {
+    background: linear-gradient(135deg, #94a3b8, #64748b);
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+.btn-text {
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .map-quick-nav {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .btn-limpiar {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .map-quick-nav {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn-limpiar {
+        grid-column: auto;
+    }
+    
+    .btn-text {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-nav-btn {
+        padding: 10px 12px;
+    }
+    
+    .btn-icon {
+        font-size: 16px;
+    }
+    
+    .btn-text {
+        font-size: 12px;
     }
 }
 

@@ -415,8 +415,7 @@ El sistema utiliza **Supabase (PostgreSQL)** con las siguientes tablas principal
 
 ## Desarrollado por
 
-**Dago David Palmera Navarro**  
-**Julian David Camargo Padilla**  
+**Dago David Palmera Navarro**   
 
 **Proyecto académico** - Ingeniería de Servicios de Internet (ISI)  
 **Universidad:** Universidad de Cartagena - Cartagena de Indias - COLOMBIA  
@@ -434,19 +433,5 @@ El sistema utiliza **Supabase (PostgreSQL)** con las siguientes tablas principal
 - **Estilos CSS**: 15+ archivos de estilos modulares
 - **Modelos de datos**: 8 modelos principales
 - **Servicios**: 11 servicios de API
-
-## 🚀 Próximas Funcionalidades
-
-- [ ] **Aplicación móvil nativa** (React Native)
-- [ ] **Sistema de geolocalización automática**
-- [ ] **Integración con APIs de emergencias**
-- [ ] **Dashboard avanzado con analytics**
-- [ ] **Sistema de calificaciones para puntos/zonas**
-- [ ] **Notificaciones push nativas**
-- [ ] **Modo offline con sincronización**
-
----
-
-*Última actualización: Diciembre 2024*
 
 <!-- Fin README.md -->

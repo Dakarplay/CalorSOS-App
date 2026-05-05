@@ -8,7 +8,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-// Importaciones de componentes y proveedores
 import App from "./app.jsx";
 import { UserProvider } from "./context/UserContext.jsx";
 
