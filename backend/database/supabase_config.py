@@ -11,14 +11,14 @@ import os
 load_dotenv(dotenv_path="calorsos.env")
 
 # Obtener credenciales de Supabase desde variables de entorno
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+VITE_SUPABASE_URL = os.getenv("VITE_SUPABASE_URL")
+VITE_SUPABASE_KEY = os.getenv("VITE_SUPABASE_KEY")
 
 # Verificar que las credenciales estén disponibles
-if not SUPABASE_URL or not SUPABASE_KEY:
-    raise EnvironmentError("No se encontraron las variables SUPABASE_URL o SUPABASE_KEY en calorsos.env")
+if not VITE_SUPABASE_URL or not VITE_SUPABASE_KEY:
+    raise EnvironmentError("No se encontraron las variables VITE_SUPABASE_URL o VITE_SUPABASE_KEY en calorsos.env")
 
 # Crear cliente global de Supabase para toda la aplicación
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase: Client = create_client(VITE_SUPABASE_URL, VITE_SUPABASE_KEY)
 
 # Fin supabase_config.py

@@ -9,6 +9,7 @@
 # =============================================
 
 # Entornos virtuales de Python
+calorsos.env
 env/
 venv/
 .venv/
